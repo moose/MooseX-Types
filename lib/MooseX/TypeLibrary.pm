@@ -12,7 +12,9 @@ use strict;
 use Sub::Uplevel;
 use Moose::Util::TypeConstraints;
 use MooseX::TypeLibrary::Base;
-use Sub::Install    qw( install_sub );
+use MooseX::TypeLibrary::Util           qw( filter_tags );
+use MooseX::TypeLibrary::UndefinedType;
+use Sub::Install                        qw( install_sub );
 use namespace::clean;
 
 our $VERSION = 0.01;
@@ -159,6 +161,12 @@ L<MooseX::TypeLibrary::Moose>.
 
 =head2 import
 
+Installs the L<MooseX::TypeLibrary::Base> class into the caller and 
+exports types according to the specification described in 
+L</"LIBRARY DEFINITION">. This will continue to 
+L<Moose::Util::TypeConstraints>' C<import> method to export helper
+functions you will need to declare your types.
+
 =cut
 
 sub import {
@@ -171,8 +179,10 @@ sub import {
     }
 
     # generate predeclared type helpers
-    if (my @declare = @{ $args{ -declare } || [] }) {
-        for my $type (@declare) {
+    if (my @orig_declare = @{ $args{ -declare } || [] }) {
+        my ($tags, $declare) = filter_tags @orig_declare;
+
+        for my $type (@$declare) {
             $callee->add_type($type);
             $callee->export_type_into(
                 $callee, $type, 
@@ -190,14 +200,24 @@ sub import {
 
 =head2 type_export_generator
 
+Generate a type export, e.g. C<Int()>. This will return either a
+L<Moose::Meta::TypeConstraint> object, or alternatively a
+L<MooseX::TypeLibrary::UndefinedType> object if the type was not
+yet defined.
+
 =cut
 
 sub type_export_generator {
     my ($class, $type, $full) = @_;
-    return sub { $full };
+    return sub { 
+        return find_type_constraint($full)
+            || MooseX::TypeLibrary::UndefinedType->new($full);
+    };
 }
 
 =head2 coercion_export_generator
+
+This generates a coercion handler function, e.g. C<to_Int($value)>. 
 
 =cut
 
@@ -219,6 +239,8 @@ sub coercion_export_generator {
 
 =head2 check_export_generator
 
+Generates a constraint check closure, e.g. C<is_Int($value)>.
+
 =cut
 
 sub check_export_generator {
@@ -232,6 +254,13 @@ sub check_export_generator {
         return $tobj->check($value);
     }
 }
+
+=head1 CAVEATS
+
+A library makes the types quasi-unique by prefixing their names with (by
+default) the library package name. If you're only using the type handler
+functions provided by MooseX::TypeLibrary, you shouldn't ever have to use
+a type's actual full name.
 
 =head1 SEE ALSO
 

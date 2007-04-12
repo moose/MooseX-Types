@@ -193,9 +193,11 @@ sub import {
     }
 
     # run type constraints import
-    return uplevel 1, 
-        Moose::Util::TypeConstraints->can('import'), 
-        'Moose::Util::TypeConstraints';
+    return Moose::Util::TypeConstraints
+        ->import({ into => $callee });
+#    return uplevel 1, 
+#        Moose::Util::TypeConstraints->can('import'), 
+#        'Moose::Util::TypeConstraints';
 }
 
 =head2 type_export_generator

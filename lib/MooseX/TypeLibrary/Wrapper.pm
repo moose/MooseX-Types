@@ -24,10 +24,10 @@ sub import {
         require Class::Inspector->filename($library_class)
             unless Class::Inspector->loaded($library_class);
 
-        $library_class->import( 
-            @{ $libraries{ $l } }, 
-            { -into => scalar(caller) } 
-        );
+        $library_class->import( @{ $libraries{ $l } }, { 
+            -into    => scalar(caller),
+            -wrapper => $class,
+        });
     }
     return 1;
 }

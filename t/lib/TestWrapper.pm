@@ -5,7 +5,7 @@ extends 'MooseX::TypeLibrary::Wrapper';
 #use Class::C3;
 #use base 'MooseX::TypeLibrary::Wrapper';
 
-around type_export_generator => sub {
+override type_export_generator => sub {
     my $code = super();
     return sub { $code->(@_) };
 };
@@ -17,7 +17,7 @@ around type_export_generator => sub {
 #    return sub { $code->(@_) };
 #}
 
-around check_export_generator => sub {
+override check_export_generator => sub {
     my $code = super();
     return sub {
         return $code unless @_;
@@ -35,7 +35,7 @@ around check_export_generator => sub {
 #    };
 #}
 
-around coercion_export_generator => sub {
+override coercion_export_generator => sub {
     my $code = super();
     return sub {
         my $value = $code->(@_);

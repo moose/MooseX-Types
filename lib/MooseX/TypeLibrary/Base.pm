@@ -37,10 +37,15 @@ L<MooseX::TypeLibrary/"LIBRARY USAGE"> for syntax details on this.
 =cut
 
 sub import {
-    my ($class, @orig_types) = @_;
+    my ($class, @args) = @_;
 
-    # separate tags from types
-    my ($tags, $types) = filter_tags @orig_types;
+    # separate tags from types and possible options
+    my ($options) = grep { ref $_ eq 'HASH' } @args;
+    my ($tags, $types) 
+      = filter_tags
+        grep { ref $_ ne 'HASH' }
+        @args;
+    my $callee = ($options && $options->{ -into } || scalar(caller));
 
     # :all replaces types with full list
     @$types = $class->type_names if $tags->{all};
@@ -49,9 +54,10 @@ sub import {
     # export all requested types
     for my $type (@$types) {
         $class->export_type_into(
-            scalar(caller), 
+            $callee, 
             $type, 
             sprintf($UndefMsg, $type, $class),
+            ($options ? %$options : ()),
         );
     }
     return 1;
@@ -69,19 +75,20 @@ sub export_type_into {
     # the real type name and its type object
     my $full = $class->get_type($type);
     my $tobj = find_type_constraint($full);
-    ### Exporting: $full
+
+    # a possible wrapper around library functionality
+    my $wrap = $args{ -wrapper } || 'MooseX::TypeLibrary';
 
     # install Type name constant
     install_sub({
-        code => MooseX::TypeLibrary->type_export_generator($type, $full),
+        code => $wrap->type_export_generator($type, $full),
         into => $target,
         as   => $type,
     });
 
     # install is_Type test function
     install_sub({
-        code => MooseX::TypeLibrary
-                    ->check_export_generator($type, $full, $undef_msg),
+        code => $wrap->check_export_generator($type, $full, $undef_msg),
         into => $target,
         as   => "is_$type",
     });
@@ -92,8 +99,7 @@ sub export_type_into {
     
         # install to_Type coercion handler
         install_sub({
-            code => MooseX::TypeLibrary->coercion_export_generator(
-                        $type, $full, $undef_msg ),
+            code => $wrap->coercion_export_generator($type, $full, $undef_msg),
             into => $target,
             as   => "to_$type",
         });

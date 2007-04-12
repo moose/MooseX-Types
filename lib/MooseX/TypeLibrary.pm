@@ -11,7 +11,7 @@ use strict;
 
 use Sub::Uplevel;
 use Moose::Util::TypeConstraints;
-use MooseX::TypeLibrary::Base;
+use MooseX::TypeLibrary::Base           ();
 use MooseX::TypeLibrary::Util           qw( filter_tags );
 use MooseX::TypeLibrary::UndefinedType;
 use Sub::Install                        qw( install_sub );
@@ -157,6 +157,82 @@ you want all of them, use the C<:all> tag. For example:
 MooseX::TypeLibrary comes with a library of Moose' built-in types called
 L<MooseX::TypeLibrary::Moose>.
 
+=head1 WRAPPING A LIBRARY
+
+You can define your own wrapper subclasses to manipulate the behaviour
+of a set of library exports. Here is an example:
+
+  package MyWrapper;
+  use strict;
+  use Class::C3;
+  use base 'MooseX::TypeLibrary::Wrapper';
+
+  sub coercion_export_generator {
+      my $class = shift;
+      my $code = $class->next::method(@_);
+      return sub {
+          my $value = $code->(@_);
+          warn "Coercion returned undef!"
+              unless defined $value;
+          return $value;
+      };
+  }
+
+  1;
+
+This class wraps the coercion generator (e.g., C<to_Int()>) and warns
+if a coercion returned an undefined value. You can wrap any library
+with this:
+
+  package Foo;
+  use strict;
+  use MyWrapper MyLibrary => [qw( Foo Bar )],
+                Moose     => [qw( Str Int )];
+
+  ...
+  1;
+
+The C<Moose> library name is a special shortcut for 
+L<MooseX::TypeLibrary::Moose>.
+
+=head2 Generator methods you can overload
+
+=over 4
+
+=item type_export_generator( $short, $full )
+
+Creates a closure returning the type's L<Moose::Meta::TypeConstraint> 
+object. 
+
+=item check_export_generator( $short, $full, $undef_message )
+
+This creates the closure used to test if a value is valid for this type.
+
+=item coercion_export_generator( $short, $full, $undef_message )
+
+This is the closure that's doing coercions.
+
+=back
+
+=head2 Provided Parameters
+
+=over 4
+
+=item $short
+
+The short, exported name of the type.
+
+=item $full
+
+The fully qualified name of this type as L<Moose> knows it.
+
+=item $undef_message
+
+A message that will be thrown when type functionality is used but the
+type does not yet exist.
+
+=back
+
 =head1 METHODS
 
 =head2 import
@@ -193,11 +269,7 @@ sub import {
     }
 
     # run type constraints import
-    return Moose::Util::TypeConstraints
-        ->import({ into => $callee });
-#    return uplevel 1, 
-#        Moose::Util::TypeConstraints->can('import'), 
-#        'Moose::Util::TypeConstraints';
+    return Moose::Util::TypeConstraints->import({ into => $callee });
 }
 
 =head2 type_export_generator

@@ -6,13 +6,14 @@ MooseX::TypeLibrary::Base - Type library base class
 
 =cut
 
-use warnings;
-use strict;
+#use warnings;
+#use strict;
 
 use Sub::Install                    qw( install_sub );
 use Carp                            qw( croak );
 use MooseX::TypeLibrary::Util       qw( filter_tags );
 use Moose::Util::TypeConstraints;
+use Moose;
 use namespace::clean;
 
 =head1 DESCRIPTION

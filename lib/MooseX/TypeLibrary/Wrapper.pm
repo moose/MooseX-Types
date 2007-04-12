@@ -1,11 +1,14 @@
 package MooseX::TypeLibrary::Wrapper;
-use warnings;
-use strict;
-use base 'MooseX::TypeLibrary';
+#use warnings;
+#use strict;
+#use base 'MooseX::TypeLibrary';
 
 use Carp    qw( croak );
 use Class::Inspector;
+use Moose;
 use namespace::clean;
+
+extends 'MooseX::TypeLibrary';
 
 sub import {
     my ($class, @args) = @_;

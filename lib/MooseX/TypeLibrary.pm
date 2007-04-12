@@ -6,8 +6,8 @@ MooseX::TypeLibrary - Organise your Moose types in libraries
 
 =cut
 
-use warnings;
-use strict;
+#use warnings;
+#use strict;
 
 use Sub::Uplevel;
 use Moose::Util::TypeConstraints;
@@ -15,6 +15,7 @@ use MooseX::TypeLibrary::Base           ();
 use MooseX::TypeLibrary::Util           qw( filter_tags );
 use MooseX::TypeLibrary::UndefinedType;
 use Sub::Install                        qw( install_sub );
+use Moose;
 use namespace::clean;
 
 our $VERSION = 0.01;

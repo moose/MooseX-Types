@@ -5,9 +5,9 @@ use strict;
 use Test::More;
 use FindBin;
 use lib "$FindBin::Bin/lib";
-use MooseX::TypeLibrary::Moose ':all';
+use MooseX::Types::Moose ':all';
 
-my @types = MooseX::TypeLibrary::Moose->type_names;
+my @types = MooseX::Types::Moose->type_names;
 
 plan tests => @types * 3;
 

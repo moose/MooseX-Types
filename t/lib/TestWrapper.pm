@@ -1,9 +1,9 @@
 package TestWrapper;
 use Moose;
 
-extends 'MooseX::TypeLibrary::Wrapper';
+extends 'MooseX::Types::Wrapper';
 #use Class::C3;
-#use base 'MooseX::TypeLibrary::Wrapper';
+#use base 'MooseX::Types::Wrapper';
 
 override type_export_generator => sub {
     my $code = super();

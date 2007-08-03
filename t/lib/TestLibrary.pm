@@ -2,8 +2,8 @@ package TestLibrary;
 use warnings;
 use strict;
 
-use MooseX::TypeLibrary::Moose qw( Str ArrayRef Int );
-use MooseX::TypeLibrary
+use MooseX::Types::Moose qw( Str ArrayRef Int );
+use MooseX::Types
     -declare => [qw( NonEmptyStr IntArrayRef TwentyThree )];
 
 subtype NonEmptyStr,

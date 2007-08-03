@@ -1,8 +1,8 @@
-package MooseX::TypeLibrary::Base;
+package MooseX::Types::Base;
 
 =head1 NAME
 
-MooseX::TypeLibrary::Base - Type library base class
+MooseX::Types::Base - Type library base class
 
 =cut
 
@@ -11,7 +11,7 @@ MooseX::TypeLibrary::Base - Type library base class
 
 use Sub::Install                    qw( install_sub );
 use Carp                            qw( croak );
-use MooseX::TypeLibrary::Util       qw( filter_tags );
+use MooseX::Types::Util       qw( filter_tags );
 use Moose::Util::TypeConstraints;
 use Moose;
 use namespace::clean;
@@ -20,7 +20,7 @@ use namespace::clean;
 
 You normally won't need to interact with this class by yourself. It is
 merely a collection of functionality that type libraries need to 
-interact with moose and the rest of the L<MooseX::TypeLibrary> module.
+interact with moose and the rest of the L<MooseX::Types> module.
 
 =cut
 
@@ -33,7 +33,7 @@ my $UndefMsg = q{Unable to find type '%s' in library '%s'};
 =head2 import
 
 Provides the import mechanism for your library. See 
-L<MooseX::TypeLibrary/"LIBRARY USAGE"> for syntax details on this.
+L<MooseX::Types/"LIBRARY USAGE"> for syntax details on this.
 
 =cut
 
@@ -78,7 +78,7 @@ sub export_type_into {
     my $tobj = find_type_constraint($full);
 
     # a possible wrapper around library functionality
-    my $wrap = $args{ -wrapper } || 'MooseX::TypeLibrary';
+    my $wrap = $args{ -wrapper } || 'MooseX::Types';
 
     # install Type name constant
     install_sub({
@@ -185,7 +185,7 @@ sub type_storage {
 
 =head1 SEE ALSO
 
-L<MooseX::TypeLibrary::Moose>
+L<MooseX::Types::Moose>
 
 =head1 AUTHOR AND COPYRIGHT
 

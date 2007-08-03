@@ -4,10 +4,10 @@ use strict;
 
 use inc::Module::Install;
 
-name            q{MooseX-TypeLibrary};
+name            q{MooseX-Types};
 license         q{perl};
 author          q{Robert 'phaylon' Sedlacek <rs@474.at>};
-all_from        q{lib/MooseX/TypeLibrary.pm};
+all_from        q{lib/MooseX/Types.pm};
 
 build_requires  q{Test::More},                  '0.62';
 build_requires  q{FindBin},                     0;

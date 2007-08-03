@@ -1,14 +1,14 @@
-package MooseX::TypeLibrary::Wrapper;
+package MooseX::Types::Wrapper;
 #use warnings;
 #use strict;
-#use base 'MooseX::TypeLibrary';
+#use base 'MooseX::Types';
 
 use Carp    qw( croak );
 use Class::Inspector;
 use Moose;
 use namespace::clean;
 
-extends 'MooseX::TypeLibrary';
+extends 'MooseX::Types';
 
 sub import {
     my ($class, @args) = @_;
@@ -20,7 +20,7 @@ sub import {
             unless ref $libraries{ $l } eq 'ARRAY';
 
         my $library_class 
-          = ($l eq 'Moose' ? 'MooseX::TypeLibrary::Moose' : $l );
+          = ($l eq 'Moose' ? 'MooseX::Types::Moose' : $l );
         require Class::Inspector->filename($library_class)
             unless Class::Inspector->loaded($library_class);
 

@@ -1,8 +1,8 @@
-package MooseX::TypeLibrary::UndefinedType;
+package MooseX::Types::UndefinedType;
 
 =head1 NAME
 
-MooseX::TypeLibrary::UndefinedType - Represents a not yet defined type
+MooseX::Types::UndefinedType - Represents a not yet defined type
 
 =cut
 
@@ -40,7 +40,7 @@ sub name { $_[0]->{name} }
 
 =head1 SEE ALSO
 
-L<MooseX::TypeLibrary::Moose>,
+L<MooseX::Types::Moose>,
 L<Moose::Util::TypeConstraints>, 
 L<Moose::Meta::TypeConstraint>
 

@@ -1,15 +1,15 @@
-package MooseX::TypeLibrary::Moose;
+package MooseX::Types::Moose;
 
 =head1 NAME
 
-MooseX::TypeLibrary::Moose - Types shipped with L<Moose>
+MooseX::Types::Moose - Types shipped with L<Moose>
 
 =cut
 
 use warnings;
 use strict;
 
-use MooseX::TypeLibrary;
+use MooseX::Types;
 use Moose::Util::TypeConstraints ();
 use namespace::clean;
 
@@ -17,7 +17,7 @@ use namespace::clean;
 
   package Foo;
   use Moose;
-  use MooseX::TypeLibrary::Moose qw( Int Str );
+  use MooseX::Types::Moose qw( Int Str );
   use Carp qw( croak );
 
   has 'name',
@@ -39,8 +39,8 @@ use namespace::clean;
 
 =head1 DESCRIPTION
 
-This package contains a virtual library for L<MooseX::TypeLibrary> that
-is able to export all types known to L<Moose>. See L<MooseX::TypeLibrary>
+This package contains a virtual library for L<MooseX::Types> that
+is able to export all types known to L<Moose>. See L<MooseX::Types>
 for general usage information.
 
 =cut
@@ -54,7 +54,7 @@ my %BuiltIn_Storage
 
 =head2 type_storage
 
-Overrides L<MooseX::TypeLibrary::Base>' C<type_storage> to provide a hash
+Overrides L<MooseX::Types::Base>' C<type_storage> to provide a hash
 reference containing all built-in L<Moose> types.
 
 =cut
@@ -64,7 +64,7 @@ sub type_storage { \%BuiltIn_Storage }
 
 =head1 SEE ALSO
 
-L<MooseX::TypeLibrary::Moose>,
+L<MooseX::Types::Moose>,
 L<Moose>, 
 L<Moose::Util::TypeConstraints>
 

@@ -1,8 +1,8 @@
-package MooseX::TypeLibrary::Util;
+package MooseX::Types::Util;
 
 =head1 NAME
 
-MooseX::TypeLibrary::Util - Common utility functions for the module
+MooseX::Types::Util - Common utility functions for the module
 
 =cut
 
@@ -14,7 +14,7 @@ use base 'Exporter';
 =head1 DESCRIPTION
 
 This package the exportable functions that many parts in 
-L<MooseX::TypeLibrary> might need.
+L<MooseX::Types> might need.
 
 =cut
 
@@ -45,7 +45,7 @@ sub filter_tags {
 
 =head1 SEE ALSO
 
-L<MooseX::TypeLibrary::Moose>, L<Exporter>
+L<MooseX::Types::Moose>, L<Exporter>
 
 =head1 AUTHOR AND COPYRIGHT
 

@@ -1,8 +1,8 @@
-package MooseX::TypeLibrary;
+package MooseX::Types;
 
 =head1 NAME
 
-MooseX::TypeLibrary - Organise your Moose types in libraries
+MooseX::Types - Organise your Moose types in libraries
 
 =cut
 
@@ -11,9 +11,9 @@ MooseX::TypeLibrary - Organise your Moose types in libraries
 
 use Sub::Uplevel;
 use Moose::Util::TypeConstraints;
-use MooseX::TypeLibrary::Base           ();
-use MooseX::TypeLibrary::Util           qw( filter_tags );
-use MooseX::TypeLibrary::UndefinedType;
+use MooseX::Types::Base           ();
+use MooseX::Types::Util           qw( filter_tags );
+use MooseX::Types::UndefinedType;
 use Sub::Install                        qw( install_sub );
 use Moose;
 use namespace::clean;
@@ -31,11 +31,11 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   use strict;
 
   # predeclare our own types
-  use MooseX::TypeLibrary 
+  use MooseX::Types 
       -declare => [qw( PositiveInt NegativeInt )];
 
   # import builtin types
-  use MooseX::TypeLibrary::Moose 'Int';
+  use MooseX::Types::Moose 'Int';
 
   # type definition
   subtype PositiveInt, 
@@ -120,13 +120,13 @@ cannot hasn't defined any coercions will lead to a compile-time error.
 
 =head1 LIBRARY DEFINITION
 
-A MooseX::TypeLibrary is just a normal Perl module. Unlike Moose 
+A MooseX::Types is just a normal Perl module. Unlike Moose 
 itself, it does not install C<use strict> and C<use warnings> in your
 class by default, so this is up to you.
 
 The only thing a library is required to do is
 
-  use MooseX::TypeLibrary -declare => \@types;
+  use MooseX::Types -declare => \@types;
 
 with C<@types> being a list of types you wish to define in this library.
 This line will install a proper base class in your package as well as the
@@ -138,9 +138,9 @@ types.
 If you want to use Moose' built-in types (e.g. for subtyping) you will 
 want to 
 
-  use MooseX::TypeLibrary::Moose @types;
+  use MooseX::Types::Moose @types;
 
-to import the helpers from the shipped L<MooseX::TypeLibrary::Moose>
+to import the helpers from the shipped L<MooseX::Types::Moose>
 library which can export all types that come with Moose.
 
 You will have to define coercions for your types or your library won't
@@ -155,8 +155,8 @@ you want all of them, use the C<:all> tag. For example:
   use MyLibrary      ':all';
   use MyOtherLibrary qw( TypeA TypeB );
 
-MooseX::TypeLibrary comes with a library of Moose' built-in types called
-L<MooseX::TypeLibrary::Moose>.
+MooseX::Types comes with a library of Moose' built-in types called
+L<MooseX::Types::Moose>.
 
 =head1 WRAPPING A LIBRARY
 
@@ -166,7 +166,7 @@ of a set of library exports. Here is an example:
   package MyWrapper;
   use strict;
   use Class::C3;
-  use base 'MooseX::TypeLibrary::Wrapper';
+  use base 'MooseX::Types::Wrapper';
 
   sub coercion_export_generator {
       my $class = shift;
@@ -194,7 +194,7 @@ with this:
   1;
 
 The C<Moose> library name is a special shortcut for 
-L<MooseX::TypeLibrary::Moose>.
+L<MooseX::Types::Moose>.
 
 =head2 Generator methods you can overload
 
@@ -238,7 +238,7 @@ type does not yet exist.
 
 =head2 import
 
-Installs the L<MooseX::TypeLibrary::Base> class into the caller and 
+Installs the L<MooseX::Types::Base> class into the caller and 
 exports types according to the specification described in 
 L</"LIBRARY DEFINITION">. This will continue to 
 L<Moose::Util::TypeConstraints>' C<import> method to export helper
@@ -252,7 +252,7 @@ sub import {
 
     # inject base class into new library
     {   no strict 'refs';
-        unshift @{ $callee . '::ISA' }, 'MooseX::TypeLibrary::Base';
+        unshift @{ $callee . '::ISA' }, 'MooseX::Types::Base';
     }
 
     # generate predeclared type helpers
@@ -277,7 +277,7 @@ sub import {
 
 Generate a type export, e.g. C<Int()>. This will return either a
 L<Moose::Meta::TypeConstraint> object, or alternatively a
-L<MooseX::TypeLibrary::UndefinedType> object if the type was not
+L<MooseX::Types::UndefinedType> object if the type was not
 yet defined.
 
 =cut
@@ -286,7 +286,7 @@ sub type_export_generator {
     my ($class, $type, $full) = @_;
     return sub { 
         return find_type_constraint($full)
-            || MooseX::TypeLibrary::UndefinedType->new($full);
+            || MooseX::Types::UndefinedType->new($full);
     };
 }
 
@@ -334,12 +334,12 @@ sub check_export_generator {
 
 A library makes the types quasi-unique by prefixing their names with (by
 default) the library package name. If you're only using the type handler
-functions provided by MooseX::TypeLibrary, you shouldn't ever have to use
+functions provided by MooseX::Types, you shouldn't ever have to use
 a type's actual full name.
 
 =head1 SEE ALSO
 
-L<Moose>, L<Moose::Util::TypeConstraints>, L<MooseX::TypeLibrary::Moose>
+L<Moose>, L<Moose::Util::TypeConstraints>, L<MooseX::Types::Moose>
 
 =head1 AUTHOR AND COPYRIGHT
 

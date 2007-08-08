@@ -1,6 +1,8 @@
 
 0.03    ...
         - Minor POD typo correction
+        - Added some error messages for wrong type names
+        - Coercion handler not exported without type object
 
 0.02    Wed Aug  8 20:33:42 CEST 2007
         - Changed declaration to croak when it sees '::' in a typename

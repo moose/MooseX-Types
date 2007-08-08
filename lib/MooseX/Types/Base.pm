@@ -10,7 +10,7 @@ MooseX::Types::Base - Type library base class
 #use strict;
 
 use Sub::Install                    qw( install_sub );
-use Carp                            qw( croak );
+use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );
 use Moose::Util::TypeConstraints;
 use Moose;
@@ -75,7 +75,8 @@ sub export_type_into {
     my ($class, $target, $type, $undef_msg, %args) = @_;
     
     # the real type name and its type object
-    my $full = $class->get_type($type);
+    my $full = $class->get_type($type)
+        or croak "No fully qualified type name stored for '$type'";
     my $tobj = find_type_constraint($full);
 
     # a possible wrapper around library functionality
@@ -97,7 +98,7 @@ sub export_type_into {
 
     # only install to_Type coercion handler if type can coerce
     # or if we want to provide them anyway, e.g. declarations
-    if ($args{ -full } or $tobj->has_coercion) {
+    if ($args{ -full } or $tobj and $tobj->has_coercion) {
     
         # install to_Type coercion handler
         install_sub({

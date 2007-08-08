@@ -19,7 +19,7 @@ use Moose;
 
 use namespace::clean -except => [qw( meta )];
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 

@@ -1,0 +1,10 @@
+
+0.03    ...
+        - Minor POD typo correction
+
+0.02    Wed Aug  8 20:33:42 CEST 2007
+        - Changed declaration to croak when it sees '::' in a typename
+
+0.01    Wed Aug  8 18:19:34 CEST 2007
+        - Initial release
+

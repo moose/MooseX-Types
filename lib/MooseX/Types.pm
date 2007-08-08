@@ -15,6 +15,7 @@ use MooseX::Types::Base             ();
 use MooseX::Types::Util             qw( filter_tags );
 use MooseX::Types::UndefinedType;
 use Sub::Install                    qw( install_sub );
+use Carp                            qw( croak );
 use Moose;
 
 use namespace::clean -except => [qw( meta )];
@@ -145,6 +146,9 @@ library which can export all types that come with Moose.
 You will have to define coercions for your types or your library won't
 export a L</to_$type> coercion helper for it.
 
+Note that you currently cannot define types containint C<::>, since 
+exporting would be a problem.
+
 =head1 LIBRARY USAGE
 
 You can import the L<"type helpers"|/"TYPE HANDLER FUNCTIONS"> of a
@@ -259,6 +263,10 @@ sub import {
         my ($tags, $declare) = filter_tags @orig_declare;
 
         for my $type (@$declare) {
+
+            croak "Cannot create a type containing '::' ($type) at the moment"
+                if $type =~ /::/;
+
             $callee->add_type($type);
             $callee->export_type_into(
                 $callee, $type, 

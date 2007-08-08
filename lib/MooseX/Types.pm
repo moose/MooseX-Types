@@ -20,7 +20,7 @@ use Moose;
 
 use namespace::clean -except => [qw( meta )];
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
@@ -146,7 +146,7 @@ library which can export all types that come with Moose.
 You will have to define coercions for your types or your library won't
 export a L</to_$type> coercion helper for it.
 
-Note that you currently cannot define types containint C<::>, since 
+Note that you currently cannot define types containing C<::>, since 
 exporting would be a problem.
 
 =head1 LIBRARY USAGE

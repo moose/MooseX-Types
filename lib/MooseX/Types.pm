@@ -11,12 +11,13 @@ MooseX::Types - Organise your Moose types in libraries
 
 use Sub::Uplevel;
 use Moose::Util::TypeConstraints;
-use MooseX::Types::Base           ();
-use MooseX::Types::Util           qw( filter_tags );
+use MooseX::Types::Base             ();
+use MooseX::Types::Util             qw( filter_tags );
 use MooseX::Types::UndefinedType;
-use Sub::Install                        qw( install_sub );
+use Sub::Install                    qw( install_sub );
 use Moose;
-use namespace::clean;
+
+use namespace::clean -except => [qw( meta )];
 
 our $VERSION = 0.01;
 
@@ -24,9 +25,8 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
 
-  #
-  # Library Definition
-  #
+=head2 Library Definition
+
   package MyLibrary;
   use strict;
 
@@ -55,9 +55,8 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
   1;
 
-  #
-  # Usage
-  #
+=head2 Usage
+
   package Foo;
   use Moose;
   use MyLibrary qw( PositiveInt NegativeInt );

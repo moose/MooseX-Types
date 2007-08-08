@@ -11,10 +11,11 @@ MooseX::Types::Base - Type library base class
 
 use Sub::Install                    qw( install_sub );
 use Carp                            qw( croak );
-use MooseX::Types::Util       qw( filter_tags );
+use MooseX::Types::Util             qw( filter_tags );
 use Moose::Util::TypeConstraints;
 use Moose;
-use namespace::clean;
+
+use namespace::clean -except => [qw( meta )];
 
 =head1 DESCRIPTION
 

@@ -11,7 +11,8 @@ use strict;
 
 use MooseX::Types;
 use Moose::Util::TypeConstraints ();
-use namespace::clean;
+
+use namespace::clean -except => [qw( meta )];
 
 =head1 SYNOPSIS
 

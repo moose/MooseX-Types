@@ -1,4 +1,7 @@
 
+0.04    ...
+        - ...
+
 0.03    Thu Aug  9 14:41:58 CEST 2007
         - Minor POD typo correction
         - Added some error messages for wrong type names

@@ -1,8 +1,9 @@
 
-0.03    ...
+0.03    Thu Aug  9 14:41:58 CEST 2007
         - Minor POD typo correction
         - Added some error messages for wrong type names
         - Coercion handler not exported without type object
+        - Moved from Class::Inspector to Class::MOP::load_class
 
 0.02    Wed Aug  8 20:33:42 CEST 2007
         - Changed declaration to croak when it sees '::' in a typename

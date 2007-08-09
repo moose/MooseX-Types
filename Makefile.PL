@@ -17,8 +17,14 @@ requires        q{Sub::Uplevel},                0.14;
 requires        q{Sub::Install},                0.922;
 requires        q{namespace::clean},            0.04;
 requires        q{Carp},                        0;
+requires        q{Carp::Clan},                  0;
+requires        q{Class::MOP},                  0;
 
 system 'pod2text lib/MooseX/Types.pm > README'
     if -e 'MANIFEST.SKIP';
+
+auto_provides;
+
+auto_install;
 
 WriteAll;

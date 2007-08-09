@@ -1,14 +1,28 @@
+=head1 NAME
+
+MooseX::Types::Wrapper - Wrap exports from a library
+
+=cut
+
 package MooseX::Types::Wrapper;
-#use warnings;
-#use strict;
-#use base 'MooseX::Types';
+use Moose;
 
 use Carp    qw( croak );
-use Class::Inspector;
-use Moose;
-use namespace::clean;
+use Class::MOP;
+
+use namespace::clean -except => [qw( meta )];
 
 extends 'MooseX::Types';
+
+=head1 DESCRIPTION
+
+See L<MooseX::Types/SYNOPSIS> for detailed usage.
+
+=head1 METHODS
+
+=head2 import
+
+=cut
 
 sub import {
     my ($class, @args) = @_;
@@ -21,8 +35,7 @@ sub import {
 
         my $library_class 
           = ($l eq 'Moose' ? 'MooseX::Types::Moose' : $l );
-        require Class::Inspector->filename($library_class)
-            unless Class::Inspector->loaded($library_class);
+        Class::MOP::load_class($library_class);
 
         $library_class->import( @{ $libraries{ $l } }, { 
             -into    => scalar(caller),
@@ -33,3 +46,19 @@ sub import {
 }
 
 1;
+
+=head1 SEE ALSO
+
+L<MooseX::Types>
+
+=head1 AUTHOR AND COPYRIGHT
+
+Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
+the C<#moose> cabal on C<irc.perl.org>.
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as perl itself.
+
+=cut

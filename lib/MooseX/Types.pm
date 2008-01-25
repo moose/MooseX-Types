@@ -9,7 +9,6 @@ MooseX::Types - Organise your Moose types in libraries
 #use warnings;
 #use strict;
 
-use Sub::Uplevel;
 use Moose::Util::TypeConstraints;
 use MooseX::Types::Base             ();
 use MooseX::Types::Util             qw( filter_tags );

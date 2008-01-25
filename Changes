@@ -1,6 +1,8 @@
 
 0.05    ...
         - ...
+        - removed vestigial load of Sub::UpLevel since it breaks
+          the argument display in confess()
 
 0.04    Thu Aug  9 20:56:14 CEST 2007
         - Automatically set strict and warnings like Moose does

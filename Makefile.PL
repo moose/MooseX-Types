@@ -13,7 +13,6 @@ build_requires  q{Test::More},                  0.62;
 build_requires  q{FindBin},                     0;
 
 requires        q{Moose},                       0.24;
-requires        q{Sub::Uplevel},                0.14;
 requires        q{Sub::Install},                0.922;
 requires        q{namespace::clean},            0.04;
 requires        q{Carp},                        0;

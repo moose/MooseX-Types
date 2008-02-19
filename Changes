@@ -1,6 +1,8 @@
 
 0.05    ...
-        - ...
+        - moved export mechanism to Sub::Exporter. ::Base contains
+          a bunch of wrapping logic to allow the export-along functionality
+          for the helper symbols
         - removed vestigial load of Sub::UpLevel since it breaks
           the argument display in confess()
 

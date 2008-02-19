@@ -4,7 +4,7 @@ use strict;
 
 use MooseX::Types::Moose qw( Str ArrayRef Int );
 use MooseX::Types
-    -declare => [qw( NonEmptyStr IntArrayRef TwentyThree )];
+    -declare => [qw( NonEmptyStr IntArrayRef TwentyThree Foo2Alias )];
 
 subtype NonEmptyStr,
     as Str,
@@ -28,5 +28,9 @@ subtype TwentyThree,
     as Int,
     where { $_ == 23 },
     message { 'Int is not 23' };
+
+subtype Foo2Alias,
+    as Str,
+    where { 1 };
 
 1;

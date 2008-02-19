@@ -7,7 +7,7 @@ MooseX::Types::Wrapper - Wrap exports from a library
 package MooseX::Types::Wrapper;
 use Moose;
 
-use Carp    qw( croak );
+use Carp::Clan      qw( ^MooseX::Types );
 use Class::MOP;
 
 use namespace::clean -except => [qw( meta )];
@@ -37,10 +37,10 @@ sub import {
           = ($l eq 'Moose' ? 'MooseX::Types::Moose' : $l );
         Class::MOP::load_class($library_class);
 
-        $library_class->import( @{ $libraries{ $l } }, { 
+        $library_class->import({ 
             -into    => scalar(caller),
             -wrapper => $class,
-        });
+        }, @{ $libraries{ $l } });
     }
     return 1;
 }

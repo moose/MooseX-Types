@@ -1,4 +1,5 @@
 package MooseX::Types::Base;
+use Moose;
 
 =head1 NAME
 
@@ -6,14 +7,11 @@ MooseX::Types::Base - Type library base class
 
 =cut
 
-#use warnings;
-#use strict;
-
-use Sub::Install                    qw( install_sub );
+#use Data::Dump                      qw( dump );
 use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );
+use Sub::Exporter                   qw( build_exporter );
 use Moose::Util::TypeConstraints;
-use Moose;
 
 use namespace::clean -except => [qw( meta )];
 
@@ -41,74 +39,77 @@ L<MooseX::Types/"LIBRARY USAGE"> for syntax details on this.
 sub import {
     my ($class, @args) = @_;
 
-    # separate tags from types and possible options
-    my ($options) = grep { ref $_ eq 'HASH' } @args;
-    my ($tags, $types) 
-      = filter_tags
-        grep { ref $_ ne 'HASH' }
-        @args;
-    my $callee = ($options && $options->{ -into } || scalar(caller));
+    # filter or create options hash for S:E
+    my $options = (@args and (ref($args[0]) eq 'HASH')) ? $args[0] : undef;
+    unless ($options) {
+        $options = {foo => 23};
+        unshift @args, $options;
+    }
 
-    # :all replaces types with full list
-    @$types = $class->type_names if $tags->{all};
+    # all types known to us
+    my @types = $class->type_names;
 
+    # determine the wrapper, -into is supported for compatibility reasons
+    my $wrapper = $options->{ -wrapper } || 'MooseX::Types';
+    $args[0]->{into} = $options->{ -into } 
+        if exists $options->{ -into };
+
+    my (%ex_spec, %ex_util);
   TYPE:
-    # export all requested types
-    for my $type (@$types) {
-        $class->export_type_into(
-            $callee, 
-            $type, 
-            sprintf($UndefMsg, $type, $class),
-            ($options ? %$options : ()),
-        );
-    }
-    return 1;
-}
+    for my $type_short (@types) {
 
-=head2 export_type_into
+        # find type name and object, create undefined message
+        my $type_full = $class->get_type($type_short)
+            or croak "No fully qualified type name stored for '$type_short'";
+        my $type_cons = find_type_constraint($type_full);
+        my $undef_msg = sprintf($UndefMsg, $type_short, $class);
 
-Exports one specific type into a target package.
+        # the type itself
+        push @{ $ex_spec{exports} }, 
+            $type_short,
+            sub { $wrapper->type_export_generator($type_short, $type_full) };
 
-=cut
+        # the check helper
+        push @{ $ex_spec{exports} },
+            "is_${type_short}",
+            sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg) };
 
-sub export_type_into {
-    my ($class, $target, $type, $undef_msg, %args) = @_;
-    
-    # the real type name and its type object
-    my $full = $class->get_type($type)
-        or croak "No fully qualified type name stored for '$type'";
-    my $tobj = find_type_constraint($full);
-
-    # a possible wrapper around library functionality
-    my $wrap = $args{ -wrapper } || 'MooseX::Types';
-
-    # install Type name constant
-    install_sub({
-        code => $wrap->type_export_generator($type, $full),
-        into => $target,
-        as   => $type,
-    });
-
-    # install is_Type test function
-    install_sub({
-        code => $wrap->check_export_generator($type, $full, $undef_msg),
-        into => $target,
-        as   => "is_$type",
-    });
-
-    # only install to_Type coercion handler if type can coerce
-    # or if we want to provide them anyway, e.g. declarations
-    if ($args{ -full } or $tobj and $tobj->has_coercion) {
-    
-        # install to_Type coercion handler
-        install_sub({
-            code => $wrap->coercion_export_generator($type, $full, $undef_msg),
-            into => $target,
-            as   => "to_$type",
-        });
+        # only export coercion helper if full (for libraries) or coercion is defined
+        next TYPE
+            unless $options->{ -full }
+            or ($type_cons and $type_cons->has_coercion);
+        push @{ $ex_spec{exports} },
+            "to_${type_short}",
+            sub { $wrapper->coercion_export_generator($type_short, $type_full, $undef_msg) };
+        $ex_util{ $type_short }{to}++;  # shortcut to remember this exists
     }
 
-    return 1;
+    # create S:E exporter and increase export level unless specified explicitly
+    my $exporter = build_exporter \%ex_spec;
+    $options->{into_level}++ 
+        unless $options->{into};
+
+    # remember requested symbols to determine what helpers to auto-export
+    my %was_requested = 
+        map  { ($_ => 1) } 
+        grep { not ref } 
+        @args;
+
+    # determine which additional symbols (helpers) to export along
+    my %add;
+  EXPORT:
+    for my $type (grep { exists $was_requested{ $_ } } @types) {
+        $add{ "is_$type" }++
+            unless $was_requested{ "is_$type" };
+        next EXPORT
+            unless exists $ex_util{ $type }{to};
+        $add{ "to_$type" }++
+            unless $was_requested{ "to_$type" };
+    }
+
+    # and on to the real exporter
+    my @new_args = (@args, keys %add);
+    return $class->$exporter(@new_args);
 }
 
 =head2 get_type

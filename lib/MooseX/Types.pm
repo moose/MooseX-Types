@@ -1,4 +1,5 @@
 package MooseX::Types;
+use Moose;
 
 =head1 NAME
 
@@ -13,9 +14,7 @@ use Moose::Util::TypeConstraints;
 use MooseX::Types::Base             ();
 use MooseX::Types::Util             qw( filter_tags );
 use MooseX::Types::UndefinedType;
-use Sub::Install                    qw( install_sub );
-use Carp                            qw( croak );
-use Moose;
+use Carp::Clan                      qw( ^MooseX::Types );
 
 use namespace::clean -except => [qw( meta )];
 
@@ -162,6 +161,12 @@ you want all of them, use the C<:all> tag. For example:
 MooseX::Types comes with a library of Moose' built-in types called
 L<MooseX::Types::Moose>.
 
+The exporting mechanism is, since version 0.5, implemented via a wrapper
+around L<Sub::Exporter>. This means you can do something like this:
+
+  use MyLibrary TypeA => { -as => 'MyTypeA' },
+                TypeB => { -as => 'MyTypeB' };
+
 =head1 WRAPPING A LIBRARY
 
 You can define your own wrapper subclasses to manipulate the behaviour
@@ -266,19 +271,19 @@ sub import {
     # generate predeclared type helpers
     if (my @orig_declare = @{ $args{ -declare } || [] }) {
         my ($tags, $declare) = filter_tags @orig_declare;
+        my @to_export;
 
         for my $type (@$declare) {
 
             croak "Cannot create a type containing '::' ($type) at the moment"
                 if $type =~ /::/;
 
+            # add type to library and remember to export
             $callee->add_type($type);
-            $callee->export_type_into(
-                $callee, $type, 
-                sprintf($UndefMsg, $type, $callee), 
-                -full => 1,
-            );
+            push @to_export, $type;
         }
+
+        $callee->import({ -full => 1, -into => $callee }, @to_export);
     }
 
     # run type constraints import
@@ -351,7 +356,10 @@ a type's actual full name.
 
 =head1 SEE ALSO
 
-L<Moose>, L<Moose::Util::TypeConstraints>, L<MooseX::Types::Moose>
+L<Moose>, 
+L<Moose::Util::TypeConstraints>, 
+L<MooseX::Types::Moose>,
+L<Sub::Exporter>
 
 =head1 AUTHOR AND COPYRIGHT
 

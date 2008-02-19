@@ -5,14 +5,15 @@ use strict;
 use Test::More;
 use FindBin;
 use lib "$FindBin::Bin/lib";
-use TestLibrary ':all';
+use TestLibrary qw( NonEmptyStr IntArrayRef ),
+                Foo2Alias => { -as => 'Foo' };
 
 my @tests = (
     [ 'NonEmptyStr', 12, "12", [], "foobar", "" ],
     [ 'IntArrayRef', 12, [12], {}, [17, 23], {} ],
 );
 
-plan tests => (@tests * 8) + 3;
+plan tests => (@tests * 8) + 5;
 
 # new array ref so we can safely shift from it
 for my $data (map { [@$_] } @tests) {
@@ -40,6 +41,10 @@ for my $data (map { [@$_] } @tests) {
         ok ! $code->($invalid), "is_$type() check false on invalid value";
     }
 }
+
+# aliasing test
+ok my $code = __PACKAGE__->can('Foo'),      'aliased type exported under correct symbol';
+is $code->(), 'TestLibrary::Foo2Alias',     'aliased type returns unaliased type name';
 
 # coercion not available
 ok ! __PACKAGE__->can('to_TwentyThree'), "type without coercion doesn't have to_* helper";

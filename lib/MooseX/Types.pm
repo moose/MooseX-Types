@@ -11,6 +11,7 @@ MooseX::Types - Organise your Moose types in libraries
 #use strict;
 
 use Moose::Util::TypeConstraints;
+use MooseX::Types::TypeDecorator;
 use MooseX::Types::Base             ();
 use MooseX::Types::Util             qw( filter_tags );
 use MooseX::Types::UndefinedType;
@@ -301,9 +302,12 @@ yet defined.
 
 sub type_export_generator {
     my ($class, $type, $full) = @_;
-    return sub { 
-        return find_type_constraint($full)
-            || MooseX::Types::UndefinedType->new($full);
+    return sub {
+        my @args = @_;
+        use Data::Dump qw/dump/; warn @args;
+        my $type_constraint = find_type_constraint($full)
+         || MooseX::Types::UndefinedType->new($full);
+        return MooseX::Types::TypeDecorator->new(type_constraint=>$type_constraint);
     };
 }
 

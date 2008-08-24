@@ -1,13 +1,14 @@
 package MooseX::Types::TypeDecorator;
 
 use Moose;
-use Moose::Util::TypeConstraints;
+use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint ();
 
 use overload(
     '""' => sub {
         shift->type_constraint->name;  
     },
+    '&' => sub {warn 'got code context'},
 );
 
 =head1 NAME
@@ -29,7 +30,7 @@ Used to make sure we can properly validate incoming type constraints.
 
 =cut
 
-class_type 'Moose::Meta::TypeConstraint';
+Moose::Util::TypeConstraints::class_type 'Moose::Meta::TypeConstraint';
 
 =head2 MooseX::Types::UndefinedType
 
@@ -37,7 +38,7 @@ Used since sometimes our constraint is an unknown type.
 
 =cut
 
-class_type 'MooseX::Types::UndefinedType';
+Moose::Util::TypeConstraints::class_type 'MooseX::Types::UndefinedType';
 
 =head1 ATTRIBUTES
 
@@ -53,8 +54,11 @@ has 'type_constraint' => (
     is=>'ro',
     isa=>'Moose::Meta::TypeConstraint|MooseX::Types::UndefinedType',
     handles=>[
-        Moose::Meta::TypeConstraint->meta->compute_all_applicable_methods,
-        "_compiled_type_constraint",
+        grep {
+            $_ ne 'meta' && $_ ne '(""';
+        } map {
+            $_->{name};
+        } Moose::Meta::TypeConstraint->meta->compute_all_applicable_methods,
     ],
 );
 

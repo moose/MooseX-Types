@@ -304,14 +304,14 @@ sub type_export_generator {
     my ($class, $type, $full) = @_;
     return sub {
         my @args = @_;
-        use Data::Dump qw/dump/; warn dump @args if @args;
+        #use Data::Dump qw/dump/; warn dump @args if @args;
         my $type_constraint = find_type_constraint($full)
          || MooseX::Types::UndefinedType->new($full);
          
         if(@args) {
             my $tc = $args[0]->[0];
-            warn dump $tc;
-            $type_constraint->type_constraint($tc);
+           # warn dump $tc;
+           # $type_constraint->type_constraint($tc);
         }
         return MooseX::Types::TypeDecorator->new(type_constraint=>$type_constraint);
     };

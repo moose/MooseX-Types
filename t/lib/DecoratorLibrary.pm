@@ -11,6 +11,7 @@ use MooseX::Types
         MyArrayRefInt02
         MyHashRefOfInts
         MyHashRefOfStr
+        StrOrArrayRef
     )];
 
 subtype MyArrayRefBase,
@@ -48,5 +49,7 @@ coerce MyArrayRefInt02,
     ### Can't do HashRef[ArrayRef] here, need to force precidence I guess???
     from HashRef([ArrayRef]),
     via {[ sort map { @$_ } values(%$_)] };
-    
+
+subtype StrOrArrayRef,
+    from Str|ArrayRef;
 1;

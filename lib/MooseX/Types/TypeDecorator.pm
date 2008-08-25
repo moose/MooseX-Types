@@ -3,9 +3,16 @@ package MooseX::Types::TypeDecorator;
 use strict;
 use warnings;
 
+use Moose::Util::TypeConstraints;
 use overload(
     '""' => sub {
         shift->type_constraint->name;  
+    },
+    '|' => sub {
+        my @names = grep {$_} map {"$_"} @_;
+        ## Don't know why I can't use the array version of this...
+        my $names = join('|', @names);
+        Moose::Util::TypeConstraints::create_type_constraint_union($names);
     },
 );
 

@@ -9,6 +9,8 @@ use MooseX::Types
         MyArrayRefBase
         MyArrayRefInt01
         MyArrayRefInt02
+        MyHashRefOfInts
+        MyHashRefOfStr
     )];
 
 subtype MyArrayRefBase,
@@ -29,12 +31,22 @@ coerce MyArrayRefInt01,
     
 subtype MyArrayRefInt02,
     as MyArrayRefBase[Int];
+    
+subtype MyHashRefOfInts,
+    as HashRef[Int];
+    
+subtype MyHashRefOfStr,
+    as HashRef[Str];
 
 coerce MyArrayRefInt02,
     from Str,
-    via {[split(':',$_)]};
-    from HashRef[Int],
-    via {[values(%$_)]},
-    from HashRef[Str],
-    via {[ map { length $_ } values(%_) ]};
+    via {[split(':',$_)]},
+    from MyHashRefOfInts,
+    via {[sort values(%$_)]},
+    from MyHashRefOfStr,
+    via {[ sort map { length $_ } values(%$_) ]},
+    ### Can't do HashRef[ArrayRef] here, need to force precidence I guess???
+    from HashRef([ArrayRef]),
+    via {[ sort map { @$_ } values(%$_)] };
+    
 1;

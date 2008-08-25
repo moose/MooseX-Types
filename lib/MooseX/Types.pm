@@ -300,23 +300,54 @@ yet defined.
 
 =cut
 
-use Data::Dump qw/dump/;
-
 sub type_export_generator {
-    my ($class, $type, $full) = @_;
+    my ($class, $type, $name) = @_;
     return sub {
-        ## todo, this needs to be some sort of ->process_args on the actual
-        ## containing type constraints.  This is ugly proof of concept
-        if(my $param = shift @_) {
-            #my @tc_args = map { find_type_constraint($full) } @args;
-            $full = $full .'['.  $param->[0]->name .']';
+        my $type_constraint;
+        if(my $params = shift @_) {
+            $type_constraint = $class->create_arged_type_constraint($name, @$params);
+        } else {
+            $type_constraint = $class->create_base_type_constraint($name)
+             || MooseX::Types::UndefinedType->new($name);           
         }
-        
-        my $type_constraint = find_type_constraint($full)
-         || MooseX::Types::UndefinedType->new($full);
-
-        return MooseX::Types::TypeDecorator->new(type_constraint=>$type_constraint);
+        return $class->create_type_decorator($type_constraint);
     };
+}
+
+=head2 create_arged_type_constraint ($name, @args)
+
+Given a String $name with @args find the matching typeconstraint.
+
+=cut
+
+sub create_arged_type_constraint {
+    my ($class, $name, @args) = @_;
+    ### This whole section is a real TODO :)  Ugly hack to get the base tests working.
+    my $fullname = $name."[$args[0]]";
+    return Moose::Util::TypeConstraints::create_parameterized_type_constraint($fullname);
+}
+
+=head2 create_base_type_constraint ($name)
+
+Given a String $name, find the matching typeconstraint.
+
+=cut
+
+sub create_base_type_constraint {
+    my ($class, $name) = @_;
+    return find_type_constraint($name);
+}
+
+=head2 create_type_decorator ($type_constraint)
+
+Given a $type_constraint, return a lightweight L<MooseX::Types::TypeDecorator>
+instance.
+
+=cut
+
+sub create_type_decorator {
+    my ($class, $type_constraint) = @_;
+    return MooseX::Types::TypeDecorator->new(type_constraint=>$type_constraint);
 }
 
 =head2 coercion_export_generator

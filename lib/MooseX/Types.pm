@@ -300,19 +300,21 @@ yet defined.
 
 =cut
 
+use Data::Dump qw/dump/;
+
 sub type_export_generator {
     my ($class, $type, $full) = @_;
     return sub {
-        my @args = @_;
-        #use Data::Dump qw/dump/; warn dump @args if @args;
+        ## todo, this needs to be some sort of ->process_args on the actual
+        ## containing type constraints.  This is ugly proof of concept
+        if(my $param = shift @_) {
+            #my @tc_args = map { find_type_constraint($full) } @args;
+            $full = $full .'['.  $param->[0]->name .']';
+        }
+        
         my $type_constraint = find_type_constraint($full)
          || MooseX::Types::UndefinedType->new($full);
-         
-        if(@args) {
-            my $tc = $args[0]->[0];
-           # warn dump $tc;
-           # $type_constraint->type_constraint($tc);
-        }
+
         return MooseX::Types::TypeDecorator->new(type_constraint=>$type_constraint);
     };
 }

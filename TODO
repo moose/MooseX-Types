@@ -7,6 +7,8 @@ Moose::TypeConstraint->create_base(%opt);
 Moose::TypeConstraint->create_structured(%opt, %signature_opts);
 Moose::TypeConstraint->create_parameterized(%opt, %);
 
+Or some sort of pattern for type constraints that accept args?
+
 then a ...->create(%opt) that chooses one of the above????
 
 

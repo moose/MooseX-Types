@@ -44,18 +44,24 @@ is_deeply $type->arrayrefbase, [qw(d e f)],
 
 ## test arrayrefint01 normal and coercion
 
-ok $type->arrayrefint01([qw(a b c)])
- => 'Assigned arrayrefbase qw(a b c)';
+ok $type->arrayrefint01([qw(1 2 3)])
+ => 'Assigned arrayrefbase qw(1 2 3)';
  
-is_deeply $type->arrayrefint01, [qw(a b c)],
+is_deeply $type->arrayrefint01, [qw(1 2 3)],
  => 'Assigment is correct';
 
-ok $type->arrayrefint01('d.e.f')
- => 'Assigned arrayrefbase d,e,f to test coercion';
+ok $type->arrayrefint01('4.5.6')
+ => 'Assigned arrayrefbase 4.5.6 to test coercion from Str';
  
-is_deeply $type->arrayrefint01, [qw(d e f)],
+is_deeply $type->arrayrefint01, [qw(4 5 6)],
  => 'Assigment and coercion is correct';
 
+ok $type->arrayrefint01({a=>7,b=>8})
+ => 'Assigned arrayrefbase {a=>7,b=>8} to test coercion from HashRef';
+ 
+is_deeply $type->arrayrefint01, [qw(7 8)],
+ => 'Assigment and coercion is correct';
+ 
 #use Data::Dump qw/dump/;
 #warn dump  MyArrayRefInt01;
 #warn dump MyArrayRefBase->validate('aaa,bbb,ccc');

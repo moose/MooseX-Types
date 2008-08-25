@@ -25,7 +25,7 @@ coerce MyArrayRefInt01,
     from Str,
     via {[split('\.',$_)]},
     from HashRef,
-    via {[values(%$_)]};
+    via {[sort values(%$_)]};
     
 subtype MyArrayRefInt02,
     as MyArrayRefBase[Int];

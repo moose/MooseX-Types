@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 29;
+use Test::More tests => 33;
 use Test::Exception;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -16,6 +16,7 @@ use lib "$FindBin::Bin/lib";
     );
     use DecoratorLibrary qw(
         MyArrayRefBase MyArrayRefInt01 MyArrayRefInt02 StrOrArrayRef
+        AtLeastOneInt
     );
     
     has 'arrayrefbase' => (is=>'rw', isa=>MyArrayRefBase, coerce=>1);
@@ -23,6 +24,7 @@ use lib "$FindBin::Bin/lib";
     has 'arrayrefint02' => (is=>'rw', isa=>MyArrayRefInt02, coerce=>1);
     has 'arrayrefint03' => (is=>'rw', isa=>MyArrayRefBase[Int]);
     has 'StrOrArrayRef' => (is=>'rw', isa=>StrOrArrayRef);
+    has 'AtLeastOneInt' => (is=>'rw', isa=>AtLeastOneInt);
 }
 
 ## Make sure we have a 'create object sanity check'
@@ -126,3 +128,20 @@ ok $type->StrOrArrayRef([1,2,3])
 throws_ok sub {
     $type->StrOrArrayRef({a=>111});
 }, qr/Attribute \(StrOrArrayRef\) does not pass the type constraint/ => 'Correctly failed to use a hashref';
+
+# Test AtLeastOneInt
+
+ok $type->AtLeastOneInt([1,2]),
+ => 'Good assignment';
+
+is_deeply $type->AtLeastOneInt, [1,2]
+ => "Got expected values.";
+ 
+throws_ok sub {
+    $type->AtLeastOneInt([]);
+}, qr/Attribute \(AtLeastOneInt\) does not pass the type constraint/ => 'properly fails';
+
+throws_ok sub {
+    $type->AtLeastOneInt(['a','b']);
+}, qr/Attribute \(AtLeastOneInt\) does not pass the type constraint/ => 'properly fails arrayref of strings';
+

@@ -12,6 +12,7 @@ use MooseX::Types
         MyHashRefOfInts
         MyHashRefOfStr
         StrOrArrayRef
+        AtLeastOneInt
     )];
 
 subtype MyArrayRefBase,
@@ -46,10 +47,18 @@ coerce MyArrayRefInt02,
     via {[sort values(%$_)]},
     from MyHashRefOfStr,
     via {[ sort map { length $_ } values(%$_) ]},
-    ### Can't do HashRef[ArrayRef] here, need to force precidence I guess???
+    ## Can't do HashRef[ArrayRef] here since if I do HashRef get the via {}
+    ## Stuff passed as args.  
     from HashRef([ArrayRef]),
-    via {[ sort map { @$_ } values(%$_)] };
+    via {[ sort map { @$_ } values(%$_) ]};
 
 subtype StrOrArrayRef,
-    from Str|ArrayRef;
+    as Str|ArrayRef;
+    
+subtype AtLeastOneInt,
+    ## Same problem as MyArrayRefInt02, see above.  Another way to solve it by
+    ## forcing some sort of context.  Tried to fix this with method prototypes
+    ## but just couldn't make it work.
+    as (ArrayRef[Int]),
+    where { @$_ > 0 };
 1;

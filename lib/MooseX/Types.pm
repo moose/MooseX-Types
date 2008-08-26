@@ -304,13 +304,23 @@ sub type_export_generator {
     my ($class, $type, $name) = @_;
     return sub {
         my $type_constraint;
-        if(my $params = shift @_) {
-            $type_constraint = $class->create_arged_type_constraint($name, @$params);
+        if(defined(my $params = shift @_)) {
+            if(ref $params eq 'ARRAY') {
+                $type_constraint = $class->create_arged_type_constraint($name, @$params);
+            } else {
+                croak 'Arguments must be an ArrayRef, not '. ref $params;
+            }
         } else {
-            $type_constraint = $class->create_base_type_constraint($name)
-             || MooseX::Types::UndefinedType->new($name);           
+            $type_constraint = $class->create_base_type_constraint($name);
         }
-        return $class->create_type_decorator($type_constraint);
+        $type_constraint = defined($type_constraint) ? $type_constraint
+         : MooseX::Types::UndefinedType->new($name);
+         
+        if(my(@extra_args) = @_) {
+            return $class->create_type_decorator($type_constraint), @_;
+        } else {
+            return $class->create_type_decorator($type_constraint);
+        }
     };
 }
 

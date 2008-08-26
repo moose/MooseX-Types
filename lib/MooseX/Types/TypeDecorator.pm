@@ -10,7 +10,8 @@ use overload(
     },
     '|' => sub {
         my @names = grep {$_} map {"$_"} @_;
-        ## Don't know why I can't use the array version of this...
+        ## Don't know why I can't use the array version of this...  If someone
+        ## knows would like to hear from you.
         my $names = join('|', @names);
         Moose::Util::TypeConstraints::create_type_constraint_union($names);
     },
@@ -42,13 +43,13 @@ sub new {
 
 =head type_constraint ($type_constraint)
 
-Set/Get the type_constraint
+Set/Get the type_constraint.
 
 =cut
 
 sub type_constraint {
     my $self = shift @_;
-    if(my $tc = shift @_) {
+    if(defined(my $tc = shift @_)) {
         $self->{type_constraint} = $tc;
     }
     return $self->{type_constraint};
@@ -70,8 +71,7 @@ Delegate to the decorator targe
 
 =cut
 
-sub AUTOLOAD
-{
+sub AUTOLOAD {
     my ($method) = (our $AUTOLOAD =~ /([^:]+)$/);
     return shift->type_constraint->$method(@_);
 }

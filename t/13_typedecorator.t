@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 33;
+use Test::More tests => 36;
 use Test::Exception;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -12,7 +12,7 @@ use lib "$FindBin::Bin/lib";
     
     use Moose;
     use MooseX::Types::Moose qw(
-        Int
+        Int Str
     );
     use DecoratorLibrary qw(
         MyArrayRefBase MyArrayRefInt01 MyArrayRefInt02 StrOrArrayRef
@@ -25,6 +25,7 @@ use lib "$FindBin::Bin/lib";
     has 'arrayrefint03' => (is=>'rw', isa=>MyArrayRefBase[Int]);
     has 'StrOrArrayRef' => (is=>'rw', isa=>StrOrArrayRef);
     has 'AtLeastOneInt' => (is=>'rw', isa=>AtLeastOneInt);
+    has 'pipeoverloading' => (is=>'rw', isa=>Int|Str);
 }
 
 ## Make sure we have a 'create object sanity check'
@@ -34,6 +35,18 @@ ok my $type = Test::MooseX::TypeLibrary::TypeDecorator->new(),
  
 isa_ok $type, 'Test::MooseX::TypeLibrary::TypeDecorator'
  => "Yes, it's the correct kind of object";
+ 
+## Test pipeoverloading
+
+ok $type->pipeoverloading(1)
+ => 'Integer for union test accepted';
+ 
+ok $type->pipeoverloading('a')
+ => 'String for union test accepted';
+
+throws_ok sub {
+    $type->pipeoverloading({a=>1,b=>2});
+}, qr/Validation failed for 'Int | Str'/ => 'Union test corrected fails a HashRef';
 
 ## test arrayrefbase normal and coercion
 

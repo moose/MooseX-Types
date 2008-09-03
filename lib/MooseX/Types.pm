@@ -315,8 +315,8 @@ sub type_export_generator {
         }
         $type_constraint = defined($type_constraint) ? $type_constraint
          : MooseX::Types::UndefinedType->new($name);
-         
-        return $class->create_type_decorator($type_constraint);
+        
+        return $class->create_type_decorator($type_constraint);  
     };
 }
 

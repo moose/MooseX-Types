@@ -39,10 +39,10 @@ isa_ok $type, 'Test::MooseX::TypeLibrary::TypeDecorator'
 
 ## test arrayrefbase normal and coercion
 
-ok $type->arrayrefbase([qw(a b c)])
- => 'Assigned arrayrefbase qw(a b c)';
+ok $type->arrayrefbase([qw(a b c d e)])
+ => 'Assigned arrayrefbase qw(a b c d e)';
  
-is_deeply $type->arrayrefbase, [qw(a b c)],
+is_deeply $type->arrayrefbase, [qw(a b c d e)],
  => 'Assignment is correct';
 
 ok $type->arrayrefbase('d,e,f')

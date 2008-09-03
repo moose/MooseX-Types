@@ -3,17 +3,18 @@ package MooseX::Types::TypeDecorator;
 use strict;
 use warnings;
 
+use Carp::Clan qw( ^MooseX::Types );
 use Moose::Util::TypeConstraints;
+use Moose::Meta::TypeConstraint::Union;
+
 use overload(
     '""' => sub {
         shift->type_constraint->name;  
     },
     '|' => sub {
-        my @names = grep {$_} map {"$_"} @_;
-        ## Don't know why I can't use the array version of this...  If someone
-        ## knows would like to hear from you.
-        my $names = join('|', @names);
-        Moose::Util::TypeConstraints::create_type_constraint_union($names);
+        my @tc = grep {ref $_} @_;
+        my $union = Moose::Meta::TypeConstraint::Union->new(type_constraints=>\@tc);
+        return Moose::Util::TypeConstraints::register_type_constraint($union);
     },
 );
 
@@ -38,7 +39,16 @@ Old school instantiation
 
 sub new {
     my ($class, %args) = @_;
-    return bless \%args, $class;
+    if(
+        $args{type_constraint} && ref($args{type_constraint}) &&
+        ($args{type_constraint}->isa('Moose::Meta::TypeConstraint') ||
+        $args{type_constraint}->isa('MooseX::Types::UndefinedType'))
+    ) {
+        return bless \%args, $class;        
+    } else {
+        croak "The argument 'type_constraint' is not valid.";
+    }
+
 }
 
 =head type_constraint ($type_constraint)
@@ -53,6 +63,38 @@ sub type_constraint {
         $self->{type_constraint} = $tc;
     }
     return $self->{type_constraint};
+}
+
+=head2 isa
+
+handle $self->isa since AUTOLOAD can't.
+
+=cut
+
+sub isa {
+    my ($self, $target) = @_;
+    if(defined $target) {
+        my $isa = $self->type_constraint->isa($target);
+        return $isa;
+    } else {
+        return;
+    }
+}
+
+=head2 can
+
+handle $self->can since AUTOLOAD can't.
+
+=cut
+
+sub can {
+    my ($self, $target) = @_;
+    if(defined $target) {
+        my $can = $self->type_constraint->can($target);
+        return $can;
+    } else {
+        return;
+    }
 }
 
 =head2 DESTROY

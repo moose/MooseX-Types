@@ -19,7 +19,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 
 use namespace::clean -except => [qw( meta )];
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
@@ -31,7 +31,11 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
   # predeclare our own types
   use MooseX::Types 
-      -declare => [qw( PositiveInt NegativeInt )];
+    -declare => [qw(
+        PositiveInt NegativeInt
+        ArrayRefOfPositiveInt ArrayRefOfAtLeastThreeNegativeInts
+        LotsOfInnerConstraints StrOrArrayRef
+    )];
 
   # import builtin types
   use MooseX::Types::Moose 'Int';
@@ -51,6 +55,23 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   coerce PositiveInt,
       from Int,
           via { 1 };
+
+  # with parameterized constraints.  Please note the containing '(...)'
+  
+  subtype ArrayRefOfPositiveInt,
+    as (ArrayRef[PositiveInt]);
+    
+  subtype ArrayRefOfAtLeastThreeNegativeInts,
+    as (ArrayRef[NegativeInt]),
+    where { scalar(@$_) > 2 };
+
+  subtype LotsOfInnerConstraints,
+    as (ArrayRef[ArrayRef[HashRef[Int]]]);
+    
+  # with TypeConstraint Unions
+  
+  subtype StrOrArrayRef,
+    as Str|ArrayRef;
 
   1;
 
@@ -244,6 +265,44 @@ type does not yet exist.
 
 =back
 
+=head1 NOTES REGARDING PARAMETERIZED CONSTRAINTS
+
+L<MooseX::Types> uses L<MooseX::Types::TypeDecorator> to do some overloading
+which generally allows you to easily create types with parameters such as:
+
+    subtype ParameterType,
+      as (ArrayRef[Int]);
+
+However, due to an outstanding issue you will need to wrap the parameterized
+type inside parenthesis, as in the example above.  Hopefully this limitation
+will be lifted in a future version of this module.
+
+If you are using paramterized types in the options section of an attribute
+declaration, the parenthesis are not needed:
+
+    use Moose;
+    use MooseX::Types::Moose qw(HashRef Int);
+    
+    has 'attr' => (isa=>HashRef[Str]);
+
+=head1 NOTES REGARDING TYPE UNIONS
+
+L<MooseX::Types> uses L<MooseX::Types::TypeDecorator> to do some overloading
+which generally allows you to easily create union types:
+
+  subtype StrOrArrayRef,
+    as Str|ArrayRef;    
+
+As with parameterized constrains, this overloading extends to modules using the
+types you define in a type library.
+
+    use Moose;
+    use MooseX::Types::Moose qw(HashRef Int);
+    
+    has 'attr' => (isa=>HashRef|Int);
+
+And everything should just work as you'd think.
+    
 =head1 METHODS
 
 =head2 import
@@ -315,8 +374,14 @@ sub type_export_generator {
         }
         $type_constraint = defined($type_constraint) ? $type_constraint
          : MooseX::Types::UndefinedType->new($name);
+         
+        return $class->create_type_decorator($type_constraint);
         
-        return $class->create_type_decorator($type_constraint);  
+        #if(@_ && wantarray) {
+        #    return ($class->create_type_decorator($type_constraint), @_);  
+        #} else {
+        #    return $class->create_type_decorator($type_constraint);
+        #}
     };
 }
 
@@ -330,6 +395,10 @@ sub create_arged_type_constraint {
     my ($class, $name, @args) = @_;
     ### This whole section is a real TODO :)  Ugly hack to get the base tests working.
     my $fullname = $name."[$args[0]]";
+    
+    #use Data::Dump qw/dump/;
+    #my $tc = Moose::Util::TypeConstraints::find_or_create_type_constraint($name);
+ 
     return Moose::Util::TypeConstraints::create_parameterized_type_constraint($fullname);
 }
 
@@ -353,7 +422,7 @@ instance.
 
 sub create_type_decorator {
     my ($class, $type_constraint) = @_;
-    return MooseX::Types::TypeDecorator->new(type_constraint=>$type_constraint);
+    return MooseX::Types::TypeDecorator->new($type_constraint);
 }
 
 =head2 coercion_export_generator
@@ -414,6 +483,8 @@ L<Sub::Exporter>
 
 Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
 the C<#moose> cabal on C<irc.perl.org>.
+
+Additional features by John Napiorkowski (jnapiorkowski) <jjnapiork@cpan.org>.
 
 =head1 LICENSE
 

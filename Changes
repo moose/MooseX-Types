@@ -1,4 +1,8 @@
 
+0.06    Fri Aug  5 12:00:00 EST 2008
+        - Added support for parameterized types and type unions, tests for all
+        that and documentation updates.
+        
 0.05    ...
         - moved export mechanism to Sub::Exporter. ::Base contains
           a bunch of wrapping logic to allow the export-along functionality

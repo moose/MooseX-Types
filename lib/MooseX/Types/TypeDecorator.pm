@@ -4,12 +4,12 @@ use strict;
 use warnings;
 
 use Carp::Clan qw( ^MooseX::Types );
-use Moose::Util::TypeConstraints;
+use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint::Union;
 
 use overload(
     '""' => sub {
-        shift->type_constraint->name;  
+        shift->__type_constraint->name;  
     },
     '|' => sub {
         my @tc = grep {ref $_} @_;
@@ -38,17 +38,19 @@ Old school instantiation
 =cut
 
 sub new {
-    my ($class, %args) = @_;
-    if(
-        $args{type_constraint} && ref($args{type_constraint}) &&
-        ($args{type_constraint}->isa('Moose::Meta::TypeConstraint') ||
-        $args{type_constraint}->isa('MooseX::Types::UndefinedType'))
-    ) {
-        return bless \%args, $class;        
+    my $class = shift @_;
+    if(my $arg = shift @_) {
+        if(ref $arg && $arg->isa('Moose::Meta::TypeConstraint')) {
+            return bless {'__type_constraint'=>$arg}, $class;
+        } elsif(ref $arg && $arg->isa('MooseX::Types::UndefinedType')) {
+            ## stub in case we'll need to handle these types differently
+            return bless {'__type_constraint'=>$arg}, $class;
+        } else {
+            croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType')";
+        }
     } else {
-        croak "The argument 'type_constraint' is not valid.";
+        croak "This method [new] requires a single argument";        
     }
-
 }
 
 =head type_constraint ($type_constraint)
@@ -57,12 +59,12 @@ Set/Get the type_constraint.
 
 =cut
 
-sub type_constraint {
+sub __type_constraint {
     my $self = shift @_;
     if(defined(my $tc = shift @_)) {
-        $self->{type_constraint} = $tc;
+        $self->{__type_constraint} = $tc;
     }
-    return $self->{type_constraint};
+    return $self->{__type_constraint};
 }
 
 =head2 isa
@@ -74,8 +76,7 @@ handle $self->isa since AUTOLOAD can't.
 sub isa {
     my ($self, $target) = @_;
     if(defined $target) {
-        my $isa = $self->type_constraint->isa($target);
-        return $isa;
+        return $self->__type_constraint->isa($target);
     } else {
         return;
     }
@@ -90,8 +91,7 @@ handle $self->can since AUTOLOAD can't.
 sub can {
     my ($self, $target) = @_;
     if(defined $target) {
-        my $can = $self->type_constraint->can($target);
-        return $can;
+        return $self->__type_constraint->can($target);
     } else {
         return;
     }
@@ -114,8 +114,13 @@ Delegate to the decorator targe
 =cut
 
 sub AUTOLOAD {
+    my ($self, @args) = @_;
     my ($method) = (our $AUTOLOAD =~ /([^:]+)$/);
-    return shift->type_constraint->$method(@_);
+    if($self->__type_constraint->can($method)) {
+        return $self->__type_constraint->$method(@args);
+    } else {
+        croak "Method '$method' is not supported";   
+    }
 }
 
 =head1 AUTHOR AND COPYRIGHT

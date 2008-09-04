@@ -26,7 +26,10 @@ use lib "$FindBin::Bin/lib";
     has 'StrOrArrayRef' => (is=>'rw', isa=>StrOrArrayRef);
     has 'AtLeastOneInt' => (is=>'rw', isa=>AtLeastOneInt);
     has 'pipeoverloading' => (is=>'rw', isa=>Int|Str);
-    has 'deep' => (is=>'rw', isa=>ArrayRef([ArrayRef([HashRef([Int])])]));
+    #has 'deep' => (is=>'rw', isa=>ArrayRef([ArrayRef([HashRef([Int])])]));
+    
+    has 'deep' => (is=>'rw', isa=>ArrayRef[ArrayRef[HashRef[Int]]] );
+    
 }
 
 ## Make sure we have a 'create object sanity check'

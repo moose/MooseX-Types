@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 39;
+use Test::More tests => 47;
 use Test::Exception;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -12,7 +12,7 @@ use lib "$FindBin::Bin/lib";
     
     use Moose;
     use MooseX::Types::Moose qw(
-        Int Str ArrayRef HashRef
+        Int Str ArrayRef HashRef Object
     );
     use DecoratorLibrary qw(
         MyArrayRefBase MyArrayRefInt01 MyArrayRefInt02 StrOrArrayRef
@@ -25,11 +25,9 @@ use lib "$FindBin::Bin/lib";
     has 'arrayrefint03' => (is=>'rw', isa=>MyArrayRefBase[Int]);
     has 'StrOrArrayRef' => (is=>'rw', isa=>StrOrArrayRef);
     has 'AtLeastOneInt' => (is=>'rw', isa=>AtLeastOneInt);
-    has 'pipeoverloading' => (is=>'rw', isa=>Int|Str);
-    #has 'deep' => (is=>'rw', isa=>ArrayRef([ArrayRef([HashRef([Int])])]));
-    
+    has 'pipeoverloading' => (is=>'rw', isa=>Int|Str);   
     has 'deep' => (is=>'rw', isa=>ArrayRef[ArrayRef[HashRef[Int]]] );
-    
+    has 'deep2' => (is=>'rw', isa=>ArrayRef[Int|ArrayRef[HashRef[Int|Object]]] );
 }
 
 ## Make sure we have a 'create object sanity check'
@@ -160,9 +158,9 @@ ok $type->pipeoverloading('a')
 
 throws_ok sub {
     $type->pipeoverloading({a=>1,b=>2});
-}, qr/Validation failed for 'Int | Str'/ => 'Union test corrected fails a HashRef';
+}, qr/Validation failed for 'Int|Str'/ => 'Union test corrected fails a HashRef';
 
-## test deep
+## test deep (ArrayRef[ArrayRef[HashRef[Int]]])
 
 ok $type->deep([[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]])
  => 'Assigned deep to [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]]';
@@ -173,3 +171,34 @@ is_deeply $type->deep, [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]],
 throws_ok sub {
     $type->deep({a=>1,b=>2});
 }, qr/Attribute \(deep\) does not pass the type constraint/ => 'Deep Constraints properly fail';
+
+# test deep2 (ArrayRef[Int|ArrayRef[HashRef[Int|Object]]])
+
+ok $type->deep2([[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]])
+ => 'Assigned deep to [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]]';
+
+is_deeply $type->deep2, [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]],
+ => 'Assignment is correct';
+ 
+throws_ok sub {
+    $type->deep2({a=>1,b=>2});
+}, qr/Attribute \(deep2\) does not pass the type constraint/ => 'Deep Constraints properly fail';
+
+throws_ok sub {
+    $type->deep2([[{a=>1,b=>2},{c=>3,d=>'noway'}],[{e=>5}]]);
+}, qr/Attribute \(deep2\) does not pass the type constraint/ => 'Deep Constraints properly fail';
+
+
+ok $type->deep2([[{a=>1,b=>2},{c=>3,d=>$type}],[{e=>5}]])
+ => 'Assigned deep to [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]]';
+
+
+is_deeply $type->deep2, [[{a=>1,b=>2},{c=>3,d=>$type}],[{e=>5}]],
+ => 'Assignment is correct';
+ 
+ok $type->deep2([1,2,3])
+ => 'Assigned deep to [1,2,3]';
+
+
+is_deeply $type->deep2, [1,2,3],
+ => 'Assignment is correct';

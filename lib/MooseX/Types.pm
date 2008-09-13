@@ -377,11 +377,6 @@ sub type_export_generator {
          
         return $class->create_type_decorator($type_constraint);
         
-        #if(@_ && wantarray) {
-        #    return ($class->create_type_decorator($type_constraint), @_);  
-        #} else {
-        #    return $class->create_type_decorator($type_constraint);
-        #}
     };
 }
 
@@ -393,13 +388,8 @@ Given a String $name with @args find the matching typeconstraint.
 
 sub create_arged_type_constraint {
     my ($class, $name, @args) = @_;
-    ### This whole section is a real TODO :)  Ugly hack to get the base tests working.
-    my $fullname = $name."[$args[0]]";
-    
-    #use Data::Dump qw/dump/;
-    #my $tc = Moose::Util::TypeConstraints::find_or_create_type_constraint($name);
- 
-    return Moose::Util::TypeConstraints::create_parameterized_type_constraint($fullname);
+    my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint($name);
+	return $type_constraint->parameterize(@args)
 }
 
 =head2 create_base_type_constraint ($name)

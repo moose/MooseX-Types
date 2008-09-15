@@ -175,7 +175,7 @@ throws_ok sub {
 # test deep2 (ArrayRef[Int|ArrayRef[HashRef[Int|Object]]])
 
 ok $type->deep2([[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]])
- => 'Assigned deep to [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]]';
+ => 'Assigned deep2 to [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]]';
 
 is_deeply $type->deep2, [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]],
  => 'Assignment is correct';
@@ -190,14 +190,14 @@ throws_ok sub {
 
 
 ok $type->deep2([[{a=>1,b=>2},{c=>3,d=>$type}],[{e=>5}]])
- => 'Assigned deep to [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]]';
+ => 'Assigned deep2 to [[{a=>1,b=>2},{c=>3,d=>$type}],[{e=>5}]]';
 
 
 is_deeply $type->deep2, [[{a=>1,b=>2},{c=>3,d=>$type}],[{e=>5}]],
  => 'Assignment is correct';
  
 ok $type->deep2([1,2,3])
- => 'Assigned deep to [1,2,3]';
+ => 'Assigned deep2 to [1,2,3]';
 
 
 is_deeply $type->deep2, [1,2,3],

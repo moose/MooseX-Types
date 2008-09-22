@@ -142,7 +142,7 @@ is_deeply $type->AtLeastOneInt, [1,2]
  
 throws_ok sub {
     $type->AtLeastOneInt([]);
-}, qr/Attribute \(AtLeastOneInt\) does not pass the type constraint/ => 'properly fails';
+}, qr/Attribute \(AtLeastOneInt\) does not pass the type constraint/ => 'properly fails to assign as []';
 
 throws_ok sub {
     $type->AtLeastOneInt(['a','b']);

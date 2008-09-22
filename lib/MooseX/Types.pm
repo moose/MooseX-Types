@@ -56,17 +56,17 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
       from Int,
           via { 1 };
 
-  # with parameterized constraints.  Please note the containing '(...)'
+  # with parameterized constraints.
   
   subtype ArrayRefOfPositiveInt,
-    as (ArrayRef[PositiveInt]);
+    as ArrayRef[PositiveInt];
     
   subtype ArrayRefOfAtLeastThreeNegativeInts,
-    as (ArrayRef[NegativeInt]),
+    as ArrayRef[NegativeInt],
     where { scalar(@$_) > 2 };
 
   subtype LotsOfInnerConstraints,
-    as (ArrayRef[ArrayRef[HashRef[Int]]]);
+    as ArrayRef[ArrayRef[HashRef[Int]]];
     
   # with TypeConstraint Unions
   
@@ -263,28 +263,6 @@ The fully qualified name of this type as L<Moose> knows it.
 A message that will be thrown when type functionality is used but the
 type does not yet exist.
 
-=back
-
-=head1 NOTES REGARDING PARAMETERIZED CONSTRAINTS
-
-L<MooseX::Types> uses L<MooseX::Types::TypeDecorator> to do some overloading
-which generally allows you to easily create types with parameters such as:
-
-    subtype ParameterType,
-      as (ArrayRef[Int]);
-
-However, due to an outstanding issue you will need to wrap the parameterized
-type inside parenthesis, as in the example above.  Hopefully this limitation
-will be lifted in a future version of this module.
-
-If you are using paramterized types in the options section of an attribute
-declaration, the parenthesis are not needed:
-
-    use Moose;
-    use MooseX::Types::Moose qw(HashRef Int);
-    
-    has 'attr' => (isa=>HashRef[Str]);
-
 =head1 NOTES REGARDING TYPE UNIONS
 
 L<MooseX::Types> uses L<MooseX::Types::TypeDecorator> to do some overloading
@@ -375,8 +353,13 @@ sub type_export_generator {
         $type_constraint = defined($type_constraint) ? $type_constraint
          : MooseX::Types::UndefinedType->new($name);
          
-        return $class->create_type_decorator($type_constraint);
+        my $type_decorator = $class->create_type_decorator($type_constraint);
         
+        if(@_) {
+            return ($type_decorator, @_);
+        } else {
+            return $type_decorator;
+        }
     };
 }
 

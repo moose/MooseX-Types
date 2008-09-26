@@ -9,9 +9,14 @@ use Moose::Meta::TypeConstraint::Union;
 
 use overload(
     '""' => sub {
-        shift->__type_constraint->name;  
+        return shift->__type_constraint->name; 
     },
     '|' => sub {
+        
+        ## It's kind of ugly that we need to know about Union Types, but this
+        ## is needed for syntax compatibility.  Maybe someday we'll all just do
+        ## Or[Str,Str,Int]
+        
         my @tc = grep {ref $_} @_;
         my $union = Moose::Meta::TypeConstraint::Union->new(type_constraints=>\@tc);
         return Moose::Util::TypeConstraints::register_type_constraint($union);
@@ -49,11 +54,11 @@ sub new {
             croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType')";
         }
     } else {
-        croak "This method [new] requires a single argument";        
+        croak "This method [new] requires a single argument of 'arg'.";        
     }
 }
 
-=head type_constraint ($type_constraint)
+=head __type_constraint ($type_constraint)
 
 Set/Get the type_constraint.
 
@@ -74,7 +79,7 @@ handle $self->isa since AUTOLOAD can't.
 =cut
 
 sub isa {
-    my ($self, $target) = @_;
+    my ($self, $target) = @_; 
     if(defined $target) {
         return $self->__type_constraint->isa($target);
     } else {

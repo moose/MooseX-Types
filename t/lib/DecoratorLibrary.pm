@@ -10,6 +10,7 @@ use MooseX::Types
         MyHashRefOfStr
         StrOrArrayRef
         AtLeastOneInt
+        Jobs
     )];
 
 ## Some questionable messing around
@@ -68,5 +69,8 @@ subtype StrOrArrayRef,
 subtype AtLeastOneInt,
     as ArrayRef[Int],
     where { @$_ > 0 };
-
+    
+enum Jobs,
+    (qw/Programming Teaching Banking/);
+    
 1;

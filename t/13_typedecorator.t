@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 47;
+use Test::More tests => 49;
 use Test::Exception;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -16,7 +16,7 @@ use lib "$FindBin::Bin/lib";
     );
     use DecoratorLibrary qw(
         MyArrayRefBase MyArrayRefInt01 MyArrayRefInt02 StrOrArrayRef
-        AtLeastOneInt 
+        AtLeastOneInt Jobs
     );
     
     has 'arrayrefbase' => (is=>'rw', isa=>MyArrayRefBase, coerce=>1);
@@ -28,6 +28,7 @@ use lib "$FindBin::Bin/lib";
     has 'pipeoverloading' => (is=>'rw', isa=>Int|Str);   
     has 'deep' => (is=>'rw', isa=>ArrayRef[ArrayRef[HashRef[Int]]] );
     has 'deep2' => (is=>'rw', isa=>ArrayRef[Int|ArrayRef[HashRef[Int|Object]]] );
+    has 'enum' => (is=>'rw', isa=>Jobs);
 }
 
 ## Make sure we have a 'create object sanity check'
@@ -202,3 +203,13 @@ ok $type->deep2([1,2,3])
 
 is_deeply $type->deep2, [1,2,3],
  => 'Assignment is correct';
+ 
+## Test jobs
+
+ok $type->enum('Programming')
+ => 'Good Assignment of Programming to Enum';
+
+
+throws_ok sub {
+    $type->enum('ddddd');
+}, qr/Attribute \(enum\) does not pass the type constraint/ => 'Enum properly fails';

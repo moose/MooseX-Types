@@ -50,8 +50,10 @@ sub new {
         } elsif(ref $arg && $arg->isa('MooseX::Types::UndefinedType')) {
             ## stub in case we'll need to handle these types differently
             return bless {'__type_constraint'=>$arg}, $class;
+        } elsif(ref $arg) {
+            croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType'), not ". ref $arg;
         } else {
-            croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType')";
+            croak "Argument cannot be '$arg'";
         }
     } else {
         croak "This method [new] requires a single argument of 'arg'.";        

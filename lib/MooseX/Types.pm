@@ -20,7 +20,6 @@ use Carp::Clan                      qw( ^MooseX::Types );
 use namespace::clean -except => [qw( meta )];
 
 our $VERSION = 0.06;
-
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -382,8 +381,8 @@ it with @args.
 =cut
 
 sub create_arged_type_constraint {
-    my ($class, $name, @args) = @_;
-    my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint($name);
+    my ($class, $name, @args) = @_;  
+    my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
 	return $type_constraint->parameterize(@args);
 }
 

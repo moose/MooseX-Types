@@ -18,12 +18,12 @@ requires        q{namespace::clean},            0.08;
 requires        q{Carp},                        0;
 requires        q{Carp::Clan},                  6.00;
 requires        q{Class::MOP},                  0.65;
+requires        q{UNIVERSAL::ref},              0.12;
+requires        q{Scalar::Util}                 1.19;
 
 system 'pod2text lib/MooseX/Types.pm > README'
     if -e 'MANIFEST.SKIP';
 
 auto_provides;
-
 auto_install;
-
 WriteAll;

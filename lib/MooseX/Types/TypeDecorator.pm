@@ -6,6 +6,7 @@ use warnings;
 use Carp::Clan qw( ^MooseX::Types );
 use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint::Union;
+use Scalar::Util qw(blessed);
 
 use overload(
     '""' => sub {
@@ -17,11 +18,12 @@ use overload(
         ## is needed for syntax compatibility.  Maybe someday we'll all just do
         ## Or[Str,Str,Int]
         
-        my @tc = grep {ref $_} @_;
+        my @tc = grep {blessed $_} @_;
         my $union = Moose::Meta::TypeConstraint::Union->new(type_constraints=>\@tc);
         return Moose::Util::TypeConstraints::register_type_constraint($union);
     },
 );
+
 
 =head1 NAME
 
@@ -45,13 +47,13 @@ Old school instantiation
 sub new {
     my $class = shift @_;
     if(my $arg = shift @_) {
-        if(ref $arg && $arg->isa('Moose::Meta::TypeConstraint')) {
+        if(blessed $arg && $arg->isa('Moose::Meta::TypeConstraint')) {
             return bless {'__type_constraint'=>$arg}, $class;
-        } elsif(ref $arg && $arg->isa('MooseX::Types::UndefinedType')) {
+        } elsif(blessed $arg && $arg->isa('MooseX::Types::UndefinedType')) {
             ## stub in case we'll need to handle these types differently
             return bless {'__type_constraint'=>$arg}, $class;
-        } elsif(ref $arg) {
-            croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType'), not ". ref $arg;
+        } elsif(blessed $arg) {
+            croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType'), not ". blessed $arg;
         } else {
             croak "Argument cannot be '$arg'";
         }
@@ -68,10 +70,15 @@ Set/Get the type_constraint.
 
 sub __type_constraint {
     my $self = shift @_;
-    if(defined(my $tc = shift @_)) {
-        $self->{__type_constraint} = $tc;
+    
+    if(blessed $self) {
+        if(defined(my $tc = shift @_)) {
+            $self->{__type_constraint} = $tc;
+        }
+        return $self->{__type_constraint};        
+    } else {
+        croak 'cannot call __type_constraint as a class method';
     }
-    return $self->{__type_constraint};
 }
 
 =head2 isa
@@ -81,7 +88,7 @@ handle $self->isa since AUTOLOAD can't.
 =cut
 
 sub isa {
-    my ($self, $target) = @_; 
+    my ($self, $target) = @_;  
     if(defined $target) {
         return $self->__type_constraint->isa($target);
     } else {

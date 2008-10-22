@@ -22,6 +22,8 @@ use overload(
         my $union = Moose::Meta::TypeConstraint::Union->new(type_constraints=>\@tc);
         return Moose::Util::TypeConstraints::register_type_constraint($union);
     },
+    fallback => 1,
+    
 );
 
 

@@ -11,6 +11,7 @@ MooseX::Types - Organise your Moose types in libraries
 #use strict;
 
 use Moose::Util::TypeConstraints;
+use MooseX::Types::TypeDecorator;
 use MooseX::Types::Base             ();
 use MooseX::Types::Util             qw( filter_tags );
 use MooseX::Types::UndefinedType;
@@ -18,8 +19,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 
 use namespace::clean -except => [qw( meta )];
 
-our $VERSION = 0.05;
-
+our $VERSION = 0.06;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -30,7 +30,11 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
   # predeclare our own types
   use MooseX::Types 
-      -declare => [qw( PositiveInt NegativeInt )];
+    -declare => [qw(
+        PositiveInt NegativeInt
+        ArrayRefOfPositiveInt ArrayRefOfAtLeastThreeNegativeInts
+        LotsOfInnerConstraints StrOrArrayRef
+    )];
 
   # import builtin types
   use MooseX::Types::Moose 'Int';
@@ -50,6 +54,23 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   coerce PositiveInt,
       from Int,
           via { 1 };
+
+  # with parameterized constraints.
+  
+  subtype ArrayRefOfPositiveInt,
+    as ArrayRef[PositiveInt];
+    
+  subtype ArrayRefOfAtLeastThreeNegativeInts,
+    as ArrayRef[NegativeInt],
+    where { scalar(@$_) > 2 };
+
+  subtype LotsOfInnerConstraints,
+    as ArrayRef[ArrayRef[HashRef[Int]]];
+    
+  # with TypeConstraint Unions
+  
+  subtype StrOrArrayRef,
+    as Str|ArrayRef;
 
   1;
 
@@ -241,8 +262,24 @@ The fully qualified name of this type as L<Moose> knows it.
 A message that will be thrown when type functionality is used but the
 type does not yet exist.
 
-=back
+=head1 NOTES REGARDING TYPE UNIONS
 
+L<MooseX::Types> uses L<MooseX::Types::TypeDecorator> to do some overloading
+which generally allows you to easily create union types:
+
+  subtype StrOrArrayRef,
+    as Str|ArrayRef;    
+
+As with parameterized constrains, this overloading extends to modules using the
+types you define in a type library.
+
+    use Moose;
+    use MooseX::Types::Moose qw(HashRef Int);
+    
+    has 'attr' => (isa=>HashRef|Int);
+
+And everything should just work as you'd think.
+    
 =head1 METHODS
 
 =head2 import
@@ -300,11 +337,76 @@ yet defined.
 =cut
 
 sub type_export_generator {
-    my ($class, $type, $full) = @_;
-    return sub { 
-        return find_type_constraint($full)
-            || MooseX::Types::UndefinedType->new($full);
+    my ($class, $type, $name) = @_;
+    
+    ## Return an anonymous subroutine that will generate the proxied type
+    ## constraint for you.
+    
+    return sub {
+        my $type_constraint;
+        if(defined(my $params = shift @_)) {
+            ## We currently only allow a TC to accept a single, ArrayRef
+            ## parameter, as in HashRef[Int], where [Int] is what's inside the
+            ## ArrayRef passed.
+            if(ref $params eq 'ARRAY') {
+                $type_constraint = $class->create_arged_type_constraint($name, @$params);
+            } else {
+                croak 'Arguments must be an ArrayRef, not '. ref $params;
+            }
+        } else {
+            $type_constraint = $class->create_base_type_constraint($name);
+        }
+        $type_constraint = defined($type_constraint) ? $type_constraint
+         : MooseX::Types::UndefinedType->new($name);
+         
+        my $type_decorator = $class->create_type_decorator($type_constraint);
+        
+        ## If there are additional args, that means it's probably stuff that
+        ## needs to be returned to the subtype.  Not an ideal solution here but
+        ## doesn't seem to cause trouble.
+        
+        if(@_) {
+            return ($type_decorator, @_);
+        } else {
+            return $type_decorator;
+        }
     };
+}
+
+=head2 create_arged_type_constraint ($name, @args)
+
+Given a String $name with @args find the matching typeconstraint and parameterize
+it with @args.
+
+=cut
+
+sub create_arged_type_constraint {
+    my ($class, $name, @args) = @_;  
+    my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
+	return $type_constraint->parameterize(@args);
+}
+
+=head2 create_base_type_constraint ($name)
+
+Given a String $name, find the matching typeconstraint.
+
+=cut
+
+sub create_base_type_constraint {
+    my ($class, $name) = @_;
+    return find_type_constraint($name);
+}
+
+=head2 create_type_decorator ($type_constraint)
+
+Given a $type_constraint, return a lightweight L<MooseX::Types::TypeDecorator>
+instance.
+
+=cut
+
+sub create_type_decorator {
+    my ($class, $type_constraint) = @_;
+    return MooseX::Types::TypeDecorator->new($type_constraint);
 }
 
 =head2 coercion_export_generator
@@ -349,11 +451,36 @@ sub check_export_generator {
 
 =head1 CAVEATS
 
+The following are lists of gotcha's and their workarounds for developers coming
+from the standard string based type constraint names
+
+=head2 Uniqueness
+
 A library makes the types quasi-unique by prefixing their names with (by
 default) the library package name. If you're only using the type handler
 functions provided by MooseX::Types, you shouldn't ever have to use
 a type's actual full name.
 
+=head2 Argument separation ('=>' versus ',')
+
+The Perlop manpage has this to say about the '=>' operator: "The => operator is
+a synonym for the comma, but forces any word (consisting entirely of word
+characters) to its left to be interpreted as a string (as of 5.001). This
+includes words that might otherwise be considered a constant or function call."
+
+Due to this stringification, the following will NOT work as you might think:
+
+  subtype StrOrArrayRef => as Str|ArrayRef;
+  
+The 'StrOrArrayRef' will have it's stringification activated this causes the
+subtype to not be created.  Since the bareword type constraints are not strings
+you really should not try to treat them that way.  You will have to use the ','
+operator instead.  The author's of this package realize that all the L<Moose>
+documention and examples nearly uniformly use the '=>' version of the comma
+operator and this could be an issue if you are converting code.
+
+Patches welcome for discussion.
+    
 =head1 SEE ALSO
 
 L<Moose>, 
@@ -365,6 +492,8 @@ L<Sub::Exporter>
 
 Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
 the C<#moose> cabal on C<irc.perl.org>.
+
+Additional features by John Napiorkowski (jnapiorkowski) <jjnapiork@cpan.org>.
 
 =head1 LICENSE
 

@@ -12,14 +12,12 @@ all_from        q{lib/MooseX/Types.pm};
 build_requires  q{Test::More},                  0.80;
 build_requires  q{FindBin},                     0;
 
-requires        q{Moose},                       0.58;
+requires        q{Moose},                       0.60;
 requires        q{Sub::Install},                0.924;
 requires        q{namespace::clean},            0.08;
 requires        q{Carp},                        0;
 requires        q{Carp::Clan},                  6.00;
-requires        q{Class::MOP},                  0.65;
-requires        q{UNIVERSAL::ref},              0.12;
-requires        q{Scalar::Util}                 1.19;
+requires        q{Scalar::Util},                1.19;
 
 system 'pod2text lib/MooseX/Types.pm > README'
     if -e 'MANIFEST.SKIP';

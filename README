@@ -1,0 +1,313 @@
+NAME
+    MooseX::Types - Organise your Moose types in libraries
+
+SYNOPSIS
+  Library Definition
+      package MyLibrary;
+
+      # predeclare our own types
+      use MooseX::Types 
+        -declare => [qw(
+            PositiveInt NegativeInt
+            ArrayRefOfPositiveInt ArrayRefOfAtLeastThreeNegativeInts
+            LotsOfInnerConstraints StrOrArrayRef
+        )];
+
+      # import builtin types
+      use MooseX::Types::Moose 'Int';
+
+      # type definition
+      subtype PositiveInt, 
+          as Int, 
+          where { $_ > 0 },
+          message { "Int is not larger than 0" };
+  
+      subtype NegativeInt,
+          as Int,
+          where { $_ < 0 },
+          message { "Int is not smaller than 0" };
+
+      # type coercion
+      coerce PositiveInt,
+          from Int,
+              via { 1 };
+
+      # with parameterized constraints.
+  
+      subtype ArrayRefOfPositiveInt,
+        as ArrayRef[PositiveInt];
+    
+      subtype ArrayRefOfAtLeastThreeNegativeInts,
+        as ArrayRef[NegativeInt],
+        where { scalar(@$_) > 2 };
+
+      subtype LotsOfInnerConstraints,
+        as ArrayRef[ArrayRef[HashRef[Int]]];
+    
+      # with TypeConstraint Unions
+  
+      subtype StrOrArrayRef,
+        as Str|ArrayRef;
+
+      1;
+
+  Usage
+      package Foo;
+      use Moose;
+      use MyLibrary qw( PositiveInt NegativeInt );
+
+      # use the exported constants as type names
+      has 'bar',
+          isa    => PositiveInt,
+          is     => 'rw';
+      has 'baz',
+          isa    => NegativeInt,
+          is     => 'rw';
+
+      sub quux {
+          my ($self, $value);
+
+          # test the value
+          print "positive\n" if is_PositiveInt($value);
+          print "negative\n" if is_NegativeInt($value);
+
+          # coerce the value, NegativeInt doesn't have a coercion
+          # helper, since it didn't define any coercions.
+          $value = to_PositiveInt($value) or die "Cannot coerce";
+      }
+
+      1;
+
+DESCRIPTION
+    The types provided with Moose are by design global. This package helps
+    you to organise and selectively import your own and the built-in types
+    in libraries. As a nice side effect, it catches typos at compile-time
+    too.
+
+    However, the main reason for this module is to provide an easy way to
+    not have conflicts with your type names, since the internal fully
+    qualified names of the types will be prefixed with the library's name.
+
+    This module will also provide you with some helper functions to make it
+    easier to use Moose types in your code.
+
+TYPE HANDLER FUNCTIONS
+  $type
+    A constant with the name of your type. It contains the type's fully
+    qualified name. Takes no value, as all constants.
+
+  is_$type
+    This handler takes a value and tests if it is a valid value for this
+    $type. It will return true or false.
+
+  to_$type
+    A handler that will take a value and coerce it into the $type. It will
+    return a false value if the type could not be coerced.
+
+    Important Note: This handler will only be exported for types that can do
+    type coercion. This has the advantage that a coercion to a type that
+    cannot hasn't defined any coercions will lead to a compile-time error.
+
+LIBRARY DEFINITION
+    A MooseX::Types is just a normal Perl module. Unlike Moose itself, it
+    does not install "use strict" and "use warnings" in your class by
+    default, so this is up to you.
+
+    The only thing a library is required to do is
+
+      use MooseX::Types -declare => \@types;
+
+    with @types being a list of types you wish to define in this library.
+    This line will install a proper base class in your package as well as
+    the full set of handlers for your declared types. It will then hand
+    control over to Moose::Util::TypeConstraints' "import" method to export
+    the functions you will need to declare your types.
+
+    If you want to use Moose' built-in types (e.g. for subtyping) you will
+    want to
+
+      use MooseX::Types::Moose @types;
+
+    to import the helpers from the shipped MooseX::Types::Moose library
+    which can export all types that come with Moose.
+
+    You will have to define coercions for your types or your library won't
+    export a "to_$type" coercion helper for it.
+
+    Note that you currently cannot define types containing "::", since
+    exporting would be a problem.
+
+    You also don't need to use "warnings" and "strict", since the definition
+    of a library automatically exports those.
+
+LIBRARY USAGE
+    You can import the "type helpers" of a library by "use"ing it with a
+    list of types to import as arguments. If you want all of them, use the
+    ":all" tag. For example:
+
+      use MyLibrary      ':all';
+      use MyOtherLibrary qw( TypeA TypeB );
+
+    MooseX::Types comes with a library of Moose' built-in types called
+    MooseX::Types::Moose.
+
+    The exporting mechanism is, since version 0.5, implemented via a wrapper
+    around Sub::Exporter. This means you can do something like this:
+
+      use MyLibrary TypeA => { -as => 'MyTypeA' },
+                    TypeB => { -as => 'MyTypeB' };
+
+WRAPPING A LIBRARY
+    You can define your own wrapper subclasses to manipulate the behaviour
+    of a set of library exports. Here is an example:
+
+      package MyWrapper;
+      use strict;
+      use Class::C3;
+      use base 'MooseX::Types::Wrapper';
+
+      sub coercion_export_generator {
+          my $class = shift;
+          my $code = $class->next::method(@_);
+          return sub {
+              my $value = $code->(@_);
+              warn "Coercion returned undef!"
+                  unless defined $value;
+              return $value;
+          };
+      }
+
+      1;
+
+    This class wraps the coercion generator (e.g., "to_Int()") and warns if
+    a coercion returned an undefined value. You can wrap any library with
+    this:
+
+      package Foo;
+      use strict;
+      use MyWrapper MyLibrary => [qw( Foo Bar )],
+                    Moose     => [qw( Str Int )];
+
+      ...
+      1;
+
+    The "Moose" library name is a special shortcut for MooseX::Types::Moose.
+
+  Generator methods you can overload
+    type_export_generator( $short, $full )
+        Creates a closure returning the type's Moose::Meta::TypeConstraint
+        object.
+
+    check_export_generator( $short, $full, $undef_message )
+        This creates the closure used to test if a value is valid for this
+        type.
+
+    coercion_export_generator( $short, $full, $undef_message )
+        This is the closure that's doing coercions.
+
+  Provided Parameters
+    $short
+        The short, exported name of the type.
+
+    $full
+        The fully qualified name of this type as Moose knows it.
+
+    $undef_message
+        A message that will be thrown when type functionality is used but
+        the type does not yet exist.
+
+NOTES REGARDING TYPE UNIONS
+        MooseX::Types uses MooseX::Types::TypeDecorator to do some
+        overloading which generally allows you to easily create union types:
+
+          subtype StrOrArrayRef,
+            as Str|ArrayRef;    
+
+        As with parameterized constrains, this overloading extends to
+        modules using the types you define in a type library.
+
+            use Moose;
+            use MooseX::Types::Moose qw(HashRef Int);
+    
+            has 'attr' => (isa=>HashRef|Int);
+
+        And everything should just work as you'd think.
+
+METHODS
+  import
+        Installs the MooseX::Types::Base class into the caller and exports
+        types according to the specification described in "LIBRARY
+        DEFINITION". This will continue to Moose::Util::TypeConstraints'
+        "import" method to export helper functions you will need to declare
+        your types.
+
+  type_export_generator
+        Generate a type export, e.g. "Int()". This will return either a
+        Moose::Meta::TypeConstraint object, or alternatively a
+        MooseX::Types::UndefinedType object if the type was not yet defined.
+
+  create_arged_type_constraint ($name, @args)
+        Given a String $name with @args find the matching typeconstraint and
+        parameterize it with @args.
+
+  create_base_type_constraint ($name)
+        Given a String $name, find the matching typeconstraint.
+
+  create_type_decorator ($type_constraint)
+        Given a $type_constraint, return a lightweight
+        MooseX::Types::TypeDecorator instance.
+
+  coercion_export_generator
+        This generates a coercion handler function, e.g. "to_Int($value)".
+
+  check_export_generator
+        Generates a constraint check closure, e.g. "is_Int($value)".
+
+CAVEATS
+        The following are lists of gotcha's and their workarounds for
+        developers coming from the standard string based type constraint
+        names
+
+  Uniqueness
+        A library makes the types quasi-unique by prefixing their names with
+        (by default) the library package name. If you're only using the type
+        handler functions provided by MooseX::Types, you shouldn't ever have
+        to use a type's actual full name.
+
+  Argument separation ('=>' versus ',')
+        The Perlop manpage has this to say about the '=>' operator: "The =>
+        operator is a synonym for the comma, but forces any word (consisting
+        entirely of word characters) to its left to be interpreted as a
+        string (as of 5.001). This includes words that might otherwise be
+        considered a constant or function call."
+
+        Due to this stringification, the following will NOT work as you
+        might think:
+
+          subtype StrOrArrayRef => as Str|ArrayRef;
+  
+        The 'StrOrArrayRef' will have it's stringification activated this
+        causes the subtype to not be created. Since the bareword type
+        constraints are not strings you really should not try to treat them
+        that way. You will have to use the ',' operator instead. The
+        author's of this package realize that all the Moose documention and
+        examples nearly uniformly use the '=>' version of the comma operator
+        and this could be an issue if you are converting code.
+
+        Patches welcome for discussion.
+
+SEE ALSO
+        Moose, Moose::Util::TypeConstraints, MooseX::Types::Moose,
+        Sub::Exporter
+
+AUTHOR AND COPYRIGHT
+        Robert 'phaylon' Sedlacek "<rs@474.at>", with many thanks to the
+        "#moose" cabal on "irc.perl.org".
+
+        Additional features by John Napiorkowski (jnapiorkowski)
+        <jjnapiork@cpan.org>.
+
+LICENSE
+        This program is free software; you can redistribute it and/or modify
+        it under the same terms as perl itself.
+

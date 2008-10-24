@@ -11,6 +11,8 @@ use MooseX::Types
         StrOrArrayRef
         AtLeastOneInt
         Jobs
+        SubOfMyArrayRefInt01
+        BiggerInt
     )];
 
 subtype MyArrayRefBase,
@@ -22,6 +24,27 @@ coerce MyArrayRefBase,
     
 subtype MyArrayRefInt01,
     as ArrayRef[Int];
+
+subtype BiggerInt,
+    as Int,
+    where {$_>10};
+
+## We can change this when the .61 Moose comes out.  When that happens we will
+## have the correct patch to Moose::Meta::TypeConstraint::Parameterized to let
+## us support parameterizing parameterized subtypes.  When we get this we can
+## then replace the where clause with:
+
+    ##as MyArrayRefInt01[BiggerInt];
+
+subtype SubOfMyArrayRefInt01,
+    as MyArrayRefInt01,
+    where {
+        my $ok_or_not = 1;
+        foreach my $int (@$_) {
+            $ok_or_not = $int>10 ? 1:0
+             if $ok_or_not;
+        } $ok_or_not;
+    };
 
 coerce MyArrayRefInt01,
     from Str,

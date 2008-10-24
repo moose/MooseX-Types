@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 49;
+use Test::More tests => 52;
 use Test::Exception;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -16,7 +16,7 @@ use lib "$FindBin::Bin/lib";
     );
     use DecoratorLibrary qw(
         MyArrayRefBase MyArrayRefInt01 MyArrayRefInt02 StrOrArrayRef
-        AtLeastOneInt Jobs
+        AtLeastOneInt Jobs SubOfMyArrayRefInt01
     );
     
     has 'arrayrefbase' => (is=>'rw', isa=>MyArrayRefBase, coerce=>1);
@@ -29,6 +29,7 @@ use lib "$FindBin::Bin/lib";
     has 'deep' => (is=>'rw', isa=>ArrayRef[ArrayRef[HashRef[Int]]] );
     has 'deep2' => (is=>'rw', isa=>ArrayRef[Int|ArrayRef[HashRef[Int|Object]]] );
     has 'enum' => (is=>'rw', isa=>Jobs);
+    has 'SubOfMyArrayRefInt01_attr' => (is=>'rw', isa=>SubOfMyArrayRefInt01);
 }
 
 ## Make sure we have a 'create object sanity check'
@@ -213,3 +214,15 @@ ok $type->enum('Programming')
 throws_ok sub {
     $type->enum('ddddd');
 }, qr/Attribute \(enum\) does not pass the type constraint/ => 'Enum properly fails';
+
+## Test SubOfMyArrayRefInt01_attr
+
+ok $type->SubOfMyArrayRefInt01_attr([15,20,25])
+ => 'Assigned SubOfMyArrayRefInt01_attr to [15,20,25]';
+
+is_deeply $type->SubOfMyArrayRefInt01_attr, [15,20,25],
+ => 'Assignment is correct';
+ 
+throws_ok sub {
+    $type->SubOfMyArrayRefInt01_attr([15,5,20]);
+}, qr/Attribute \(SubOfMyArrayRefInt01_attr\) does not pass the type constraint/ => 'SubOfMyArrayRefInt01 Constraints properly fail';

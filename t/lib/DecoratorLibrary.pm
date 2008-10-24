@@ -13,21 +13,6 @@ use MooseX::Types
         Jobs
     )];
 
-## Some questionable messing around
-    sub my_subtype {
-        my ($subtype, $basetype, @rest) = @_;
-        return subtype($subtype, $basetype, shift @rest, shift @rest);
-    }
-    
-    sub my_from {
-        return @_;
-        
-    }
-    sub my_as {
-        return @_;
-    }
-## End
-
 subtype MyArrayRefBase,
     as ArrayRef;
     

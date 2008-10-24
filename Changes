@@ -1,5 +1,5 @@
 
-0.06    Fri Sep  25 12:00:00 EST 2008
+0.06    Fri Oct  24 15:00:00 EST 2008
         - Added support for parameterized types and type unions, tests for all
         that and documentation updates.
         

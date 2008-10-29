@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 52;
+use Test::More tests => 62;
 use Test::Exception;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -16,7 +16,8 @@ use lib "$FindBin::Bin/lib";
     );
     use DecoratorLibrary qw(
         MyArrayRefBase MyArrayRefInt01 MyArrayRefInt02 StrOrArrayRef
-        AtLeastOneInt Jobs SubOfMyArrayRefInt01
+        AtLeastOneInt Jobs SubOfMyArrayRefInt01 WierdIntergersArrayRef1
+        WierdIntergersArrayRef2
     );
     
     has 'arrayrefbase' => (is=>'rw', isa=>MyArrayRefBase, coerce=>1);
@@ -30,6 +31,8 @@ use lib "$FindBin::Bin/lib";
     has 'deep2' => (is=>'rw', isa=>ArrayRef[Int|ArrayRef[HashRef[Int|Object]]] );
     has 'enum' => (is=>'rw', isa=>Jobs);
     has 'SubOfMyArrayRefInt01_attr' => (is=>'rw', isa=>SubOfMyArrayRefInt01);
+    has 'WierdIntergersArrayRef1_attr' => (is=>'rw', isa=>WierdIntergersArrayRef1);
+    has 'WierdIntergersArrayRef2_attr' => (is=>'rw', isa=>WierdIntergersArrayRef2);   
 }
 
 ## Make sure we have a 'create object sanity check'
@@ -225,4 +228,55 @@ is_deeply $type->SubOfMyArrayRefInt01_attr, [15,20,25],
  
 throws_ok sub {
     $type->SubOfMyArrayRefInt01_attr([15,5,20]);
-}, qr/Attribute \(SubOfMyArrayRefInt01_attr\) does not pass the type constraint/ => 'SubOfMyArrayRefInt01 Constraints properly fail';
+}, qr/Attribute \(SubOfMyArrayRefInt01_attr\) does not pass the type constraint/
+ => 'SubOfMyArrayRefInt01 Constraints properly fail';
+
+## test WierdIntergersArrayRef1 
+
+ok $type->WierdIntergersArrayRef1_attr([5,10,1000])
+ => 'Assigned deep2 to [5,10,1000]';
+
+is_deeply $type->WierdIntergersArrayRef1_attr, [5,10,1000],
+ => 'Assignment is correct';
+ 
+throws_ok sub {
+    $type->WierdIntergersArrayRef1_attr({a=>1,b=>2});
+}, qr/Attribute \(WierdIntergersArrayRef1_attr\) does not pass the type constraint/
+ => 'Constraints properly fail';
+
+throws_ok sub {
+    $type->WierdIntergersArrayRef1_attr([5,10,1]);
+}, qr/Attribute \(WierdIntergersArrayRef1_attr\) does not pass the type constraint/
+ => 'Constraints properly fail';
+
+throws_ok sub {
+    $type->WierdIntergersArrayRef1_attr([1]);
+}, qr/Attribute \(WierdIntergersArrayRef1_attr\) does not pass the type constraint/
+ => 'Constraints properly fail';
+
+## test WierdIntergersArrayRef2 
+
+ok $type->WierdIntergersArrayRef2_attr([5,10,$type])
+ => 'Assigned deep2 to [5,10,$type]';
+
+is_deeply $type->WierdIntergersArrayRef2_attr, [5,10,$type],
+ => 'Assignment is correct';
+ 
+throws_ok sub {
+    $type->WierdIntergersArrayRef2_attr({a=>1,b=>2});
+}, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
+ => 'Constraints properly fail';
+
+throws_ok sub {
+    $type->WierdIntergersArrayRef2_attr([5,10,1]);
+}, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
+ => 'Constraints properly fail';
+
+throws_ok sub {
+    $type->WierdIntergersArrayRef2_attr([1]);
+}, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
+ => 'Constraints properly fail';
+
+
+
+

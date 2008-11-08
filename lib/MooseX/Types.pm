@@ -19,7 +19,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 
 use namespace::clean -except => [qw( meta )];
 
-our $VERSION = 0.06;
+our $VERSION = 0.07;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -39,7 +39,7 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   # import builtin types
   use MooseX::Types::Moose 'Int';
 
-  # type definition
+  # type definition.
   subtype PositiveInt, 
       as Int, 
       where { $_ > 0 },
@@ -279,7 +279,7 @@ types you define in a type library.
     has 'attr' => (isa=>HashRef|Int);
 
 And everything should just work as you'd think.
-    
+
 =head1 METHODS
 
 =head2 import

@@ -12,7 +12,7 @@ all_from        q{lib/MooseX/Types.pm};
 build_requires  q{Test::More},                  0.80;
 build_requires  q{FindBin},                     0;
 
-requires        q{Moose},                       0.60;
+requires        q{Moose},                       0.61;
 requires        q{Sub::Install},                0.924;
 requires        q{namespace::clean},            0.08;
 requires        q{Carp},                        0;

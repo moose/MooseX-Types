@@ -19,6 +19,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 
 use namespace::clean -except => [qw( meta )];
 
+use 5.008;
 our $VERSION = 0.07;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 

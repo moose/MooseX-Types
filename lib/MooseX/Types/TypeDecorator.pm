@@ -51,7 +51,10 @@ sub new {
     if(my $arg = shift @_) {
         if(blessed $arg && $arg->isa('Moose::Meta::TypeConstraint')) {
             return bless {'__type_constraint'=>$arg}, $class;
-        } elsif(blessed $arg && $arg->isa('MooseX::Types::UndefinedType')) {
+        } elsif(
+            blessed $arg &&
+            $arg->isa('MooseX::Types::UndefinedType') 
+          ) {
             ## stub in case we'll need to handle these types differently
             return bless {'__type_constraint'=>$arg}, $class;
         } elsif(blessed $arg) {
@@ -60,7 +63,7 @@ sub new {
             croak "Argument cannot be '$arg'";
         }
     } else {
-        croak "This method [new] requires a single argument of 'arg'.";        
+        croak "This method [new] requires a single argument.";        
     }
 }
 
@@ -135,7 +138,7 @@ sub AUTOLOAD {
     if($self->__type_constraint->can($method)) {
         return $self->__type_constraint->$method(@args);
     } else {
-        croak "Method '$method' is not supported";   
+        croak "Method '$method' is not supported for ". ref($self->__type_constraint);   
     }
 }
 

@@ -357,6 +357,7 @@ sub type_export_generator {
         } else {
             $type_constraint = $class->create_base_type_constraint($name);
         }
+
         $type_constraint = defined($type_constraint) ? $type_constraint
          : MooseX::Types::UndefinedType->new($name);
          

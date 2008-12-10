@@ -2,7 +2,7 @@ package SubExporterCompatibility; {
     
     use MooseX::Types::Moose qw(Str);
     use MooseX::Types -declare => [qw(MyStr)];
-    use Sub::Exporter -setup => { exports => [ qw(something) ] };
+    use Sub::Exporter -setup => { exports => [ qw(something MyStr) ] };
     
     subtype MyStr,
      as Str;

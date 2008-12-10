@@ -12,9 +12,8 @@ BEGIN {
         : ( tests => 3 );
 }
 
-use SubExporterCompatibility qw(MyStr);
-
+use SubExporterCompatibility qw(MyStr something);
+	
 ok MyStr->check('aaa'), "Correctly passed";
 ok !MyStr->check([1]), "Correctly fails";
 ok something(), "Found the something method";
-

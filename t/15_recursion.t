@@ -20,9 +20,10 @@ BEGIN {
     package MooseX::Types::Test::Recursion::TestRunner;
     
     BEGIN {
-        use Test::More 'no_plan';
-        use Data::Dump qw/dump/;
+        use Test::More tests=>5;
+        use Test::Exception;
         
+        ## Grab the newly created test type constraint
         MooseX::Types::Test::Recursion->import(':all');
     };
 
@@ -33,8 +34,21 @@ BEGIN {
     ok RecursiveHashRef->check({key=>{subkey=>"value"}})
      => 'properly validated {key=>{subkey=>"value"}}';
      
+    ok RecursiveHashRef->check({
+        key=>{
+            subkey=>"value",
+            subkey2=>{
+                ssubkey1=>"value3",
+                ssubkey2=>"value4"
+            }
+        }
+    }) => 'properly validated deeper recursive values';
+    
+    ok ! RecursiveHashRef->check({key=>[1,2,3]})
+     => 'Properly invalidates bad value';
      
-    warn dump RecursiveHashRef();
+    ok ! RecursiveHashRef->check({key=>{subkey=>"value",subkey2=>{ssubkey=>[1,2,3]}}})
+     => 'Properly invalidates bad value deeply';
 }
 
 

@@ -20,7 +20,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 use namespace::clean -except => [qw( meta )];
 
 use 5.008;
-our $VERSION = 0.07;
+our $VERSION = 0.08;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -263,6 +263,21 @@ The fully qualified name of this type as L<Moose> knows it.
 A message that will be thrown when type functionality is used but the
 type does not yet exist.
 
+=head1 RECURSIVE SUBTYPES
+
+As of version 0.08, L<Moose::Types> has experimental support for Recursive
+subtypes.  This will allow:
+
+    subtype Tree() => as HashRef[Str|Tree];
+
+Which validates things like:
+
+    {key=>'value'};
+    {key=>{subkey1=>'value', subkey2=>'value'}}
+    
+And so on.  This feature is new and there may be lurking bugs so don't be afraid
+to hunt me down with patches and test cases if you have trouble.
+
 =head1 NOTES REGARDING TYPE UNIONS
 
 L<MooseX::Types> uses L<MooseX::Types::TypeDecorator> to do some overloading
@@ -482,6 +497,42 @@ documention and examples nearly uniformly use the '=>' version of the comma
 operator and this could be an issue if you are converting code.
 
 Patches welcome for discussion.
+
+=head2 Compatibility with Sub::Exporter
+
+If you want to use L<Sub::Exporter> with a Type Library, you need to make sure
+you export all the type constraints declared AS WELL AS any additional export
+targets. For example if you do:
+
+    package TypeAndSubExporter; {
+        
+        use MooseX::Types::Moose qw(Str);
+        use MooseX::Types -declare => [qw(MyStr)];
+        use Sub::Exporter -setup => { exports => [ qw(something) ] };
+        
+        subtype MyStr,
+         as Str;
+         
+        sub something {
+            return 1;
+        }    
+        
+    } 1;
+    
+    package Foo; {
+        use TypeAndSubExporter qw(MyStr);
+    } 1;
+
+You'll get a '"MyStr" is not exported by the TypeAndSubExporter module' error.
+Upi can workaround by:
+
+        - use Sub::Exporter -setup => { exports => [ qw(something) ] };
+        + use Sub::Exporter -setup => { exports => [ qw(something MyStr) ] };
+
+This is a workaround and I am exploring how to make these modules work better
+together.  I realize this workaround will lead a lot of duplication in your
+export declarations and will be onerous for large type libraries.  Patches and
+detailed test cases welcome. See the tests directory for a start on this.
     
 =head1 SEE ALSO
 

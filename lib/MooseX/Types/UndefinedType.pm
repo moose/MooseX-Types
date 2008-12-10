@@ -9,6 +9,9 @@ MooseX::Types::UndefinedType - Represents a not yet defined type
 use warnings;
 use strict;
 
+use Moose::Util::TypeConstraints ();
+use Carp::Clan qw( ^MooseX::Types );
+
 use overload '""'     => sub { shift->name },
              fallback => 1;
 
@@ -19,6 +22,9 @@ constraint under it's full name, it assumes it has not yet been defined.
 It will then return an instance of this class, handling only 
 stringification, name and possible identification of undefined types.
 
+Later, when you try to use the Undefined Type Constraint, autovivification will
+be attempted.
+
 =head1 METHODS
 
 =head2 new
@@ -28,7 +34,9 @@ class.
 
 =cut
 
-sub new { bless { name => $_[1] }, $_[0] }
+sub new {
+    return bless { name => $_[1] }, $_[0];
+}
 
 =head2 name
 
@@ -36,18 +44,69 @@ Returns the stored type name.
 
 =cut
 
-sub name { $_[0]->{name} }
+sub name {
+    return $_[0]->{name};
+}
+
+=head2 __autovivify
+
+Try to see if the type constraint has yet been defined and if so create it.
+
+=cut
+
+sub __autovivify {
+    my ($self) = @_;
+    if(my $tc = $self->{instance}) {
+        return $tc;
+    } elsif( my $new_tc = Moose::Util::TypeConstraints::find_type_constraint($self->name)) {
+        $self->{instance} = $new_tc;
+        return $new_tc;
+    } else {
+        return;
+    }
+}
+
+=head2 AUTOLOAD
+
+Try to autovivify and delegate
+
+=cut
+
+sub AUTOLOAD {
+    my ($self, @args)  = @_;
+    my ($method) = our $AUTOLOAD =~ /([^:]+)$/;    
+
+    if(my $type_constraint = $self->__autovivify) {
+        return $type_constraint->$method(@args);
+    } else {
+        croak "Method '$method' is not supported for " . $self->name;
+    }
+}
+
+=head2 DESTROY
+
+Moose::Meta::TypeConstraint::Parameterizable complains if this isn't here. TODO
+to find out why.
+
+=cut
+
+sub DESTROY {
+    return;
+}
 
 =head1 SEE ALSO
 
 L<MooseX::Types::Moose>,
 L<Moose::Util::TypeConstraints>, 
-L<Moose::Meta::TypeConstraint>
+L<Moose::Meta::TypeConstraint>,
+L<Carp::Clan>
 
 =head1 AUTHOR AND COPYRIGHT
 
 Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
 the C<#moose> cabal on C<irc.perl.org>.
+
+Additional features by John Napiorkowski (jnapiorkowski) <jjnapiork@cpan.org>
 
 =head1 LICENSE
 

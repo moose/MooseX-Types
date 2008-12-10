@@ -6,7 +6,7 @@ use inc::Module::Install 0.67;
 
 name            q{MooseX-Types};
 license         q{perl};
-author          q{Robert 'phaylon' Sedlacek <rs@474.at>};
+author          q{Robert "phaylon" Sedlacek <rs@474.at>};
 all_from        q{lib/MooseX/Types.pm};
 
 build_requires  q{Test::More},                  0.80;

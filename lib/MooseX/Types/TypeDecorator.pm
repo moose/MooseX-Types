@@ -3,6 +3,7 @@ package MooseX::Types::TypeDecorator;
 use strict;
 use warnings;
 
+
 use Carp::Clan qw( ^MooseX::Types );
 use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint::Union;
@@ -10,7 +11,12 @@ use Scalar::Util qw(blessed);
 
 use overload(
     '""' => sub {
-        return shift->__type_constraint->name; 
+    		my $self = shift @_;
+    		if(blessed $self) {
+        		return $self->__type_constraint->name;     		
+    		} else {
+    			return "$self";
+    		}
     },
     '|' => sub {
         
@@ -25,7 +31,6 @@ use overload(
     fallback => 1,
     
 );
-
 
 =head1 NAME
 
@@ -74,8 +79,7 @@ Set/Get the type_constraint.
 =cut
 
 sub __type_constraint {
-    my $self = shift @_;
-    
+    my $self = shift @_;    
     if(blessed $self) {
         if(defined(my $tc = shift @_)) {
             $self->{__type_constraint} = $tc;
@@ -95,7 +99,11 @@ handle $self->isa since AUTOLOAD can't.
 sub isa {
     my ($self, $target) = @_;  
     if(defined $target) {
-        return $self->__type_constraint->isa($target);
+    	if(blessed $self) {
+    		return $self->__type_constraint->isa($target);
+    	} else {
+    		return;
+    	}
     } else {
         return;
     }
@@ -110,11 +118,29 @@ handle $self->can since AUTOLOAD can't.
 sub can {
     my ($self, $target) = @_;
     if(defined $target) {
-        return $self->__type_constraint->can($target);
+    	if(blessed $self) {
+    		return $self->__type_constraint->can($target);
+    	} else {
+    		return;
+    	}
     } else {
         return;
     }
 }
+
+=head2 meta
+
+have meta examine the underlying type constraints
+
+=cut
+
+sub meta {
+	my $self = shift @_;
+	if(blessed $self) {
+		return $self->__type_constraint->meta;
+	} 
+}
+
 
 =head2 DESTROY
 

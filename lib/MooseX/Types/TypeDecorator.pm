@@ -72,7 +72,7 @@ sub new {
     }
 }
 
-=head __type_constraint ($type_constraint)
+=head2 __type_constraint ($type_constraint)
 
 Set/Get the type_constraint.
 

@@ -5,6 +5,9 @@ use warnings;
 use Data::Dump qw( pp );
 use Test::More tests => 1;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
 do {
     package IntrospectionTest;
     use IntrospectTypeExports   __PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr );

@@ -18,7 +18,7 @@ L<MooseX::Types> might need.
 
 =cut
 
-our @EXPORT_OK = qw( filter_tags );
+our @EXPORT_OK = qw( filter_tags has_available_type_export );
 
 =head1 FUNCTIONS
 
@@ -41,6 +41,56 @@ sub filter_tags {
         push @other, $_;
     }
     return \%tags, \@other;
+}
+
+=head2 has_available_type_export
+
+  TypeConstraint | Undef = has_available_type_export($package, $name);
+
+This function allows you to introspect if a given type export is available 
+I<at this point in time>. This means that the C<$package> must have imported
+a typeconstraint with the name C<$name>, and it must be still in its symbol
+table.
+
+Two arguments are expected:
+
+=over 4
+
+=item $package
+
+The name of the package to introspect.
+
+=item $name
+
+The name of the type export to introspect.
+
+=back
+
+B<Note> that the C<$name> is the I<exported> name of the type, not the declared
+one. This means that if you use L<Sub::Exporter>s functionality to rename an import
+like this:
+
+  use MyTypes Str => { -as => 'MyStr' };
+
+you would have to introspect this type like this:
+
+  has_available_type_export $package, 'MyStr';
+
+The return value will be either the type constraint that belongs to the export
+or an undefined value.
+
+=cut
+
+sub has_available_type_export {
+    my ($package, $name) = @_;
+
+    my $sub = $package->can($name)
+        or return undef;
+
+    return undef
+        unless $sub->isa('MooseX::Types::EXPORTED_TYPE_CONSTRAINT');
+
+    return $sub->();
 }
 
 =head1 SEE ALSO

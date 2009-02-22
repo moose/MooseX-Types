@@ -1,3 +1,8 @@
+0.09    ...
+        - Added MooseX::Types::Util::has_available_type_export($p, $n) to
+          allow introspection of available types for other libraries wanting
+          to use type export names for type specifications.
+
 0.08    Mon Dec  09 19:00:00 EST 2008
         - Added experimental support for recursive type constraints.  Pod and
           tests for this feature.  Let the madness begin.

@@ -67,7 +67,10 @@ sub import {
         # the type itself
         push @{ $ex_spec{exports} }, 
             $type_short,
-            sub { $wrapper->type_export_generator($type_short, $type_full) };
+            sub { 
+                bless $wrapper->type_export_generator($type_short, $type_full),
+                    'MooseX::Types::EXPORTED_TYPE_CONSTRAINT';
+            };
 
         # the check helper
         push @{ $ex_spec{exports} },

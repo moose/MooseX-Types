@@ -1,3 +1,7 @@
+0.10    Fri March 06 17:34:00 EST 2009
+        - Removed unneeded debugging code from one of the tests, which was
+          causing installation errors for people that didn't already have
+          Data::Dump installed. (jjnapiork)	
 0.09    ...
         - Added MooseX::Types::Util::has_available_type_export($p, $n) to
           allow introspection of available types for other libraries wanting

@@ -7,7 +7,6 @@ MooseX::Types::Base - Type library base class
 
 =cut
 
-#use Data::Dump                      qw( dump );
 use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );
 use Sub::Exporter                   qw( build_exporter );

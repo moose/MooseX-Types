@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 
-use Data::Dump qw( pp );
 use Test::More tests => 1;
 
 use FindBin;

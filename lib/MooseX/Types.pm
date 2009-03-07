@@ -7,9 +7,6 @@ MooseX::Types - Organise your Moose types in libraries
 
 =cut
 
-#use warnings;
-#use strict;
-
 use Moose::Util::TypeConstraints;
 use MooseX::Types::TypeDecorator;
 use MooseX::Types::Base             ();
@@ -20,7 +17,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 use namespace::clean -except => [qw( meta )];
 
 use 5.008;
-our $VERSION = 0.09;
+our $VERSION = 0.10;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS

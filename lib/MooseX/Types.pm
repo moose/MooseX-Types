@@ -260,6 +260,8 @@ The fully qualified name of this type as L<Moose> knows it.
 A message that will be thrown when type functionality is used but the
 type does not yet exist.
 
+=back
+
 =head1 RECURSIVE SUBTYPES
 
 As of version 0.08, L<Moose::Types> has experimental support for Recursive

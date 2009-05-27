@@ -9,15 +9,18 @@ MooseX::Types - Organise your Moose types in libraries
 
 use Moose::Util::TypeConstraints;
 use MooseX::Types::TypeDecorator;
-use MooseX::Types::Base             ();
-use MooseX::Types::Util             qw( filter_tags );
+use MooseX::Types::Base               ();
+use MooseX::Types::Util               qw( filter_tags );
 use MooseX::Types::UndefinedType;
-use Carp::Clan                      qw( ^MooseX::Types );
+use MooseX::Types::CheckedUtilExports ();
+use Carp::Clan                        qw( ^MooseX::Types );
+use Sub::Name;
+use Scalar::Util                      'reftype';
 
 use namespace::clean -except => [qw( meta )];
 
 use 5.008;
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -35,7 +38,7 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
     )];
 
   # import builtin types
-  use MooseX::Types::Moose 'Int';
+  use MooseX::Types::Moose qw/Int HashRef/;
 
   # type definition.
   subtype PositiveInt, 
@@ -69,6 +72,12 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   
   subtype StrOrArrayRef,
     as Str|ArrayRef;
+
+  class_type 'DateTime';
+
+  coerce 'DateTime',
+    from HashRef,
+    via { DateTime->new(%$_) };
 
   1;
 
@@ -112,6 +121,9 @@ names of the types will be prefixed with the library's name.
 
 This module will also provide you with some helper functions to make it 
 easier to use Moose types in your code.
+
+String type names will produce a syntax error, unless it's for a C<class_type>
+or C<role_type> declared within the library.
 
 =head1 TYPE HANDLER FUNCTIONS
 
@@ -339,7 +351,12 @@ sub import {
     }
 
     # run type constraints import
-    return Moose::Util::TypeConstraints->import({ into => $callee });
+    Moose::Util::TypeConstraints->import({ into => $callee });
+
+    # override some with versions that check for syntax errors
+    MooseX::Types::CheckedUtilExports->import({ into => $callee });
+
+    1;
 }
 
 =head2 type_export_generator
@@ -357,19 +374,22 @@ sub type_export_generator {
     ## Return an anonymous subroutine that will generate the proxied type
     ## constraint for you.
     
-    return sub {
-        my $type_constraint;
+    return subname $name => sub {
+        my $type_constraint = $class->create_base_type_constraint($name);
+
         if(defined(my $params = shift @_)) {
             ## We currently only allow a TC to accept a single, ArrayRef
             ## parameter, as in HashRef[Int], where [Int] is what's inside the
             ## ArrayRef passed.
-            if(ref $params eq 'ARRAY') {
+            if(reftype $params eq 'ARRAY') {
                 $type_constraint = $class->create_arged_type_constraint($name, @$params);
+            } elsif(!defined $type_constraint) {
+                croak "Syntax error in type definition (did you forget a comma"
+                    . " after $type?)";
             } else {
-                croak 'Arguments must be an ArrayRef, not '. ref $params;
+                croak "Argument must be an ArrayRef to create a parameterized "
+                    . "type, Eg.: ${type}[Int]. Got: ".ref($params)."."
             }
-        } else {
-            $type_constraint = $class->create_base_type_constraint($name);
         }
 
         $type_constraint = defined($type_constraint) ? $type_constraint

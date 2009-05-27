@@ -1,3 +1,8 @@
+0.11    Sat May 23 18:02:35 PDT 2009
+        - warning on string types and unregistered class/role types
+        - better error for missing comma
+        - MooseX::Types::Combine for combining type libs
+
 0.10    Fri March 06 17:34:00 EST 2009
         - Removed unneeded debugging code from one of the tests, which was
           causing installation errors for people that didn't already have

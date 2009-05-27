@@ -188,6 +188,90 @@ sub type_storage {
     }
 }
 
+=head2 registered_class_types
+
+Returns the class types registered within this library. Don't use directly.
+
+=cut
+
+sub registered_class_types {
+    my ($class) = @_;
+
+    {
+        no strict 'refs';
+        return \%{ $class . '::__MOOSEX_TYPELIBRARY_CLASS_TYPES' };
+    }
+}
+
+=head2 register_class_type
+
+Register a C<class_type> for use in this library by class name.
+
+=cut
+
+sub register_class_type {
+    my ($class, $type) = @_;
+
+    croak "Not a class_type"
+        unless $type->isa('Moose::Meta::TypeConstraint::Class');
+
+    $class->registered_class_types->{$type->class} = $type;
+}
+
+=head2 get_registered_class_type
+
+Get a C<class_type> registered in this library by name.
+
+=cut
+
+sub get_registered_class_type {
+    my ($class, $name) = @_;
+
+    $class->registered_class_types->{$name};
+}
+
+=head2 registered_role_types
+
+Returns the role types registered within this library. Don't use directly.
+
+=cut
+
+sub registered_role_types {
+    my ($class) = @_;
+
+    {
+        no strict 'refs';
+        return \%{ $class . '::__MOOSEX_TYPELIBRARY_ROLE_TYPES' };
+    }
+}
+
+=head2 register_role_type
+
+Register a C<role_type> for use in this library by role name.
+
+=cut
+
+sub register_role_type {
+    my ($class, $type) = @_;
+
+    croak "Not a role_type"
+        unless $type->isa('Moose::Meta::TypeConstraint::Role');
+
+    $class->registered_role_types->{$type->role} = $type;
+}
+
+=head2 get_registered_role_type
+
+Get a C<role_type> registered in this library by role name.
+
+=cut
+
+sub get_registered_role_type {
+    my ($class, $name) = @_;
+
+    $class->registered_role_types->{$name};
+}
+
 =head1 SEE ALSO
 
 L<MooseX::Types::Moose>

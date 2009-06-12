@@ -122,8 +122,9 @@ names of the types will be prefixed with the library's name.
 This module will also provide you with some helper functions to make it 
 easier to use Moose types in your code.
 
-String type names will produce a syntax error, unless it's for a C<class_type>
-or C<role_type> declared within the library.
+String type names will produce a warning, unless it's for a C<class_type> or
+C<role_type> declared within the library, or a fully qualified name like
+C<'MyTypeLibrary::Foo'>.
 
 =head1 TYPE HANDLER FUNCTIONS
 

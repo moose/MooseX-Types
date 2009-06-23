@@ -1,3 +1,8 @@
+Revision history for MooseX-Types
+
+0.13    Tue Jun 23 05:46:33 PDT 2009
+        - Add Test::Moose to build_requires for Fedora
+
 0.12    Sun Jun 14 14:39:57 PDT 2009
         - fix mixing of typelibs with regular Moose classes
 

@@ -23,8 +23,12 @@ use overload(
         ## It's kind of ugly that we need to know about Union Types, but this
         ## is needed for syntax compatibility.  Maybe someday we'll all just do
         ## Or[Str,Str,Int]
-        
-        my @tc = grep {blessed $_} @_;
+
+	my @tc = map {
+	    blessed $_ ? $_ :
+	      Moose::Util::TypeConstraints::find_or_parse_type_constraint($_)
+	} @_;
+
         my $union = Moose::Meta::TypeConstraint::Union->new(type_constraints=>\@tc);
         return Moose::Util::TypeConstraints::register_type_constraint($union);
     },

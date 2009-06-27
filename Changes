@@ -1,5 +1,8 @@
 Revision history for MooseX-Types
 
+0.14    Fri Jun 26 17:52:20 PDT 2009
+        - Fix union with string type
+
 0.13    Tue Jun 23 05:46:33 PDT 2009
         - Add Test::Moose to build_requires for Fedora
 

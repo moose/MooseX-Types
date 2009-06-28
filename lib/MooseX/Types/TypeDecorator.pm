@@ -28,14 +28,15 @@ use overload(
         my @tc = grep {blessed $_} map {
             blessed $_ ? $_ :
             Moose::Util::TypeConstraints::find_or_parse_type_constraint($_)
-              || croak "$_ is not a type constraint"
+              || __PACKAGE__->_throw_error( "$_ is not a type constraint")
         } @args;
 
         ( scalar @tc == scalar @args)
-            || croak "one of your type constraints is bad.  Passed: ". join(', ', @args) ." Got: ". join(', ', @tc);
+            || __PACKAGE__->_throw_error(
+			  "one of your type constraints is bad.  Passed: ". join(', ', @args) ." Got: ". join(', ', @tc));
 
         ( scalar @tc >= 2 )
-            || croak "You must pass in at least 2 type names to make a union";
+            || __PACKAGE__->_throw_error("You must pass in at least 2 type names to make a union");
 
         my $union = Moose::Meta::TypeConstraint::Union->new(type_constraints=>\@tc);
         return Moose::Util::TypeConstraints::register_type_constraint($union);
@@ -75,12 +76,12 @@ sub new {
             ## stub in case we'll need to handle these types differently
             return bless {'__type_constraint'=>$arg}, $class;
         } elsif(blessed $arg) {
-            croak "Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType'), not ". blessed $arg;
+            __PACKAGE__->_throw_error("Argument must be ->isa('Moose::Meta::TypeConstraint') or ->isa('MooseX::Types::UndefinedType'), not ". blessed $arg);
         } else {
-            croak "Argument cannot be '$arg'";
+            __PACKAGE__->_throw_error("Argument cannot be '$arg'");
         }
     } else {
-        croak "This method [new] requires a single argument.";        
+        __PACKAGE__->_throw_error("This method [new] requires a single argument.");        
     }
 }
 
@@ -98,7 +99,7 @@ sub __type_constraint {
         }
         return $self->{__type_constraint};        
     } else {
-        croak 'cannot call __type_constraint as a class method';
+        __PACKAGE__->_throw_error('cannot call __type_constraint as a class method');
     }
 }
 
@@ -120,6 +121,7 @@ sub isa {
         return;
     }
 }
+
 
 =head2 can
 
@@ -153,6 +155,18 @@ sub meta {
 	} 
 }
 
+=head2 _throw_error
+
+properly delegate error messages
+
+=cut
+
+sub _throw_error {
+    shift;
+    require Moose;
+    unshift @_, 'Moose';
+    goto &Moose::throw_error;
+}
 
 =head2 DESTROY
 
@@ -184,7 +198,7 @@ sub AUTOLOAD {
     eval {
         $return = $self->__type_constraint->$method(@args);
     }; if($@) {
-        croak $@;
+        __PACKAGE__->_throw_error($@);
     } else {
         return $return;
     }

@@ -1,5 +1,11 @@
 Revision history for MooseX-Types
 
+0.15    Sun Jun 27 15:50:00 EDT 2009
+        - Change all uses of croak in TypeDecorator to use the Moose
+          throw_exception method.
+        - More test cases for the union mixed string type issue, and
+          better handling of this in the | overload in TypeDecorator
+
 0.14    Fri Jun 26 17:52:20 PDT 2009
         - Fix union with string type
 

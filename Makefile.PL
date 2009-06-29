@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use inc::Module::Install 0.67;
+use inc::Module::Install 0.91;
 
 name            q{MooseX-Types};
 license         q{perl};

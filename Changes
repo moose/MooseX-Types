@@ -1,5 +1,8 @@
 Revision history for MooseX-Types
 
+0.16    Mon Jun 29 10:50:41 PDT 2009
+        - Ship with Module::Install 0.91
+
 0.15    Sun Jun 27 15:50:00 EDT 2009
         - Change all uses of croak in TypeDecorator to use the Moose
           throw_exception method.

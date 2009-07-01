@@ -276,10 +276,9 @@ sub get_registered_role_type {
 
 L<MooseX::Types::Moose>
 
-=head1 AUTHOR AND COPYRIGHT
+=head1 AUTHOR
 
-Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
-the C<#moose> cabal on C<irc.perl.org>.
+See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

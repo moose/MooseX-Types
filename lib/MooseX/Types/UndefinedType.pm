@@ -101,12 +101,9 @@ L<Moose::Util::TypeConstraints>,
 L<Moose::Meta::TypeConstraint>,
 L<Carp::Clan>
 
-=head1 AUTHOR AND COPYRIGHT
+=head1 AUTHOR
 
-Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
-the C<#moose> cabal on C<irc.perl.org>.
-
-Additional features by John Napiorkowski (jnapiorkowski) <jjnapiork@cpan.org>
+See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

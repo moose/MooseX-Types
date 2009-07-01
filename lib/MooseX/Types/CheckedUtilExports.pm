@@ -87,6 +87,10 @@ sub role_type ($;$) {
 
 L<MooseX::Types>
 
+=head1 AUTHOR
+
+See L<MooseX::Types/AUTHOR>.
+
 =head1 LICENSE
 
 This program is free software; you can redistribute it and/or modify

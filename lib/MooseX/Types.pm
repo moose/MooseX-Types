@@ -561,14 +561,23 @@ L<Moose::Util::TypeConstraints>,
 L<MooseX::Types::Moose>,
 L<Sub::Exporter>
 
-=head1 AUTHOR AND COPYRIGHT
+=head1 ACKNOWLEDGEMENTS
 
-Robert 'phaylon' Sedlacek C<E<lt>rs@474.atE<gt>>, with many thanks to
-the C<#moose> cabal on C<irc.perl.org>.
+Many thanks to the C<#moose> cabal on C<irc.perl.org>.
 
-Additional features by John Napiorkowski (jnapiorkowski) <jjnapiork@cpan.org>.
+=head1 AUTHOR
 
-=head1 LICENSE
+Robert "phaylon" Sedlacek <rs@474.at>
+
+=head1 CONTRIBUTORS
+
+jnapiorkowski: John Napiorkowski <jjnapiork@cpan.org>
+
+caelum: Rafael Kitover <rkitover@cpan.org>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright (c) 2007-2009 Robert Sedlacek
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as perl itself.

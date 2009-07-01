@@ -204,9 +204,9 @@ sub AUTOLOAD {
     }
 }
 
-=head1 AUTHOR AND COPYRIGHT
+=head1 AUTHOR
 
-John Napiorkowski (jnapiorkowski) <jjnapiork@cpan.org>
+See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

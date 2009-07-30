@@ -14,7 +14,7 @@ use Class::MOP ();
 
     package CombinedTypeLib;
 
-    use base 'MooseX::Types::Combined';
+    use base 'MooseX::Types::Combine';
 
     __PACKAGE__->provide_types_from(qw/TypeLib1 TypeLib2/);
 

@@ -575,6 +575,8 @@ jnapiorkowski: John Napiorkowski <jjnapiork@cpan.org>
 
 caelum: Rafael Kitover <rkitover@cpan.org>
 
+rafl: Florian Ragwitz <rafl@debian.org>
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright (c) 2007-2009 Robert Sedlacek

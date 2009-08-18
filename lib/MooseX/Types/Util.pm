@@ -8,6 +8,7 @@ MooseX::Types::Util - Common utility functions for the module
 
 use warnings;
 use strict;
+use Scalar::Util 'blessed';
 
 use base 'Exporter';
 
@@ -88,7 +89,7 @@ sub has_available_type_export {
         or return undef;
 
     return undef
-        unless $sub->isa('MooseX::Types::EXPORTED_TYPE_CONSTRAINT');
+        unless blessed $sub && $sub->isa('MooseX::Types::EXPORTED_TYPE_CONSTRAINT');
 
     return $sub->();
 }

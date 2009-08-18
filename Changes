@@ -1,5 +1,11 @@
 Revision history for MooseX-Types
 
+        - Documentation typo fix (Dave Rolsky).
+        - Stop blowing up in has_available_type_export if the introspected code
+          symbol exists but is not a type export (Florian Ragwitz).
+        - Reorganize author/copyright sections at the request of Debian
+          packagers (Rafael Kitover).
+
 0.16    Mon Jun 29 10:50:41 PDT 2009
         - Ship with Module::Install 0.91
 

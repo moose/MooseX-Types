@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -14,6 +14,16 @@ do {
     use IntrospectTypeExports   __PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr );
     use TestLibrary             NonEmptyStr => { -as => 'MyNonEmptyStr' };
     use IntrospectTypeExports   __PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr );
+
+    sub NotAType () { 'just a string' }
+
+    BEGIN {
+        eval {
+            IntrospectTypeExports->import(__PACKAGE__, qw( NotAType ));
+        };
+        ::ok(!$@, "introspecting something that's not not a type doesn't blow up");
+    }
+
     BEGIN { 
         no strict 'refs'; 
         delete ${'IntrospectionTest::'}{TwentyThree};
@@ -37,6 +47,8 @@ is_deeply(IntrospectTypeExports->get_memory, [
     [$P, TwentyThree    => 'TestLibrary::TwentyThree'],
     [$P, NonEmptyStr    => undef],
     [$P, MyNonEmptyStr  => 'TestLibrary::NonEmptyStr'],
+
+    [$P, NotAType       => undef],
 
     [$P, TwentyThree    => undef],
     [$P, NonEmptyStr    => undef],

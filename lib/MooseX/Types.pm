@@ -35,6 +35,7 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
         PositiveInt NegativeInt
         ArrayRefOfPositiveInt ArrayRefOfAtLeastThreeNegativeInts
         LotsOfInnerConstraints StrOrArrayRef
+	MyDateTime
     )];
 
   # import builtin types
@@ -73,9 +74,15 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   subtype StrOrArrayRef,
     as Str|ArrayRef;
 
+  # class types
+
   class_type 'DateTime';
 
-  coerce 'DateTime',
+  # or better
+
+  class_type MyDateTime, { class => 'DateTime' };
+
+  coerce MyDateTime,
     from HashRef,
     via { DateTime->new(%$_) };
 
@@ -420,7 +427,7 @@ it with @args.
 sub create_arged_type_constraint {
     my ($class, $name, @args) = @_;  
     my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
-	return $type_constraint->parameterize(@args);
+    return $type_constraint->parameterize(@args);
 }
 
 =head2 create_base_type_constraint ($name)

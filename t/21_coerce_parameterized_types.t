@@ -7,7 +7,9 @@ use Test::More tests => 2;
 
 BEGIN {
     package TypeLib;
-    use MooseX::Types -declare => [qw/MyChar MyDigit ArrayRefOfMyCharOrDigit/];
+    use MooseX::Types -declare => [qw/
+	MyChar MyDigit ArrayRefOfMyCharOrDigit
+    /];
     use MooseX::Types::Moose qw/ArrayRef Str Int/;
 
     subtype MyChar, as Str, where {
@@ -32,11 +34,13 @@ BEGIN {
 {
     package AClass;
     use Moose;
-    BEGIN { TypeLib->import(qw/MyChar MyDigit ArrayRefOfMyCharOrDigit/) };
+    BEGIN { TypeLib->import(qw/
+	MyChar MyDigit ArrayRefOfMyCharOrDigit/
+    ) };
     use MooseX::Types::Moose 'ArrayRef';
 
     has parameterized => (is => 'rw', isa => ArrayRef[MyChar|MyDigit], coerce => 1);
-    has subtype => (is => 'rw', isa => ArrayRefOfMyCharOrDigit, coerce => 1);
+    has subtype_parameterized => (is => 'rw', isa => ArrayRefOfMyCharOrDigit, coerce => 1);
 }
 
 my $instance = AClass->new;
@@ -44,4 +48,5 @@ my $instance = AClass->new;
 lives_ok { $instance->parameterized('foo') }
     'coercion applied to parameterized type';
 
-lives_ok { $instance->subtype('foo') } 'coercion applied to subtype';
+lives_ok { $instance->subtype_parameterized('foo') }
+    'coercion applied to subtype';

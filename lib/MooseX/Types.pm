@@ -427,7 +427,16 @@ it with @args.
 sub create_arged_type_constraint {
     my ($class, $name, @args) = @_;  
     my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
-    return $type_constraint->parameterize(@args);
+    my $parameterized = $type_constraint->parameterize(@args);
+    # It's obnoxious to have to parameterize before looking for the TC, but the
+    # alternative is to hard-code the assumption that the name is
+    # "$name[$args[0]]", which would be worse.
+    if (my $existing =
+        Moose::Util::TypeConstraints::find_type_constraint($parameterized->name)) {
+        return $existing;
+    }
+    Moose::Util::TypeConstraints::register_type_constraint($parameterized);
+    return $parameterized;
 }
 
 =head2 create_base_type_constraint ($name)

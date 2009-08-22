@@ -425,9 +425,16 @@ it with @args.
 =cut
 
 sub create_arged_type_constraint {
-    my ($class, $name, @args) = @_;  
-    my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
-    return $type_constraint->parameterize(@args);
+    my ($class, $name, $arg) = @_;  
+
+    my $container_tc =
+	Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
+    my $contained_tc =
+	Moose::Util::TypeConstraints::find_or_create_type_constraint("$arg");
+
+    my $tc_name = $container_tc->name . '[' . $contained_tc->name .  ']';
+
+    return Moose::Util::TypeConstraints::find_or_create_type_constraint($tc_name);
 }
 
 =head2 create_base_type_constraint ($name)

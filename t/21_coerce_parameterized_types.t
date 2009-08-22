@@ -7,32 +7,36 @@ use Test::More tests => 2;
 
 BEGIN {
     package TypeLib;
-    use MooseX::Types -declare => [qw/MyType ArrayRefOfMyType/];
-    use MooseX::Types::Moose qw/ArrayRef Str/;
+    use MooseX::Types -declare => [qw/MyChar MyDigit ArrayRefOfMyCharOrDigit/];
+    use MooseX::Types::Moose qw/ArrayRef Str Int/;
 
-    subtype MyType, as Str, where {
+    subtype MyChar, as Str, where {
 	length == 1
     };
 
-    coerce ArrayRef[MyType], from Str, via {
+    subtype MyDigit, as Int, where {
+	length == 1
+    };
+
+    coerce ArrayRef[MyChar|MyDigit], from Str, via {
 	[split //]
     };
 
 # same thing with an explicit subtype
-    subtype ArrayRefOfMyType, as ArrayRef[MyType];
+    subtype ArrayRefOfMyCharOrDigit, as ArrayRef[MyChar|MyDigit];
 
-    coerce ArrayRefOfMyType, from Str, via {
+    coerce ArrayRefOfMyCharOrDigit, from Str, via {
 	[split //]
     };
 }
 {
     package AClass;
     use Moose;
-    BEGIN { TypeLib->import(qw/MyType ArrayRefOfMyType/) };
+    BEGIN { TypeLib->import(qw/MyChar MyDigit ArrayRefOfMyCharOrDigit/) };
     use MooseX::Types::Moose 'ArrayRef';
 
-    has parameterized => (is => 'rw', isa => ArrayRef[MyType], coerce => 1);
-    has subtype => (is => 'rw', isa => ArrayRefOfMyType, coerce => 1);
+    has parameterized => (is => 'rw', isa => ArrayRef[MyChar|MyDigit], coerce => 1);
+    has subtype => (is => 'rw', isa => ArrayRefOfMyCharOrDigit, coerce => 1);
 }
 
 my $instance = AClass->new;

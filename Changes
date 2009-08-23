@@ -1,5 +1,11 @@
 Revision history for MooseX-Types
 
+0.19
+        - un-fix coercions on parameterized types, since it broke
+          MooseX::Method::Signatures, as well as any other code that relied on
+          new type constraint objects being generated each time a type was
+          parameterized (hdp).
+
 0.18    Sat Aug 22 12:50:42 EDT 2009
         - fix coercions on parameterized types (Hans Dieter Pearcey).
 

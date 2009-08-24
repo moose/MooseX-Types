@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-0.19
+0.19    Sun Aug 23 15:03:02 EDT 2009
         - un-fix coercions on parameterized types, since it broke
           MooseX::Method::Signatures, as well as any other code that relied on
           new type constraint objects being generated each time a type was

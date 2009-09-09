@@ -45,10 +45,6 @@ From L<Moose::Util::TypeConstraints>. See that module for syntax.
 
 =cut
 
-Moose::Exporter->setup_import_methods(
-    with_caller => [ @exports, 'class_type', 'role_type' ]
-);
-
 for my $export (@exports) {
     no strict 'refs';
 
@@ -66,6 +62,10 @@ for my $export (@exports) {
         goto &{"Moose::Util::TypeConstraints::$export"};
     }
 }
+
+Moose::Exporter->setup_import_methods(
+    with_caller => [ @exports, 'class_type', 'role_type' ]
+);
 
 sub class_type {
     my $caller = shift;

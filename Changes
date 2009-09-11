@@ -1,5 +1,8 @@
 Revision history for MooseX-Types
 
+0.20    Thu Sep 10 22:34:48 EDT 2009
+        - fix "empty export" warning (doy).
+
 0.19    Sun Aug 23 15:03:02 EDT 2009
         - un-fix coercions on parameterized types, since it broke
           MooseX::Method::Signatures, as well as any other code that relied on

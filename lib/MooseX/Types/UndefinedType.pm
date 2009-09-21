@@ -1,4 +1,5 @@
 package MooseX::Types::UndefinedType;
+our $VERSION = "0.20";
 
 =head1 NAME
 

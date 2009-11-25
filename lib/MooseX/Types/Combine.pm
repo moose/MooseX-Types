@@ -45,7 +45,14 @@ sub import {
     } @type_libs;
 
     my %from;
-    push @{ $from{ $types{ $_ } } }, $_ for @types;
+    for my $type (@types) {
+        die
+            "$caller asked for a type ($type) which is not found in any of the"
+            . " type libraries (@type_libs) combined by $class\n"
+            unless $types{$type};
+
+        push @{ $from{ $types{$type} } }, $type;
+    }
 
     $_->import({ -into => $caller }, @{ $from{ $_ } })
         for keys %from;

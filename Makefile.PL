@@ -14,7 +14,7 @@ build_requires  q{FindBin},                     0;
 build_requires  q{Test::Moose},                 0;
 build_requires  q{Test::Exception},             0;
 
-requires        q{Moose},                       '0.61';
+requires        q{Moose},                       '0.93';
 requires        q{Sub::Install},                '0.924';
 requires        q{namespace::clean},            '0.08';
 requires        q{Carp},                        0;

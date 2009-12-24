@@ -1,10 +1,12 @@
 Revision history for MooseX-Types
 
-0.21
+
+0.21    Thu Dec 24 00:21:26 EST 2009
         - Attempting to import a non-existent type from a combined type
           library gave a very confusing error message from the
           MooseX::Types::Combined internals. Now it gives you a much more
           useful message. (Dave Rolsky)
+        - bump up Moose dep (RT#53016)
 
 0.20    Thu Sep 10 22:34:48 EDT 2009
         - fix "empty export" warning (doy).

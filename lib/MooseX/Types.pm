@@ -20,7 +20,7 @@ use Scalar::Util                      'reftype';
 use namespace::clean -except => [qw( meta )];
 
 use 5.008;
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -596,6 +596,8 @@ caelum: Rafael Kitover <rkitover@cpan.org>
 rafl: Florian Ragwitz <rafl@debian.org>
 
 hdp: Hans Dieter Pearcey <hdp@cpan.org>
+
+autarch: Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT & LICENSE
 

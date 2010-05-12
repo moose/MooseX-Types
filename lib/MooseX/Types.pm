@@ -213,7 +213,7 @@ of a set of library exports. Here is an example:
 
   package MyWrapper;
   use strict;
-  use Class::C3;
+  use MRO::Compat;
   use base 'MooseX::Types::Wrapper';
 
   sub coercion_export_generator {

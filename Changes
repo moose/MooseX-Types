@@ -1,5 +1,6 @@
 Revision history for MooseX-Types
 
+        - Update docs to mention MRO::Compat rather than Class::C3
 
 0.21    Thu Dec 24 00:21:26 EST 2009
         - Attempting to import a non-existent type from a combined type

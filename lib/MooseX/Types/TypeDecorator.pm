@@ -11,6 +11,11 @@ use Moose::Meta::TypeConstraint::Union;
 use Scalar::Util qw(blessed);
 
 use overload(
+    '0+' => sub {
+            my $self = shift @_;
+            my $tc = $self->{__type_constraint};
+            return 0+$tc;
+     },
     '""' => sub {
     		my $self = shift @_;
     		if(blessed $self) {
@@ -19,6 +24,7 @@ use overload(
     			return "$self";
     		}
     },
+    bool => sub { 1 },
     '|' => sub {
         
         ## It's kind of ugly that we need to know about Union Types, but this

@@ -1,5 +1,5 @@
 package MooseX::Types::Util;
-our $VERSION = "0.21";
+our $VERSION = "0.22";
 
 =head1 NAME
 

@@ -6,7 +6,7 @@ use MooseX::Types;
 use MooseX::Types::Moose qw(Any Item );
 
 
-my $item = subtype as 'Item';
+my $item = subtype as Item;
 
 ok Item->equals('Item');
 ok Item->equals(Item);

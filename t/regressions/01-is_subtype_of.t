@@ -20,19 +20,3 @@ ok ( Item->is_subtype_of('Any'),
 ok ( Item->is_subtype_of(Any),
   q[Item is subtype of Any]);
 
-
-__END__
-
-
-my $any = subtype as 'Any';
-
-ok ( $item->is_subtype_of(Any),
-  q[Item is subtype of Any]);
-
-ok ( $item->is_subtype_of($any),
-  q[$item is subtype of $any]);
-
-ok ( Item->is_subtype_of($any),
-  q[Item is subtype of $any]);
-
-

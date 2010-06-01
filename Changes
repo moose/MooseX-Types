@@ -1,11 +1,10 @@
 Revision history for MooseX-Types
 
-0.22	TBD
         - Update docs to mention MRO::Compat rather than Class::C3
-	- Added '0+' overloading to solve the type constraint equality
-	  regression introduced when Moose 1.05 tightened the rules
-	  determing type constraint equality.  Added tests for the
-	  regression.
+        - Added '0+' overloading to solve the type constraint equality
+          regression introduced when Moose 1.05 tightened the rules
+          determing type constraint equality.  Added tests for the
+          regression.
 
 0.21    Thu Dec 24 00:21:26 EST 2009
         - Attempting to import a non-existent type from a combined type
@@ -102,4 +101,3 @@ Revision history for MooseX-Types
 
 0.01    Wed Aug  8 18:19:34 CEST 2007
         - Initial release
-

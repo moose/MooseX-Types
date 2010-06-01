@@ -30,7 +30,8 @@ system 'pod2text lib/MooseX/Types.pm > README'
     if -e 'MANIFEST.SKIP';
 
 auto_provides;
-auto_install;
+tests_recursive;
+
 WriteAll;
 
 if ($Module::Install::AUTHOR) {

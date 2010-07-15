@@ -1,5 +1,8 @@
 Revision history for MooseX-Types
 
+0.23
+        - Avoid warnings from Moose 1.09 in tests (Dave Rolsky).
+
 0.22    Tue Jun  1 20:10:12 CEST 2010
         - Update docs to mention MRO::Compat rather than Class::C3.
         - Added '0+' overloading to solve the type constraint equality

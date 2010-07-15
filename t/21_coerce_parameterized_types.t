@@ -31,25 +31,19 @@ BEGIN {
 	[split //]
     };
 }
+
 {
-    package AClass;
-    use Moose;
     BEGIN { TypeLib->import(qw/
 	MyChar MyDigit ArrayRefOfMyCharOrDigit/
     ) };
     use MooseX::Types::Moose 'ArrayRef';
 
-    local *Moose::Deprecated::deprecated = sub { };
-    has parameterized => (is => 'rw', isa => ArrayRef[MyChar|MyDigit], coerce => 1);
-    has subtype_parameterized => (is => 'rw', isa => ArrayRefOfMyCharOrDigit, coerce => 1);
+    my $parameterized = ArrayRef[MyChar|MyDigit];
+    { local $::TODO = "see comments in MooseX::Types->create_arged_...";
+      ::ok( $parameterized->has_coercion, 'coercion applied to parameterized type' );
+    }
+
+    my $subtype = ArrayRefOfMyCharOrDigit;
+    ::ok( $subtype->has_coercion, 'coercion applied to subtype' );
 }
 
-my $instance = AClass->new;
-
-{ local $TODO = "see comments in MooseX::Types->create_arged_...";
-lives_ok { $instance->parameterized('foo') }
-    'coercion applied to parameterized type';
-}
-
-lives_ok { $instance->subtype_parameterized('foo') }
-    'coercion applied to subtype';

@@ -39,6 +39,7 @@ BEGIN {
     ) };
     use MooseX::Types::Moose 'ArrayRef';
 
+    local *Moose::Deprecated::deprecated = sub { };
     has parameterized => (is => 'rw', isa => ArrayRef[MyChar|MyDigit], coerce => 1);
     has subtype_parameterized => (is => 'rw', isa => ArrayRefOfMyCharOrDigit, coerce => 1);
 }

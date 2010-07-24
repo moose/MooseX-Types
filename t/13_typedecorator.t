@@ -24,8 +24,8 @@ use lib "$FindBin::Bin/lib";
     has 'arrayrefint01' => (is=>'rw', isa=>MyArrayRefInt01, coerce=>1);
     has 'arrayrefint02' => (is=>'rw', isa=>MyArrayRefInt02, coerce=>1);
     has 'arrayrefint03' => (is=>'rw', isa=>MyArrayRefBase[Int]);
-    has 'StrOrArrayRef' => (is=>'rw', isa=>StrOrArrayRef);
-    has 'AtLeastOneInt' => (is=>'rw', isa=>AtLeastOneInt);
+    has 'StrOrArrayRef_attr' => (is=>'rw', isa=>StrOrArrayRef);
+    has 'AtLeastOneInt_attr' => (is=>'rw', isa=>AtLeastOneInt);
     has 'pipeoverloading' => (is=>'rw', isa=>Int|Str);   
     has 'deep' => (is=>'rw', isa=>ArrayRef[ArrayRef[HashRef[Int]]] );
     has 'deep2' => (is=>'rw', isa=>ArrayRef[Int|ArrayRef[HashRef[Int|Object]]] );
@@ -127,31 +127,31 @@ throws_ok sub {
 
 # TEST StrOrArrayRef
 
-ok $type->StrOrArrayRef('string')
+ok $type->StrOrArrayRef_attr('string')
  => 'String part of union is good';
 
-ok $type->StrOrArrayRef([1,2,3])
+ok $type->StrOrArrayRef_attr([1,2,3])
  => 'arrayref part of union is good';
  
 throws_ok sub {
-    $type->StrOrArrayRef({a=>111});
-}, qr/Attribute \(StrOrArrayRef\) does not pass the type constraint/ => 'Correctly failed to use a hashref';
+    $type->StrOrArrayRef_attr({a=>111});
+}, qr/Attribute \(StrOrArrayRef_attr\) does not pass the type constraint/ => 'Correctly failed to use a hashref';
 
 # Test AtLeastOneInt
 
-ok $type->AtLeastOneInt([1,2]),
+ok $type->AtLeastOneInt_attr([1,2]),
  => 'Good assignment';
 
-is_deeply $type->AtLeastOneInt, [1,2]
+is_deeply $type->AtLeastOneInt_attr, [1,2]
  => "Got expected values.";
  
 throws_ok sub {
-    $type->AtLeastOneInt([]);
-}, qr/Attribute \(AtLeastOneInt\) does not pass the type constraint/ => 'properly fails to assign as []';
+    $type->AtLeastOneInt_attr([]);
+}, qr/Attribute \(AtLeastOneInt_attr\) does not pass the type constraint/ => 'properly fails to assign as []';
 
 throws_ok sub {
-    $type->AtLeastOneInt(['a','b']);
-}, qr/Attribute \(AtLeastOneInt\) does not pass the type constraint/ => 'properly fails arrayref of strings';
+    $type->AtLeastOneInt_attr(['a','b']);
+}, qr/Attribute \(AtLeastOneInt_attr\) does not pass the type constraint/ => 'properly fails arrayref of strings';
 
 ## Test pipeoverloading
 

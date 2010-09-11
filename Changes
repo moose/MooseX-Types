@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-0.24
+0.24    Sat Sep 11 19:59:18 CEST 2010
         - Avoid more warnings from Moose 1.09 in tests (Dave Rolsky).
 
 0.23    Tue Jul 20 02:18:37 CEST 2010

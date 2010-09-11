@@ -5,7 +5,7 @@ MooseX::Types::Wrapper - Wrap exports from a library
 =cut
 
 package MooseX::Types::Wrapper;
-our $VERSION = "0.23";
+our $VERSION = "0.24";
 use Moose;
 
 use Carp::Clan      qw( ^MooseX::Types );

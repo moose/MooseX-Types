@@ -3,7 +3,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 62;
-use Test::Exception;
+use Test::Fatal;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 
@@ -77,7 +77,7 @@ ok $type->arrayrefint01({a=>7,b=>8})
 is_deeply $type->arrayrefint01, [qw(7 8)],
  => 'Assignment and coercion is correct';
  
-throws_ok sub {
+like exception {
     $type->arrayrefint01([qw(a b c)])
 }, qr/Attribute \(arrayrefint01\) does not pass the type constraint/ => 'Dies when values are strings';
 
@@ -121,7 +121,7 @@ ok $type->arrayrefint03([qw(11 12 13)])
 is_deeply $type->arrayrefint03, [qw(11 12 13)],
  => 'Assignment is correct';
  
-throws_ok sub {
+like exception {
     $type->arrayrefint03([qw(a b c)])
 }, qr/Attribute \(arrayrefint03\) does not pass the type constraint/ => 'Dies when values are strings';
 
@@ -133,7 +133,7 @@ ok $type->StrOrArrayRef_attr('string')
 ok $type->StrOrArrayRef_attr([1,2,3])
  => 'arrayref part of union is good';
  
-throws_ok sub {
+like exception {
     $type->StrOrArrayRef_attr({a=>111});
 }, qr/Attribute \(StrOrArrayRef_attr\) does not pass the type constraint/ => 'Correctly failed to use a hashref';
 
@@ -145,11 +145,11 @@ ok $type->AtLeastOneInt_attr([1,2]),
 is_deeply $type->AtLeastOneInt_attr, [1,2]
  => "Got expected values.";
  
-throws_ok sub {
+like exception {
     $type->AtLeastOneInt_attr([]);
 }, qr/Attribute \(AtLeastOneInt_attr\) does not pass the type constraint/ => 'properly fails to assign as []';
 
-throws_ok sub {
+like exception {
     $type->AtLeastOneInt_attr(['a','b']);
 }, qr/Attribute \(AtLeastOneInt_attr\) does not pass the type constraint/ => 'properly fails arrayref of strings';
 
@@ -161,7 +161,7 @@ ok $type->pipeoverloading(1)
 ok $type->pipeoverloading('a')
  => 'String for union test accepted';
 
-throws_ok sub {
+like exception {
     $type->pipeoverloading({a=>1,b=>2});
 }, qr/Validation failed for 'Int|Str'/ => 'Union test corrected fails a HashRef';
 
@@ -173,7 +173,7 @@ ok $type->deep([[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]])
 is_deeply $type->deep, [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]],
  => 'Assignment is correct';
  
-throws_ok sub {
+like exception {
     $type->deep({a=>1,b=>2});
 }, qr/Attribute \(deep\) does not pass the type constraint/ => 'Deep Constraints properly fail';
 
@@ -185,11 +185,11 @@ ok $type->deep2([[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]])
 is_deeply $type->deep2, [[{a=>1,b=>2},{c=>3,d=>4}],[{e=>5}]],
  => 'Assignment is correct';
  
-throws_ok sub {
+like exception {
     $type->deep2({a=>1,b=>2});
 }, qr/Attribute \(deep2\) does not pass the type constraint/ => 'Deep Constraints properly fail';
 
-throws_ok sub {
+like exception {
     $type->deep2([[{a=>1,b=>2},{c=>3,d=>'noway'}],[{e=>5}]]);
 }, qr/Attribute \(deep2\) does not pass the type constraint/ => 'Deep Constraints properly fail';
 
@@ -214,7 +214,7 @@ ok $type->enum('Programming')
  => 'Good Assignment of Programming to Enum';
 
 
-throws_ok sub {
+like exception {
     $type->enum('ddddd');
 }, qr/Attribute \(enum\) does not pass the type constraint/ => 'Enum properly fails';
 
@@ -226,7 +226,7 @@ ok $type->SubOfMyArrayRefInt01_attr([15,20,25])
 is_deeply $type->SubOfMyArrayRefInt01_attr, [15,20,25],
  => 'Assignment is correct';
  
-throws_ok sub {
+like exception {
     $type->SubOfMyArrayRefInt01_attr([15,5,20]);
 }, qr/Attribute \(SubOfMyArrayRefInt01_attr\) does not pass the type constraint/
  => 'SubOfMyArrayRefInt01 Constraints properly fail';
@@ -239,17 +239,17 @@ ok $type->WierdIntergersArrayRef1_attr([5,10,1000])
 is_deeply $type->WierdIntergersArrayRef1_attr, [5,10,1000],
  => 'Assignment is correct';
  
-throws_ok sub {
+like exception {
     $type->WierdIntergersArrayRef1_attr({a=>1,b=>2});
 }, qr/Attribute \(WierdIntergersArrayRef1_attr\) does not pass the type constraint/
  => 'Constraints properly fail';
 
-throws_ok sub {
+like exception {
     $type->WierdIntergersArrayRef1_attr([5,10,1]);
 }, qr/Attribute \(WierdIntergersArrayRef1_attr\) does not pass the type constraint/
  => 'Constraints properly fail';
 
-throws_ok sub {
+like exception {
     $type->WierdIntergersArrayRef1_attr([1]);
 }, qr/Attribute \(WierdIntergersArrayRef1_attr\) does not pass the type constraint/
  => 'Constraints properly fail';
@@ -262,17 +262,17 @@ ok $type->WierdIntergersArrayRef2_attr([5,10,$type])
 is_deeply $type->WierdIntergersArrayRef2_attr, [5,10,$type],
  => 'Assignment is correct';
  
-throws_ok sub {
+like exception {
     $type->WierdIntergersArrayRef2_attr({a=>1,b=>2});
 }, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
  => 'Constraints properly fail';
 
-throws_ok sub {
+like exception {
     $type->WierdIntergersArrayRef2_attr([5,10,1]);
 }, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
  => 'Constraints properly fail';
 
-throws_ok sub {
+like exception {
     $type->WierdIntergersArrayRef2_attr([1]);
 }, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
  => 'Constraints properly fail';

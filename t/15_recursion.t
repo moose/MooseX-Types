@@ -21,7 +21,6 @@ BEGIN {
     
     BEGIN {
         use Test::More tests=>5;
-        use Test::Exception;
         
         ## Grab the newly created test type constraint
         MooseX::Types::Test::Recursion->import(':all');

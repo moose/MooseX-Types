@@ -1,5 +1,9 @@
 Revision history for MooseX-Types
 
+NEXT
+        - The test suite now uses Test::Fatal instead of Test::Exception
+          (Karen Etheridge).
+
 0.24    Sat Sep 11 19:59:18 CEST 2010
         - Avoid more warnings from Moose 1.09 in tests (Dave Rolsky).
 

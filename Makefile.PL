@@ -12,7 +12,7 @@ all_from        q{lib/MooseX/Types.pm};
 build_requires  q{Test::More},                  '0.80';
 build_requires  q{FindBin},                     0;
 build_requires  q{Test::Moose},                 0;
-build_requires  q{Test::Exception},             0;
+build_requires  q{Test::Fatal},                 0;
 
 requires        q{Moose},                       '1.06';
 requires        q{Sub::Install},                '0.924';

@@ -152,7 +152,7 @@ return a false value if the type could not be coerced.
 
 B<Important Note>: This handler will only be exported for types that can
 do type coercion. This has the advantage that a coercion to a type that
-cannot hasn't defined any coercions will lead to a compile-time error.
+has not defined any coercions will lead to a compile-time error.
 
 =head1 LIBRARY DEFINITION
 
@@ -527,7 +527,7 @@ Due to this stringification, the following will NOT work as you might think:
 
   subtype StrOrArrayRef => as Str|ArrayRef;
   
-The 'StrOrArrayRef' will have it's stringification activated this causes the
+The 'StrOrArrayRef' will have its stringification activated this causes the
 subtype to not be created.  Since the bareword type constraints are not strings
 you really should not try to treat them that way.  You will have to use the ','
 operator instead.  The author's of this package realize that all the L<Moose>

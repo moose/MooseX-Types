@@ -17,8 +17,6 @@ my @tests = (
     [ 'Str',         'Str',                      12, "12", [], "foo", [777] ],
 );
 
-plan tests => (@tests * 9);
-
 # new array ref so we can safely shift from it
 for my $data (map { [@$_] } @tests) {
     my $type = shift @$data;
@@ -49,4 +47,4 @@ for my $data (map { [@$_] } @tests) {
     }
 }
 
-
+done_testing;

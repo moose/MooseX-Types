@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 2;
+use Test::More;
 
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -56,3 +56,4 @@ is_deeply(IntrospectTypeExports->get_memory, [
 
 ], 'all calls to has_available_type_export returned correct results');
 
+done_testing();

@@ -9,8 +9,6 @@ use MooseX::Types::Moose ':all', 'Bool';
 
 my @types = MooseX::Types::Moose->type_names;
 
-plan tests => @types * 3;
-
 for my $t (@types) {
     ok my $code = __PACKAGE__->can($t), "$t() was exported";
     if ($code) {
@@ -22,3 +20,4 @@ for my $t (@types) {
     ok __PACKAGE__->can("is_$t"), "is_$t() was exported";
 }
 
+done_testing;

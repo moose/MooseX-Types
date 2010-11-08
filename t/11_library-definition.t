@@ -13,8 +13,6 @@ my @tests = (
     [ 'IntArrayRef', 12, [12], {}, [17, 23], {} ],
 );
 
-plan tests => (@tests * 8) + 5;
-
 # new array ref so we can safely shift from it
 for my $data (map { [@$_] } @tests) {
     my $type = shift @$data;
@@ -52,3 +50,5 @@ ok ! __PACKAGE__->can('to_TwentyThree'), "type without coercion doesn't have to_
 eval { require TestNamespaceSep };
 ok   $@,                q(trying to declare a type with '::' in it croaks);
 like $@, qr/Foo::Bar/,  q(error message contains type name);
+
+done_testing;

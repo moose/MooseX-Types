@@ -20,7 +20,7 @@ BEGIN {
     package MooseX::Types::Test::Recursion::TestRunner;
     
     BEGIN {
-        use Test::More tests=>5;
+        use Test::More;
         
         ## Grab the newly created test type constraint
         MooseX::Types::Test::Recursion->import(':all');
@@ -48,10 +48,6 @@ BEGIN {
      
     ok ! RecursiveHashRef->check({key=>{subkey=>"value",subkey2=>{ssubkey=>[1,2,3]}}})
      => 'Properly invalidates bad value deeply';
+
+    done_testing;
 }
-
-
-
-
-
-

@@ -4,7 +4,7 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/lib";
 
-use Test::More tests => 7;
+use Test::More;
 use Test::Fatal;
 
 BEGIN { use_ok 'Combined', qw/Foo2Alias MTFNPY NonEmptyStr/ }
@@ -35,3 +35,5 @@ qr/\Qmain asked for a type (NonExistentType) which is not found in any of the ty
     qr/Can't locate DoesNotExist\.pm/,
     'cannot combine types from a package which does not exist';
 }
+
+done_testing();

@@ -2,7 +2,7 @@
 use strict;
 use warnings;
  
-use Test::More tests => 1;
+use Test::More;
 
 {
     package MyRole;
@@ -24,3 +24,5 @@ eval q{
 };
 
 ok !$@, 'type export not picked up as a method on role application';
+
+done_testing();

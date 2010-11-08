@@ -2,7 +2,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 62;
+use Test::More;
 use Test::Fatal;
 use FindBin;
 use lib "$FindBin::Bin/lib";
@@ -277,6 +277,4 @@ like exception {
 }, qr/Attribute \(WierdIntergersArrayRef2_attr\) does not pass the type constraint/
  => 'Constraints properly fail';
 
-
-
-
+done_testing();

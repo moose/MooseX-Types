@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 14;
+use Test::More;
 
 my $exception;
 {
@@ -48,3 +48,5 @@ my $exception;
 	Test::More::ok !Test3->check({a=>1}), 'fails wrong ref type';
 	Test::More::ok Test3->check($obj), 'Union allows Object';
 }
+
+done_testing();

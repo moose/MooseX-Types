@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More;
 
 # remove this when CheckedUtilExports croaks instead of carps
 $SIG{__WARN__} = sub { die @_ };
@@ -91,3 +91,5 @@ my $role_type = q{
 };
 eval $role_type;
 is $@, '', "declared role_types don't throw error";
+
+done_testing();

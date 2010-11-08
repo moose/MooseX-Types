@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests=>5;
+use Test::More;
 use MooseX::Types;
 use MooseX::Types::Moose qw(Any Item );
 
@@ -20,3 +20,4 @@ ok ( Item->is_subtype_of('Any'),
 ok ( Item->is_subtype_of(Any),
   q[Item is subtype of Any]);
 
+done_testing;

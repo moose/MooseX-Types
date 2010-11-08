@@ -571,7 +571,15 @@ This is a workaround and I am exploring how to make these modules work better
 together.  I realize this workaround will lead a lot of duplication in your
 export declarations and will be onerous for large type libraries.  Patches and
 detailed test cases welcome. See the tests directory for a start on this.
-    
+
+=head1 COMBINING TYPE LIBRARIES
+
+You may want to combine a set of types for your application with other type
+libraries, like L<MooseX::Types::Moose> or L<MooseX::Types::Common::String>.
+
+The L<MooseX::Types::Combine> module provides a simple API for combining a set
+of type libraries together.
+
 =head1 SEE ALSO
 
 L<Moose>, 

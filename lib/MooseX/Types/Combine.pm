@@ -84,6 +84,15 @@ sub provide_types_from {
     @$store;
 }
 
+sub _check_type_lib {
+    my ($class, $lib) = @_;
+
+    Class::MOP::load_class($lib);
+
+    die "Cannot use $lib in a combined type library, it does not provide any types"
+        unless $lib->can('type_names');
+}
+
 sub _provided_types {
     my ($class, %types) = @_;
 
@@ -94,15 +103,6 @@ sub _provided_types {
         if keys %types;
 
     %$types;
-}
-
-sub _check_type_lib {
-    my ($class, $lib) = @_;
-
-    Class::MOP::load_class($lib);
-
-    die "Cannot use $lib in a combined type library, it does not provide any types"
-        unless $lib->can('type_names');
 }
 
 =head1 SEE ALSO

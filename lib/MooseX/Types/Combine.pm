@@ -36,20 +36,17 @@ sub import {
     my ($class, @types) = @_;
     my $caller = caller;
 
-    my @type_libs = $class->provide_types_from;
-    Class::MOP::load_class($_) for @type_libs;
-
-    my %types = map {
-        my $lib = $_;
-        map +($_ => $lib), $lib->type_names
-    } @type_libs;
+    my %types = $class->_provided_types;
 
     my %from;
     for my $type (@types) {
-        die
-            "$caller asked for a type ($type) which is not found in any of the"
-            . " type libraries (@type_libs) combined by $class\n"
-            unless $types{$type};
+        unless ($types{$type}) {
+            my @type_libs = $class->provide_types_from;
+
+            die
+                "$caller asked for a type ($type) which is not found in any of the"
+                . " type libraries (@type_libs) combined by $class\n";
+        }
 
         push @{ $from{ $types{$type} } }, $type;
     }
@@ -72,9 +69,40 @@ sub provide_types_from {
     my $store =
      do { no strict 'refs'; \@{ "${class}::__MOOSEX_TYPELIBRARY_LIBRARIES" } };
 
-    @$store = @libs if @libs;
+    if (@libs) {
+        $class->_check_type_lib($_) for @libs;
+        @$store = @libs;
+
+        my %types = map {
+            my $lib = $_;
+            map +( $_ => $lib ), $lib->type_names
+        } @libs;
+
+        $class->_provided_types(%types);
+    }
 
     @$store;
+}
+
+sub _provided_types {
+    my ($class, %types) = @_;
+
+    my $types =
+     do { no strict 'refs'; \%{ "${class}::__MOOSEX_TYPELIBRARY_TYPES" } };
+
+    %$types = %types
+        if keys %types;
+
+    %$types;
+}
+
+sub _check_type_lib {
+    my ($class, $lib) = @_;
+
+    Class::MOP::load_class($lib);
+
+    die "Cannot use $lib in a combined type library, it does not provide any types"
+        unless $lib->can('type_names');
 }
 
 =head1 SEE ALSO

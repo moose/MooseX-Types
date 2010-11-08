@@ -2,9 +2,9 @@
 use strict;
 use warnings;
 use FindBin;
-use lib "$FindBin::Bin/lib";   
+use lib "$FindBin::Bin/lib";
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::Fatal;
 
 BEGIN { use_ok 'Combined', qw/Foo2Alias MTFNPY NonEmptyStr/ }
@@ -21,3 +21,17 @@ is NonEmptyStr->name, 'TestLibrary2::NonEmptyStr',
 like exception { Combined->import('NonExistentType') },
 qr/\Qmain asked for a type (NonExistentType) which is not found in any of the type libraries (TestLibrary TestLibrary2) combined by Combined/,
 'asking for a non-existent type from a combined type library gives a useful error';
+
+{
+    package BadCombined;
+
+    use base 'MooseX::Types::Combine';
+
+    ::like ::exception { __PACKAGE__->provide_types_from('Empty') },
+    qr/Cannot use Empty in a combined type library, it does not provide any types/,
+    'cannot combine types from a package which is not a type library';
+
+    ::like ::exception { __PACKAGE__->provide_types_from('DoesNotExist') },
+    qr/Can't locate DoesNotExist\.pm/,
+    'cannot combine types from a package which does not exist';
+}

@@ -4,10 +4,16 @@ NEXT
         - The test suite now uses Test::Fatal instead of Test::Exception
           (Karen Etheridge).
 
+        - Modernized tests to use Test::Requires and done_testing. (Dave
+          Rolsky)
+
         - MooseX::Types::Combine is a little more efficient, and only tries to
           load the libraries it's combining when that list is set. It also
           checks that each lib in the list actually provides types. (Dave
           Rolsky).
+
+        - The MooseX::Types docs now contain a pointer to
+          MooseX::Types::Combine. (Dave Rolsky)
 
 0.24    Sat Sep 11 19:59:18 CEST 2010
         - Avoid more warnings from Moose 1.09 in tests (Dave Rolsky).

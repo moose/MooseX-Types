@@ -23,6 +23,8 @@ requires        q{Carp::Clan},                  '6.00';
 requires        q{Scalar::Util},                '1.19';
 requires        q{Sub::Name},                   0;
 
+add_metadata( x_authority => 'cpan:PHAYLON' );
+
 if (can_use('MooseX::Types::IO') && !can_use('MooseX::Types::IO', '0.03')) {
     requires q{MooseX::Types::IO}, '0.03';
 }

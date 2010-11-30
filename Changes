@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-NEXT
+0.25    Tue Nov 30 13:49:52 CST 2010
         - The test suite now uses Test::Fatal instead of Test::Exception
           (Karen Etheridge).
         - Modernized tests to use Test::Requires and done_testing. (Dave

@@ -42,14 +42,6 @@ sub name {
     return $_[0]->{name};
 }
 
-=head2 can_be_inlined
-
-Always returns false. Needed for compatibility with Moose 2.0100+.
-
-=cut
-
-sub can_be_inlined { 0 }
-
 =head2 __autovivify
 
 Try to see if the type constraint has yet been defined and if so create it.
@@ -63,6 +55,22 @@ sub __autovivify {
     } elsif( my $new_tc = Moose::Util::TypeConstraints::find_type_constraint($self->name)) {
         $self->{instance} = $new_tc;
         return $new_tc;
+    } else {
+        return;
+    }
+}
+
+=head2 can_be_inlined
+
+Make sure that if a type hasn't been defined yet when Moose wants to inline it,
+we don't allow inlining.
+
+=cut
+
+sub can_be_inlined {
+    my $self = shift;
+    if(my $type_constraint = $self->__autovivify) {
+        return $type_constraint->can_be_inlined;
     } else {
         return;
     }

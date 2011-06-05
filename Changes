@@ -4,6 +4,7 @@ Revision history for MooseX-Types
 
         - Small changes for forward compatibility with Moose 2.0100, when it
           is released. (Dave Rolsky)
+        - Some small doc cleanup and improvements. (Dave Rolsky)
 
 0.25    2010-11-30
         - The test suite now uses Test::Fatal instead of Test::Exception

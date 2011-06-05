@@ -25,23 +25,27 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
   package MyLibrary;
 
   # predeclare our own types
-  use MooseX::Types 
-    -declare => [qw(
-        PositiveInt NegativeInt
-        ArrayRefOfPositiveInt ArrayRefOfAtLeastThreeNegativeInts
-        LotsOfInnerConstraints StrOrArrayRef
-	MyDateTime
-    )];
+  use MooseX::Types -declare => [
+      qw(
+          PositiveInt
+          NegativeInt
+          ArrayRefOfPositiveInt
+          ArrayRefOfAtLeastThreeNegativeInts
+          LotsOfInnerConstraints
+          StrOrArrayRef
+          MyDateTime
+          )
+  ];
 
   # import builtin types
   use MooseX::Types::Moose qw/Int HashRef/;
 
   # type definition.
-  subtype PositiveInt, 
-      as Int, 
+  subtype PositiveInt,
+      as Int,
       where { $_ > 0 },
       message { "Int is not larger than 0" };
-  
+
   subtype NegativeInt,
       as Int,
       where { $_ < 0 },
@@ -53,19 +57,19 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
           via { 1 };
 
   # with parameterized constraints.
-  
+
   subtype ArrayRefOfPositiveInt,
     as ArrayRef[PositiveInt];
-    
+
   subtype ArrayRefOfAtLeastThreeNegativeInts,
     as ArrayRef[NegativeInt],
     where { scalar(@$_) > 2 };
 
   subtype LotsOfInnerConstraints,
     as ArrayRef[ArrayRef[HashRef[Int]]];
-    
+
   # with TypeConstraint Unions
-  
+
   subtype StrOrArrayRef,
     as Str|ArrayRef;
 

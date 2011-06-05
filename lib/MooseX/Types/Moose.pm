@@ -1,6 +1,6 @@
 package MooseX::Types::Moose;
 
-# ABSTRACT: Type exportes that match the types shipped with L<Moose>
+# ABSTRACT: Type exports that match the types shipped with L<Moose>
 
 use warnings;
 use strict;

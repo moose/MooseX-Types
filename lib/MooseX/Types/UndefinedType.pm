@@ -49,6 +49,14 @@ sub name {
     return $_[0]->{name};
 }
 
+=head2 can_be_inlined
+
+Always returns false. Needed for compatbility with Moose 2.0100+.
+
+=cut
+
+sub can_be_inlined { 0 }
+
 =head2 __autovivify
 
 Try to see if the type constraint has yet been defined and if so create it.

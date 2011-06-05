@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-0.25    Tue Nov 30 13:49:52 CST 2010
+0.25    2010-11-30
         - The test suite now uses Test::Fatal instead of Test::Exception
           (Karen Etheridge).
         - Modernized tests to use Test::Requires and done_testing. (Dave
@@ -12,69 +12,69 @@ Revision history for MooseX-Types
         - The MooseX::Types docs now contain a pointer to
           MooseX::Types::Combine. (Dave Rolsky)
 
-0.24    Sat Sep 11 19:59:18 CEST 2010
+0.24    2010-09-11
         - Avoid more warnings from Moose 1.09 in tests (Dave Rolsky).
 
-0.23    Tue Jul 20 02:18:37 CEST 2010
+0.23    2010-07-19
         - Avoid warnings from Moose 1.09 in tests (Dave Rolsky).
 
-0.22    Tue Jun  1 20:10:12 CEST 2010
+0.22    2010-06-01
         - Update docs to mention MRO::Compat rather than Class::C3.
         - Added '0+' overloading to solve the type constraint equality
           regression introduced when Moose 1.05 tightened the rules
           determing type constraint equality.  Added tests for the
           regression.
 
-0.21    Thu Dec 24 00:21:26 EST 2009
+0.21    2009-12-23
         - Attempting to import a non-existent type from a combined type
           library gave a very confusing error message from the
           MooseX::Types::Combined internals. Now it gives you a much more
           useful message. (Dave Rolsky)
         - bump up Moose dep (RT#53016)
 
-0.20    Thu Sep 10 22:34:48 EDT 2009
+0.20    2009-09-10
         - fix "empty export" warning (doy).
 
-0.19    Sun Aug 23 15:03:02 EDT 2009
+0.19    2009-08-23
         - un-fix coercions on parameterized types, since it broke
           MooseX::Method::Signatures, as well as any other code that relied on
           new type constraint objects being generated each time a type was
           parameterized (hdp).
 
-0.18    Sat Aug 22 12:50:42 EDT 2009
+0.18    2009-08-22
         - fix coercions on parameterized types (Hans Dieter Pearcey).
 
-0.17    Tue Aug 18 02:32:31 EDT 2009
+0.17    2009-08-18
         - Documentation typo fix (Dave Rolsky).
         - Stop blowing up in has_available_type_export if the introspected code
           symbol exists but is not a type export (Florian Ragwitz).
         - Reorganize author/copyright sections at the request of Debian
           packagers (Rafael Kitover).
 
-0.16    Mon Jun 29 10:50:41 PDT 2009
+0.16    2009-06-29
         - Ship with Module::Install 0.91
 
-0.15    Sun Jun 27 15:50:00 EDT 2009
+0.15    2009-06-27
         - Change all uses of croak in TypeDecorator to use the Moose
           throw_exception method.
         - More test cases for the union mixed string type issue, and
           better handling of this in the | overload in TypeDecorator
 
-0.14    Fri Jun 26 17:52:20 PDT 2009
+0.14    2009-06-26
         - Fix union with string type
 
-0.13    Tue Jun 23 05:46:33 PDT 2009
+0.13    2009-06-23
         - Add Test::Moose to build_requires for Fedora
 
-0.12    Sun Jun 14 14:39:57 PDT 2009
+0.12    2009-06-14
         - fix mixing of typelibs with regular Moose classes
 
-0.11    Sat May 23 18:02:35 PDT 2009
+0.11    2009-05-23
         - warning on string types and unregistered class/role types
         - better error for missing comma
         - MooseX::Types::Combine for combining type libs
 
-0.10    Fri March 06 17:34:00 EST 2009
+0.10    2009-03-06
         - Removed unneeded debugging code from one of the tests, which was
           causing installation errors for people that didn't already have
           Data::Dump installed. (jjnapiork)
@@ -83,19 +83,19 @@ Revision history for MooseX-Types
           allow introspection of available types for other libraries wanting
           to use type export names for type specifications.
 
-0.08    Mon Dec  09 19:00:00 EST 2008
+0.08    2008-12-09
         - Added experimental support for recursive type constraints.  Pod and
           tests for this feature.  Let the madness begin.
         - Documentation updates.
         - Workaround test case for the SUb::Exporter compatibility issue.  Also
           documented in Pod.
 
-0.07    Fri Oct  07 23:00:00 EST 2008
+0.07    2008-10-07
         - Bumped minimum allowed Moose version to fix problem with overloading
           on some versions of Perl
         - Tiny documentation updates.
 
-0.06    Fri Oct  24 15:00:00 EST 2008
+0.06    2008-10-24
         - Added support for parameterized types and type unions, tests for all
         that and documentation updates.
 
@@ -106,17 +106,17 @@ Revision history for MooseX-Types
         - removed vestigial load of Sub::UpLevel since it breaks
           the argument display in confess()
 
-0.04    Thu Aug  9 20:56:14 CEST 2007
+0.04    2007-08-09
         - Automatically set strict and warnings like Moose does
 
-0.03    Thu Aug  9 14:41:58 CEST 2007
+0.03    2007-08-09
         - Minor POD typo correction
         - Added some error messages for wrong type names
         - Coercion handler not exported without type object
         - Moved from Class::Inspector to Class::MOP::load_class
 
-0.02    Wed Aug  8 20:33:42 CEST 2007
+0.02    2007-08-08
         - Changed declaration to croak when it sees '::' in a typename
 
-0.01    Wed Aug  8 18:19:34 CEST 2007
+0.01    2007-08-08
         - Initial release

@@ -35,7 +35,7 @@ Upi
 autarch
 caelum
 documention
-gotcha's
+gotchas
 hdp
 isa
 jnapiorkowski

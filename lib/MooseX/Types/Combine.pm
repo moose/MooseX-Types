@@ -5,7 +5,7 @@ MooseX::Types::Combine - Combine type libraries for exporting
 =cut
 
 package MooseX::Types::Combine;
-our $VERSION = "0.25";
+our $VERSION = "0.26";
 
 use strict;
 use warnings;

@@ -6,7 +6,7 @@ safer for L<MooseX::Types>
 =cut
 
 package MooseX::Types::CheckedUtilExports;
-our $VERSION = "0.25";
+our $VERSION = "0.26";
 
 use strict;
 use warnings;

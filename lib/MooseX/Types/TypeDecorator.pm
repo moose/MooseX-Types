@@ -1,5 +1,5 @@
 package MooseX::Types::TypeDecorator;
-our $VERSION = "0.25";
+our $VERSION = "0.26";
 
 use strict;
 use warnings;
@@ -201,7 +201,6 @@ sub AUTOLOAD {
     ## MooseX::Types::UndefinedType which AUTOLOADs during autovivication.
     
     my $return;
-    
     eval {
         $return = $self->__type_constraint->$method(@args);
     }; if($@) {

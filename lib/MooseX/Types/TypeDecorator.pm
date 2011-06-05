@@ -183,7 +183,7 @@ sub DESTROY {
 
 =head2 AUTOLOAD
 
-Delegate to the decorator targe
+Delegate to the decorator target.
 
 =cut
 

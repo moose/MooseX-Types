@@ -44,7 +44,7 @@ sub name {
 
 =head2 can_be_inlined
 
-Always returns false. Needed for compatbility with Moose 2.0100+.
+Always returns false. Needed for compatibility with Moose 2.0100+.
 
 =cut
 

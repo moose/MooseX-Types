@@ -99,7 +99,7 @@ Revision history for MooseX-Types
         - Added support for parameterized types and type unions, tests for all
         that and documentation updates.
 
-0.05    [Indetermined]
+0.05    [unknown]
         - moved export mechanism to Sub::Exporter. ::Base contains
           a bunch of wrapping logic to allow the export-along functionality
           for the helper symbols

@@ -1,7 +1,5 @@
 package MooseX::Types::UndefinedType;
 
-=cut
-
 use warnings;
 use strict;
 

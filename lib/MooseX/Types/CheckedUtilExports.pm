@@ -1,11 +1,6 @@
-=head1 NAME
-
-MooseX::Types::CheckedUtilExports - Wrap L<Moose::Util::TypeConstraints> to be
-safer for L<MooseX::Types>
-
-=cut
-
 package MooseX::Types::CheckedUtilExports;
+
+#ABSTRACT: Wrap L<Moose::Util::TypeConstraints> to be safer for L<MooseX::Types>
 
 use strict;
 use warnings;

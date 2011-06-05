@@ -12,9 +12,9 @@ use Test::Requires {
 
 my %skip = map { $_ => 1 } qw( MooseX::Types::CheckedUtilExports );
 
-my @modules = grep { !( $skip{$_} } all_modules();
+my @modules = grep { !$skip{$_} } all_modules();
 
-my %trustme = ( Courriel => ['replace_body'] );
+my %trustme;
 
 for my $module ( sort @modules ) {
     my $trustme = [];

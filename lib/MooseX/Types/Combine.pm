@@ -1,11 +1,6 @@
-=head1 NAME
-
-MooseX::Types::Combine - Combine type libraries for exporting
-
-=cut
-
 package MooseX::Types::Combine;
-our $VERSION = "0.26";
+
+# ABSTRACT: Combine type libraries for exporting
 
 use strict;
 use warnings;
@@ -108,10 +103,6 @@ sub _provided_types {
 =head1 SEE ALSO
 
 L<MooseX::Types>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

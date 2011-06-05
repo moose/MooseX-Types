@@ -1,11 +1,6 @@
 package MooseX::Types::Moose;
-our $VERSION = "0.26";
 
-=head1 NAME
-
-MooseX::Types::Moose - Types shipped with L<Moose>
-
-=cut
+# ABSTRACT: Type exportes that match the types shipped with L<Moose>
 
 use warnings;
 use strict;
@@ -69,10 +64,6 @@ sub type_storage { \%BuiltIn_Storage }
 L<MooseX::Types::Moose>,
 L<Moose>, 
 L<Moose::Util::TypeConstraints>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

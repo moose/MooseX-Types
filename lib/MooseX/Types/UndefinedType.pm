@@ -1,9 +1,4 @@
 package MooseX::Types::UndefinedType;
-our $VERSION = "0.26";
-
-=head1 NAME
-
-MooseX::Types::UndefinedType - Represents a not yet defined type
 
 =cut
 
@@ -109,10 +104,6 @@ L<MooseX::Types::Moose>,
 L<Moose::Util::TypeConstraints>, 
 L<Moose::Meta::TypeConstraint>,
 L<Carp::Clan>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

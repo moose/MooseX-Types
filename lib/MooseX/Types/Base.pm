@@ -1,12 +1,7 @@
 package MooseX::Types::Base;
-our $VERSION = "0.26";
 use Moose;
 
-=head1 NAME
-
-MooseX::Types::Base - Type library base class
-
-=cut
+# ABSTRACT: Type library base class
 
 use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );
@@ -276,10 +271,6 @@ sub get_registered_role_type {
 =head1 SEE ALSO
 
 L<MooseX::Types::Moose>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

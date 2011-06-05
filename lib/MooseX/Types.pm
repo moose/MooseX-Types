@@ -1,11 +1,7 @@
 package MooseX::Types;
 use Moose;
 
-=head1 NAME
-
-MooseX::Types - Organise your Moose types in libraries
-
-=cut
+# ABSTRACT: Organise your Moose types in libraries
 
 use Moose::Util::TypeConstraints;
 use MooseX::Types::TypeDecorator;
@@ -20,7 +16,6 @@ use Scalar::Util                      'reftype';
 use namespace::clean -except => [qw( meta )];
 
 use 5.008;
-our $VERSION = '0.26';
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 =head1 SYNOPSIS
@@ -591,10 +586,6 @@ L<Sub::Exporter>
 
 Many thanks to the C<#moose> cabal on C<irc.perl.org>.
 
-=head1 AUTHOR
-
-Robert "phaylon" Sedlacek <rs@474.at>
-
 =head1 CONTRIBUTORS
 
 jnapiorkowski: John Napiorkowski <jjnapiork@cpan.org>
@@ -606,13 +597,6 @@ rafl: Florian Ragwitz <rafl@debian.org>
 hdp: Hans Dieter Pearcey <hdp@cpan.org>
 
 autarch: Dave Rolsky <autarch@urth.org>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright (c) 2007-2009 Robert Sedlacek <rs@474.at>
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as perl itself.
 
 =cut
 

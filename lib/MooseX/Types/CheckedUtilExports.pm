@@ -6,7 +6,6 @@ safer for L<MooseX::Types>
 =cut
 
 package MooseX::Types::CheckedUtilExports;
-our $VERSION = "0.26";
 
 use strict;
 use warnings;
@@ -87,10 +86,6 @@ sub role_type ($;$) {
 =head1 SEE ALSO
 
 L<MooseX::Types>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

@@ -1,11 +1,6 @@
 package MooseX::Types::Util;
-our $VERSION = "0.26";
 
-=head1 NAME
-
-MooseX::Types::Util - Common utility functions for the module
-
-=cut
+#ABSTRACT: Common utility functions for the distribution
 
 use warnings;
 use strict;
@@ -98,10 +93,6 @@ sub has_available_type_export {
 =head1 SEE ALSO
 
 L<MooseX::Types::Moose>, L<Exporter>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

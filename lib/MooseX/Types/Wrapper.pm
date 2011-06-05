@@ -1,11 +1,7 @@
-=head1 NAME
-
-MooseX::Types::Wrapper - Wrap exports from a library
-
-=cut
-
 package MooseX::Types::Wrapper;
-our $VERSION = "0.26";
+
+#ABSTRACT: Wrap exports from a library
+
 use Moose;
 
 use Carp::Clan      qw( ^MooseX::Types );
@@ -51,10 +47,6 @@ sub import {
 =head1 SEE ALSO
 
 L<MooseX::Types>
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

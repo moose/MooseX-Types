@@ -1,9 +1,9 @@
 package MooseX::Types::TypeDecorator;
-our $VERSION = "0.26";
+
+#ABSTRACT: Wraps Moose::Meta::TypeConstraint objects with added features
 
 use strict;
 use warnings;
-
 
 use Carp::Clan qw( ^MooseX::Types );
 use Moose::Util::TypeConstraints ();
@@ -51,10 +51,6 @@ use overload(
     fallback => 1,
     
 );
-
-=head1 NAME
-
-MooseX::Types::TypeDecorator - More flexible access to a Type Constraint
 
 =head1 DESCRIPTION
 
@@ -209,10 +205,6 @@ sub AUTOLOAD {
         return $return;
     }
 }
-
-=head1 AUTHOR
-
-See L<MooseX::Types/AUTHOR>.
 
 =head1 LICENSE
 

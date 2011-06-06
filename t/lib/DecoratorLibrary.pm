@@ -19,8 +19,8 @@ use MooseX::Types
         TwoEqualArrayRefs
         VeryBigInt
         FiveOrTenOrFifteen
-        WierdIntergersArrayRef1
-        WierdIntergersArrayRef2
+        WierdIntegersArrayRef1
+        WierdIntegersArrayRef2
     )];
 
 subtype MyArrayRefBase,
@@ -94,9 +94,9 @@ subtype VeryBigInt,
 subtype FiveOrTenOrFifteen,
  as isFive|isTen|isFifteen;
 
-subtype WierdIntergersArrayRef1,
+subtype WierdIntegersArrayRef1,
  as ArrayRef[FiveOrTenOrFifteen|VeryBigInt];
 
-subtype WierdIntergersArrayRef2,
+subtype WierdIntegersArrayRef2,
  as ArrayRef[FiveOrTenOrFifteen|Object];    
 1;

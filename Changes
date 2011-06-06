@@ -1,6 +1,7 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - A better fix for type constraint changes in Moose 2.0100. (doy)
 
 0.26    2011-06-05
 

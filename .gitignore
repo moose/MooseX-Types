@@ -9,3 +9,5 @@ inc
 META.yml
 .*
 !.gitignore
+MooseX-Types*
+.build

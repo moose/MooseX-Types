@@ -2,6 +2,8 @@ Revision history for MooseX-Types
 
 {{$NEXT}}
 
+0.28    2011-08-02
+
         - Fixed git and bug tracking info in META.{yml,json}. Reported by
           Petter Rabbitson. (Dave Rolsky)
 

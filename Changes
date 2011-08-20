@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - Require namespace::clean 0.19. Tests fail with 0.18. Reported by
+          Ruslan Zakirov. RT #67923.
 
 0.28    2011-08-02
         - Fixed git and bug tracking info in META.{yml,json}. Reported by

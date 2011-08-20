@@ -14,16 +14,16 @@ use namespace::clean -except => [qw( meta )];
 
   package Foo;
   use Moose;
-  use MooseX::Types::Moose qw( Int Str );
+  use MooseX::Types::Moose qw( ArrayRef Int Str );
   use Carp qw( croak );
 
   has 'name',
     is  => 'rw',
     isa => Str;
 
-  has 'id',
+  has 'ids',
     is  => 'rw',
-    isa => Int;
+    isa => ArrayRef[Int];
 
   sub add {
       my ($self, $x, $y) = @_;

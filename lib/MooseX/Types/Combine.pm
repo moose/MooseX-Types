@@ -33,6 +33,11 @@ sub import {
 
     my %types = $class->_provided_types;
 
+    if ( grep { $_ eq ':all' } @types ){
+      $_->import({ -into => $caller }, q{:all} ) for $class->provide_types_from;
+      return;
+    }
+
     my %from;
     for my $type (@types) {
         unless ($types{$type}) {

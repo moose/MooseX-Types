@@ -81,11 +81,11 @@ my $role_type = q{
     use MooseX::Types -declare => ['Foo'];
     use MooseX::Types::Moose 'Str';
 
-    role_type 'mtfnpy';
+    role_type 'ypnftm';
 
-    coerce mtfnpy =>
+    coerce ypnftm =>
         from Str,
-        via { bless \$_, 'mtfnpy' };
+        via { bless \$_, 'ypnftm' };
 
     1;
 };

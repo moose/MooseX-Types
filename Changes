@@ -1,6 +1,7 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - Fix a bug in the tests that caused failures with Moose HEAD. (doy)
 
 0.29    2011-08-20
         - Require namespace::clean 0.19. Tests fail with 0.18. Reported by

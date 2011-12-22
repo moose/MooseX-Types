@@ -1,6 +1,7 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - Add support for qw( :all ) on MooseX::Types::Combine libraries. (kentnl)
 
 0.30    2011-09-17
         - Fix a bug in the tests that caused failures with Moose HEAD. (doy)

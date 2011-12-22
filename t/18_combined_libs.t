@@ -36,4 +36,6 @@ qr/\Qmain asked for a type (NonExistentType) which is not found in any of the ty
     'cannot combine types from a package which does not exist';
 }
 
+is exception { 'Combined'->import(':all') }, undef, ':all syntax works';
+
 done_testing();

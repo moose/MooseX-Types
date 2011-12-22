@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+
+0.31    2011-12-22
         - Add support for qw( :all ) on MooseX::Types::Combine libraries. (kentnl)
 
 0.30    2011-09-17

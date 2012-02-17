@@ -335,7 +335,7 @@ helper functions you will need to declare your types.
 
 sub import {
     my ($class, %args) = @_;
-    my  $callee = caller;
+    my  $caller = caller;
 
     # everyone should want this
     strict->import;
@@ -343,7 +343,7 @@ sub import {
 
     # inject base class into new library
     {   no strict 'refs';
-        unshift @{ $callee . '::ISA' }, 'MooseX::Types::Base';
+        unshift @{ $caller . '::ISA' }, 'MooseX::Types::Base';
     }
 
     # generate predeclared type helpers
@@ -357,18 +357,18 @@ sub import {
                 if $type =~ /::/;
 
             # add type to library and remember to export
-            $callee->add_type($type);
+            $caller->add_type($type);
             push @to_export, $type;
         }
 
-        $callee->import({ -full => 1, -into => $callee }, @to_export);
+        $caller->import({ -full => 1, -into => $caller }, @to_export);
     }
 
     # run type constraints import
-    Moose::Util::TypeConstraints->import({ into => $callee });
+    Moose::Util::TypeConstraints->import({ into => $caller });
 
     # override some with versions that check for syntax errors
-    MooseX::Types::CheckedUtilExports->import({ into => $callee });
+    MooseX::Types::CheckedUtilExports->import({ into => $caller });
 
     1;
 }

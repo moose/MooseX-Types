@@ -2,6 +2,9 @@ Revision history for MooseX-Types
 
 {{$NEXT}}
 
+        - Support delegation of methods to the class for class types
+        - Factor out _try_delegate method
+
 0.31    2011-12-22
         - Add support for qw( :all ) on MooseX::Types::Combine libraries. (kentnl)
 

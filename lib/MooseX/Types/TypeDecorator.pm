@@ -68,7 +68,11 @@ Old school instantiation
 =cut
 
 sub new {
-    my $class = shift @_;
+    my $proto = shift;
+    if (ref($proto)) {
+        return $proto->_try_delegate('new', @_);
+    }
+    my $class = $proto;
     if(my $arg = shift @_) {
         if(blessed $arg && $arg->isa('Moose::Meta::TypeConstraint')) {
             return bless {'__type_constraint'=>$arg}, $class;
@@ -112,19 +116,7 @@ handle $self->isa since AUTOLOAD can't.
 
 =cut
 
-sub isa {
-    my ($self, $target) = @_;  
-    if(defined $target) {
-    	if(blessed $self) {
-    		return $self->__type_constraint->isa($target);
-    	} else {
-    		return;
-    	}
-    } else {
-        return;
-    }
-}
-
+sub isa { shift->_try_delegate('isa', @_) }
 
 =head2 can
 
@@ -132,31 +124,7 @@ handle $self->can since AUTOLOAD can't.
 
 =cut
 
-sub can {
-    my ($self, $target) = @_;
-    if(defined $target) {
-    	if(blessed $self) {
-    		return $self->__type_constraint->can($target);
-    	} else {
-    		return;
-    	}
-    } else {
-        return;
-    }
-}
-
-=head2 meta
-
-have meta examine the underlying type constraints
-
-=cut
-
-sub meta {
-	my $self = shift @_;
-	if(blessed $self) {
-		return $self->__type_constraint->meta;
-	} 
-}
+sub can { shift->_try_delegate('can', @_) }
 
 =head2 _throw_error
 
@@ -188,22 +156,25 @@ Delegate to the decorator target.
 =cut
 
 sub AUTOLOAD {
-    
     my ($self, @args) = @_;
     my ($method) = (our $AUTOLOAD =~ /([^:]+)$/);
     
     ## We delegate with this method in an attempt to support a value of
     ## __type_constraint which is also AUTOLOADing, in particular the class
     ## MooseX::Types::UndefinedType which AUTOLOADs during autovivication.
-    
-    my $return;
-    eval {
-        $return = $self->__type_constraint->$method(@args);
-    }; if($@) {
-        __PACKAGE__->_throw_error($@);
-    } else {
-        return $return;
-    }
+
+    $self->_try_delegate($method, @args);    
+}
+
+sub _try_delegate {
+    my ($self, $method, @args) = @_;
+    my $tc = $self->__type_constraint;
+    my $inv = (
+        $tc->isa('Moose::Meta::TypeConstraint::Class')
+            ? $self->__type_constraint->class
+            : $self->__type_constraint
+    );
+    $inv->$method(@args);
 }
 
 =head1 LICENSE

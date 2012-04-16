@@ -139,7 +139,7 @@ of attribute declarations.
 
 If you mix string-based names with types created by this module, it will warn,
 with a few exceptions. If you are declaring a C<class_type()> or
-c<role_type()> within your type library, or if you use a fully qualified name
+C<role_type()> within your type library, or if you use a fully qualified name
 like C<"MyApp::Foo">.
 
 =head1 LIBRARY DEFINITION

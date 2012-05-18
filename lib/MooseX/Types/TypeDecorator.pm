@@ -158,8 +158,9 @@ sub DESTROY {
 =head2 AUTOLOAD
 
 Delegate to the decorator target, unless this is a class type, in which
-case it will call the class' version of the method if present, and fall
-back to the type's version if not.
+case it will try to delegate to the type object, then if that fails try
+the class. The method 'new' is special cased to go to the class first
+if present.
 
 =cut
 
@@ -190,7 +191,15 @@ sub _try_delegate {
         }
     }
         
-    my $inv = ($class && $class->can($method)) ? $class : $tc;
+    my $inv = do {
+      if ($tc->can($method) and $method ne 'new') {
+            $tc
+        } elsif ($class && $class->can($method)) {
+            $class
+        } else {
+            $tc
+        }
+    };
 
     $inv->$method(@args);
 }

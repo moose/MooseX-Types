@@ -20,6 +20,8 @@ BEGIN {
 
   use Moose;
 
+  sub check { die "FAIL" }
+
   package ClassyClassConsumer;
 
   BEGIN { MyTypes->import('ClassyType') }

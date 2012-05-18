@@ -2,6 +2,8 @@ Revision history for MooseX-Types
 
 {{$NEXT}}
 
+        - Switch delegation order to prioritise type over class except for new
+
 0.32    2012-05-18
 
         - Support delegation of methods to the class for class types

@@ -112,7 +112,8 @@ sub __type_constraint {
 
 =head2 isa
 
-handle $self->isa since AUTOLOAD can't.
+handle $self->isa since AUTOLOAD can't - this tries both the type constraint,
+and for a class type, the class.
 
 =cut
 
@@ -156,7 +157,9 @@ sub DESTROY {
 
 =head2 AUTOLOAD
 
-Delegate to the decorator target.
+Delegate to the decorator target, unless this is a class type, in which
+case it will call the class' version of the method if present, and fall
+back to the type's version if not.
 
 =cut
 
@@ -187,15 +190,8 @@ sub _try_delegate {
         }
     }
         
-    my $inv = (
-        $class
-            ? (
-                $method eq 'new' || $class->can($method)
-                    ? $class
-                    : $tc
-              )
-            : $tc
-    );
+    my $inv = ($class && $class->can($method)) ? $class : $tc;
+
     $inv->$method(@args);
 }
 

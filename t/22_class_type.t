@@ -31,4 +31,6 @@ ok(my $o = ClassyClassConsumer->new, "Constructor happy");
 
 is(ref($o->om_nom), 'ClassyClass', 'Attribute happy');
 
+ok(ClassyClassConsumer->new(om_nom => ClassyClass->new), 'Constructor happy');
+
 done_testing;

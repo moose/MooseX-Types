@@ -159,8 +159,9 @@ sub DESTROY {
 
 Delegate to the decorator target, unless this is a class type, in which
 case it will try to delegate to the type object, then if that fails try
-the class. The method 'new' is special cased to go to the class first
-if present.
+the class. The method 'new' is special cased to only be permitted on
+the class; if there is no class, or it does not provide a new method,
+an exception will be thrown.
 
 =cut
 
@@ -192,9 +193,15 @@ sub _try_delegate {
     }
         
     my $inv = do {
-      if ($tc->can($method) and $method ne 'new') {
-            $tc
-        } elsif ($class && $class->can($method)) {
+        if ($method eq 'new') {
+            die "new called on type decorator for non-class-type ".$tc->name
+                unless $class;
+            die "new called on class type decorator ".$tc->name."\n"
+                ." for class ${class}\n"
+                ." which does not provide a new method - did you forget to load it?"
+                unless $class->can('new');
+            $class
+        } elsif ($class && !$tc->can($method)) {
             $class
         } else {
             $tc

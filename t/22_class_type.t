@@ -5,13 +5,24 @@ use Test::More;
 BEGIN {
   package MyTypes;
 
-  use MooseX::Types -declare => [ 'ClassyType' ];
+  use MooseX::Types -declare => [ 'ClassyType', 'NoClass' ];
 
   class_type 'ClassyClass';
 
   subtype ClassyType, as 'ClassyClass';
 
-  #class_type ClassyType, { class => 'ClassyClass' };
+  subtype NoClass, as 'Item', where { 1 };
+}
+
+BEGIN {
+
+  ok(!eval { MyTypes::ClassyType->new }, 'new without class loaded explodes');
+
+  like($@, qr/does not provide/, 'right exception');
+
+  ok(!eval { MyTypes::NoClass->new }, 'new on non-class type');
+
+  like($@, qr/non-class-type/, 'right exception');
 }
 
 BEGIN {

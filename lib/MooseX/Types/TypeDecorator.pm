@@ -117,8 +117,10 @@ handle $self->isa since AUTOLOAD can't.
 =cut
 
 sub isa {
-  return 1 if $_[1]->isa('Moose::Meta::TypeConstraint');
-  shift->_try_delegate('isa', @_)
+  my $self = shift;
+  return
+    $self->__type_constraint->isa(@_)
+    || $self->_try_delegate('isa', @_);
 }
 
 =head2 can

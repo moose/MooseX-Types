@@ -5,13 +5,14 @@ use Test::More;
 BEGIN {
   package MyTypes;
 
+  use MooseX::Types::Moose qw( Item );
   use MooseX::Types -declare => [ 'ClassyType', 'NoClass' ];
 
   class_type 'ClassyClass';
 
   subtype ClassyType, as 'ClassyClass';
 
-  subtype NoClass, as 'Item', where { 1 };
+  subtype NoClass, as Item, where { 1 };
 }
 
 BEGIN {

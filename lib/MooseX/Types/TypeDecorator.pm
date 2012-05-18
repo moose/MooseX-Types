@@ -116,7 +116,10 @@ handle $self->isa since AUTOLOAD can't.
 
 =cut
 
-sub isa { shift->_try_delegate('isa', @_) }
+sub isa {
+  return 1 if $_[1]->isa('Moose::Meta::TypeConstraint');
+  shift->_try_delegate('isa', @_)
+}
 
 =head2 can
 
@@ -171,8 +174,12 @@ sub _try_delegate {
     my $tc = $self->__type_constraint;
     my $inv = (
         $tc->isa('Moose::Meta::TypeConstraint::Class')
-            ? $self->__type_constraint->class
-            : $self->__type_constraint
+            ? (
+                $method eq 'new' || $tc->class->can($method)
+                    ? $tc->class
+                    : $tc
+              )
+            : $tc
     );
     $inv->$method(@args);
 }

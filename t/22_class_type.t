@@ -7,7 +7,11 @@ BEGIN {
 
   use MooseX::Types -declare => [ 'ClassyType' ];
 
-  class_type ClassyType, { class => 'ClassyClass' };
+  class_type 'ClassyClass';
+
+  subtype ClassyType, as 'ClassyClass';
+
+  #class_type ClassyType, { class => 'ClassyClass' };
 }
 
 BEGIN {
@@ -32,5 +36,7 @@ ok(my $o = ClassyClassConsumer->new, "Constructor happy");
 is(ref($o->om_nom), 'ClassyClass', 'Attribute happy');
 
 ok(ClassyClassConsumer->new(om_nom => ClassyClass->new), 'Constructor happy');
+
+ok(!eval { ClassyClassConsumer->new(om_nom => 3) }, 'Type checked');
 
 done_testing;

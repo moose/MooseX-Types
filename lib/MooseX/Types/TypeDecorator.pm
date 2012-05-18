@@ -172,11 +172,21 @@ sub AUTOLOAD {
 sub _try_delegate {
     my ($self, $method, @args) = @_;
     my $tc = $self->__type_constraint;
+    my $class;
+    my $search_tc = $tc;
+    while ($search_tc->is_subtype_of('Object')) {
+        if ($search_tc->isa('Moose::Meta::TypeConstraint::Class')) {
+            $class = $search_tc->class;
+            last;
+        }
+        $search_tc = $search_tc->parent;
+    }
+        
     my $inv = (
-        $tc->isa('Moose::Meta::TypeConstraint::Class')
+        $class
             ? (
-                $method eq 'new' || $tc->class->can($method)
-                    ? $tc->class
+                $method eq 'new' || $class->can($method)
+                    ? $class
                     : $tc
               )
             : $tc

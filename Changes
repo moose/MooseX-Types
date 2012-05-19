@@ -2,6 +2,10 @@ Revision history for MooseX-Types
 
 {{$NEXT}}
 
+        - The new delegation code could fail when a type had no
+          parent. Attempting to subtype Any was one way to trigger the
+          bug. (Dave Rolsky)
+
 0.34    2012-05-18
 
         - Special case new to avoid unexpected exceptions on unloaded classes

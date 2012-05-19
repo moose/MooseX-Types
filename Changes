@@ -6,6 +6,9 @@ Revision history for MooseX-Types
           parent. Attempting to subtype Any was one way to trigger the
           bug. (Dave Rolsky)
 
+        - The new delegation code broke calling ->can or ->isa on
+          MooseX::Types::TypeDecorator as a class method. (Dave Rolsky)
+
 0.34    2012-05-18
 
         - Special case new to avoid unexpected exceptions on unloaded classes

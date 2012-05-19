@@ -188,7 +188,7 @@ sub _try_delegate {
                 last;
             }
             $search_tc = $search_tc->parent;
-            last unless $search_tc->is_subtype_of('Object');
+            last unless $search_tc && $search_tc->is_subtype_of('Object');
         }
     }
         

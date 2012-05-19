@@ -120,8 +120,10 @@ and for a class type, the class.
 sub isa {
   my $self = shift;
   return
-    $self->__type_constraint->isa(@_)
-    || $self->_try_delegate('isa', @_);
+    blessed $self
+      ? $self->__type_constraint->isa(@_)
+      || $self->_try_delegate( 'isa', @_ )
+      : $self->SUPER::isa(@_);
 }
 
 =head2 can
@@ -130,7 +132,13 @@ handle $self->can since AUTOLOAD can't.
 
 =cut
 
-sub can { shift->_try_delegate('can', @_) }
+sub can {
+    my $self = shift;
+
+    return blessed $self
+        ? $self->_try_delegate( 'can', @_ )
+        : $self->SUPER::can(@_);
+}
 
 =head2 _throw_error
 

@@ -312,7 +312,7 @@ which generally allows you to easily create union types:
   subtype StrOrArrayRef,
       as Str|ArrayRef;
 
-As with parameterized constrains, this overloading extends to modules using the
+As with parameterized constraints, this overloading extends to modules using the
 types you define in a type library.
 
   use Moose;

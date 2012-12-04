@@ -535,7 +535,7 @@ Due to this stringification, the following will NOT work as you might think:
 The 'StrOrArrayRef' will have its stringification activated this causes the
 subtype to not be created.  Since the bareword type constraints are not strings
 you really should not try to treat them that way.  You will have to use the ','
-operator instead.  The author's of this package realize that all the L<Moose>
+operator instead.  The authors of this package realize that all the L<Moose>
 documention and examples nearly uniformly use the '=>' version of the comma
 operator and this could be an issue if you are converting code.
 

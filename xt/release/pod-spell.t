@@ -20,6 +20,7 @@ all_pod_files_spelling_ok;
 
 __DATA__
 API
+Florian
 Kitover
 MyStr
 Napiorkowski
@@ -35,16 +36,23 @@ TypeAndSubExporter
 Upi
 autarch
 caelum
+coercions
 documention
 gotchas
 hdp
 inline
+instantiation
 isa
 jnapiorkowski
+libs
 namespaces
+organise
 parameterize
 parameterized
 phaylon
 rafl
+subclasses
+subtype
+subtypes
 subtyping
 typeconstraint

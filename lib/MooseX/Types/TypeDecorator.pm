@@ -16,6 +16,8 @@ use overload(
             my $tc = $self->{__type_constraint};
             return 0+$tc;
      },
+    # workaround for perl 5.8.5 bug
+    '==' => sub { 0+$_[0] == 0+$_[1] },
     '""' => sub {
     		my $self = shift @_;
     		if(blessed $self) {

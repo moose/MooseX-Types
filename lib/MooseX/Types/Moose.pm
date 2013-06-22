@@ -43,8 +43,8 @@ for general usage information.
 =cut
 
 # all available builtin types as short and long name
-my %BuiltIn_Storage 
-  = map { ($_) x 2 } 
+my %BuiltIn_Storage
+  = map { ($_) x 2 }
     Moose::Util::TypeConstraints->list_all_builtin_type_constraints;
 
 =head1 METHODS
@@ -62,7 +62,7 @@ sub type_storage { \%BuiltIn_Storage }
 =head1 SEE ALSO
 
 L<MooseX::Types::Moose>,
-L<Moose>, 
+L<Moose>,
 L<Moose::Util::TypeConstraints>
 
 =head1 LICENSE

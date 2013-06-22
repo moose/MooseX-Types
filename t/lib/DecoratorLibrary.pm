@@ -25,18 +25,18 @@ use MooseX::Types
 
 subtype MyArrayRefBase,
     as ArrayRef;
-    
+
 coerce MyArrayRefBase,
     from Str,
     via {[split(',', $_)]};
-    
+
 subtype MyArrayRefInt01,
     as ArrayRef[Int];
 
 subtype BiggerInt,
     as Int,
     where {$_>10};
-    
+
 subtype SubOfMyArrayRefInt01,
     as MyArrayRefInt01[BiggerInt];
 
@@ -45,13 +45,13 @@ coerce MyArrayRefInt01,
     via {[split('\.',$_)]},
     from HashRef,
     via {[sort values(%$_)]};
-    
+
 subtype MyArrayRefInt02,
     as MyArrayRefBase[Int];
-    
+
 subtype MyHashRefOfInts,
     as HashRef[Int];
-    
+
 subtype MyHashRefOfStr,
     as HashRef[Str];
 
@@ -71,10 +71,10 @@ subtype StrOrArrayRef,
 subtype AtLeastOneInt,
     as ArrayRef[Int],
     where { @$_ > 0 };
-    
+
 enum Jobs,
     (qw/Programming Teaching Banking/);
-    
+
 subtype isFive,
  as Int,
  where { $_ == 5};
@@ -82,15 +82,15 @@ subtype isFive,
 subtype isTen,
  as Int,
  where { $_ == 10};
- 
+
 subtype isFifteen,
  as Int,
  where { $_ == 15};
- 
+
 subtype VeryBigInt,
  as BiggerInt,
  where {$_>100};
- 
+
 subtype FiveOrTenOrFifteen,
  as isFive|isTen|isFifteen;
 
@@ -98,5 +98,5 @@ subtype WierdIntegersArrayRef1,
  as ArrayRef[FiveOrTenOrFifteen|VeryBigInt];
 
 subtype WierdIntegersArrayRef2,
- as ArrayRef[FiveOrTenOrFifteen|Object];    
+ as ArrayRef[FiveOrTenOrFifteen|Object];
 1;

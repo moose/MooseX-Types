@@ -20,7 +20,7 @@ use Class::MOP ();
 
 =head1 DESCRIPTION
 
-Allows you to export types from multiple type libraries. 
+Allows you to export types from multiple type libraries.
 
 Libraries on the right side of the type libs passed to L</provide_types_from>
 take precedence over those on the left in case of conflicts.

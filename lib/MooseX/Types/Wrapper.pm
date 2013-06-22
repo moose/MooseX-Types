@@ -30,11 +30,11 @@ sub import {
         croak qq($class expects an array reference as import spec)
             unless ref $libraries{ $l } eq 'ARRAY';
 
-        my $library_class 
+        my $library_class
           = ($l eq 'Moose' ? 'MooseX::Types::Moose' : $l );
         Class::MOP::load_class($library_class);
 
-        $library_class->import({ 
+        $library_class->import({
             -into    => scalar(caller),
             -wrapper => $class,
         }, @{ $libraries{ $l } });

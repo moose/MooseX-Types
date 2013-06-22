@@ -11,9 +11,9 @@ use overload '""'     => sub { shift->name },
 
 =head1 DESCRIPTION
 
-Whenever a type handle function (e.g. C<Int()> can't find a type 
+Whenever a type handle function (e.g. C<Int()> can't find a type
 constraint under it's full name, it assumes it has not yet been defined.
-It will then return an instance of this class, handling only 
+It will then return an instance of this class, handling only
 stringification, name and possible identification of undefined types.
 
 Later, when you try to use the Undefined Type Constraint, autovivification will
@@ -84,7 +84,7 @@ Try to autovivify and delegate
 
 sub AUTOLOAD {
     my ($self, @args)  = @_;
-    my ($method) = our $AUTOLOAD =~ /([^:]+)$/;    
+    my ($method) = our $AUTOLOAD =~ /([^:]+)$/;
 
     if(my $type_constraint = $self->__autovivify) {
         return $type_constraint->$method(@args);
@@ -107,7 +107,7 @@ sub DESTROY {
 =head1 SEE ALSO
 
 L<MooseX::Types::Moose>,
-L<Moose::Util::TypeConstraints>, 
+L<Moose::Util::TypeConstraints>,
 L<Moose::Meta::TypeConstraint>,
 L<Carp::Clan>
 

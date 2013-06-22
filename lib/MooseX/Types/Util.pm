@@ -10,7 +10,7 @@ use base 'Exporter';
 
 =head1 DESCRIPTION
 
-This package the exportable functions that many parts in 
+This package the exportable functions that many parts in
 L<MooseX::Types> might need.
 
 =cut
@@ -44,7 +44,7 @@ sub filter_tags {
 
   TypeConstraint | Undef = has_available_type_export($package, $name);
 
-This function allows you to introspect if a given type export is available 
+This function allows you to introspect if a given type export is available
 I<at this point in time>. This means that the C<$package> must have imported
 a typeconstraint with the name C<$name>, and it must be still in its symbol
 table.

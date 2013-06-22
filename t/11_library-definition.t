@@ -24,7 +24,7 @@ for my $data (map { [@$_] } @tests) {
     }
 
     # coercion handler export
-    {   
+    {
         my ($coerce, $coercion_result, $cannot_coerce) = map { shift @$data } 1 .. 3;
         ok my $code = __PACKAGE__->can("to_$type"), "to_$type() coercion was exported";
         is_deeply scalar $code->($coerce), $coercion_result, "to_$type() coercion works";

@@ -144,7 +144,7 @@ like C<"MyApp::Foo">.
 
 =head1 LIBRARY DEFINITION
 
-A MooseX::Types is just a normal Perl module. Unlike Moose 
+A MooseX::Types is just a normal Perl module. Unlike Moose
 itself, it does not install C<use strict> and C<use warnings> in your
 class by default, so this is up to you.
 
@@ -154,13 +154,13 @@ The only thing a library is required to do is
 
 with C<@types> being a list of types you wish to define in this library.
 This line will install a proper base class in your package as well as the
-full set of L<handlers|/"TYPE HANDLER FUNCTIONS"> for your declared 
+full set of L<handlers|/"TYPE HANDLER FUNCTIONS"> for your declared
 types. It will then hand control over to L<Moose::Util::TypeConstraints>'
 C<import> method to export the functions you will need to declare your
 types.
 
-If you want to use Moose' built-in types (e.g. for subtyping) you will 
-want to 
+If you want to use Moose' built-in types (e.g. for subtyping) you will
+want to
 
   use MooseX::Types::Moose @types;
 
@@ -170,7 +170,7 @@ library which can export all types that come with Moose.
 You will have to define coercions for your types or your library won't
 export a L</to_$type> coercion helper for it.
 
-Note that you currently cannot define types containing C<::>, since 
+Note that you currently cannot define types containing C<::>, since
 exporting would be a problem.
 
 You also don't need to use C<warnings> and C<strict>, since the
@@ -383,7 +383,7 @@ L<MooseX::Types::UndefinedType> object if the type was not yet defined.
 
 sub type_export_generator {
     my ($class, $type, $name) = @_;
-    
+
     ## Return an anonymous subroutine that will generate the proxied type
     ## constraint for you.
 
@@ -407,13 +407,13 @@ sub type_export_generator {
 
         $type_constraint = defined($type_constraint) ? $type_constraint
          : MooseX::Types::UndefinedType->new($name);
-         
+
         my $type_decorator = $class->create_type_decorator($type_constraint);
-        
+
         ## If there are additional args, that means it's probably stuff that
         ## needs to be returned to the subtype.  Not an ideal solution here but
         ## doesn't seem to cause trouble.
-        
+
         if(@_) {
             return ($type_decorator, @_);
         } else {
@@ -430,7 +430,7 @@ it with @args.
 =cut
 
 sub create_arged_type_constraint {
-    my ($class, $name, @args) = @_;  
+    my ($class, $name, @args) = @_;
     my $type_constraint = Moose::Util::TypeConstraints::find_or_create_type_constraint("$name");
     my $parameterized = $type_constraint->parameterize(@args);
     # It's obnoxious to have to parameterize before looking for the TC, but the

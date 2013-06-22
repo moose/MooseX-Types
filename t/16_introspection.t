@@ -24,8 +24,8 @@ do {
         ::ok(!$@, "introspecting something that's not not a type doesn't blow up");
     }
 
-    BEGIN { 
-        no strict 'refs'; 
+    BEGIN {
+        no strict 'refs';
         delete ${'IntrospectionTest::'}{TwentyThree};
     }
 };

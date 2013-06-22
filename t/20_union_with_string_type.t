@@ -19,9 +19,9 @@ my $exception;
 
 	Test::More::ok !$@, 'types are not mutated by union with a string type';
 
-	subtype Test1, 
+	subtype Test1,
 	  as Int | 'ArrayRef[Int]';
-	
+
 	Test::More::ok Test1->check(1), '1 is an Int';
 	Test::More::ok !Test1->check('a'),  'a is not an Int';
 	Test::More::ok Test1->check([1, 2, 3]),  'Passes ArrayRef';
@@ -29,16 +29,16 @@ my $exception;
 	Test::More::ok !Test1->check({a=>1}), 'fails wrong ref type';
 
 	eval {
-	subtype Test2, 
+	subtype Test2,
 	 as Int | 'IDONTEXIST';
 	};
 
 	my $check = $@;
 
-	Test::More::ok $@, 'Got an error for bad Type'; 
+	Test::More::ok $@, 'Got an error for bad Type';
 	Test::More::like $check,  qr/IDONTEXIST is not a type constraint/,  'correct error';
 
-	my $obj = subtype Test3, 
+	my $obj = subtype Test3,
 	  as Int | 'ArrayRef[Int]' | Object;
 
 	Test::More::ok Test3->check(1), '1 is an Int';

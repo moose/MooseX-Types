@@ -21,14 +21,14 @@ use overload(
     '""' => sub {
     		my $self = shift @_;
     		if(blessed $self) {
-        		return $self->__type_constraint->name;     		
+        		return $self->__type_constraint->name;
     		} else {
     			return "$self";
     		}
     },
     bool => sub { 1 },
     '|' => sub {
-        
+
         ## It's kind of ugly that we need to know about Union Types, but this
         ## is needed for syntax compatibility.  Maybe someday we'll all just do
         ## Or[Str,Str,Int]
@@ -51,7 +51,7 @@ use overload(
         return Moose::Util::TypeConstraints::register_type_constraint($union);
     },
     fallback => 1,
-    
+
 );
 
 =head1 DESCRIPTION
@@ -80,7 +80,7 @@ sub new {
             return bless {'__type_constraint'=>$arg}, $class;
         } elsif(
             blessed $arg &&
-            $arg->isa('MooseX::Types::UndefinedType') 
+            $arg->isa('MooseX::Types::UndefinedType')
           ) {
             ## stub in case we'll need to handle these types differently
             return bless {'__type_constraint'=>$arg}, $class;
@@ -90,7 +90,7 @@ sub new {
             __PACKAGE__->_throw_error("Argument cannot be '$arg'");
         }
     } else {
-        __PACKAGE__->_throw_error("This method [new] requires a single argument.");        
+        __PACKAGE__->_throw_error("This method [new] requires a single argument.");
     }
 }
 
@@ -101,12 +101,12 @@ Set/Get the type_constraint.
 =cut
 
 sub __type_constraint {
-    my $self = shift @_;    
+    my $self = shift @_;
     if(blessed $self) {
         if(defined(my $tc = shift @_)) {
             $self->{__type_constraint} = $tc;
         }
-        return $self->{__type_constraint};        
+        return $self->{__type_constraint};
     } else {
         __PACKAGE__->_throw_error('cannot call __type_constraint as a class method');
     }
@@ -178,12 +178,12 @@ an exception will be thrown.
 sub AUTOLOAD {
     my ($self, @args) = @_;
     my ($method) = (our $AUTOLOAD =~ /([^:]+)$/);
-    
+
     ## We delegate with this method in an attempt to support a value of
     ## __type_constraint which is also AUTOLOADing, in particular the class
     ## MooseX::Types::UndefinedType which AUTOLOADs during autovivication.
 
-    $self->_try_delegate($method, @args);    
+    $self->_try_delegate($method, @args);
 }
 
 sub _try_delegate {
@@ -201,7 +201,7 @@ sub _try_delegate {
             last unless $search_tc && $search_tc->is_subtype_of('Object');
         }
     }
-        
+
     my $inv = do {
         if ($method eq 'new') {
             die "new called on type decorator for non-class-type ".$tc->name

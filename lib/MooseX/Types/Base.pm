@@ -13,7 +13,7 @@ use namespace::clean -except => [qw( meta )];
 =head1 DESCRIPTION
 
 You normally won't need to interact with this class by yourself. It is
-merely a collection of functionality that type libraries need to 
+merely a collection of functionality that type libraries need to
 interact with moose and the rest of the L<MooseX::Types> module.
 
 =cut
@@ -26,7 +26,7 @@ my $UndefMsg = q{Unable to find type '%s' in library '%s'};
 
 =head2 import
 
-Provides the import mechanism for your library. See 
+Provides the import mechanism for your library. See
 L<MooseX::Types/"LIBRARY USAGE"> for syntax details on this.
 
 =cut
@@ -46,7 +46,7 @@ sub import {
 
     # determine the wrapper, -into is supported for compatibility reasons
     my $wrapper = $options->{ -wrapper } || 'MooseX::Types';
-    $args[0]->{into} = $options->{ -into } 
+    $args[0]->{into} = $options->{ -into }
         if exists $options->{ -into };
 
     my (%ex_spec, %ex_util);
@@ -60,9 +60,9 @@ sub import {
         my $undef_msg = sprintf($UndefMsg, $type_short, $class);
 
         # the type itself
-        push @{ $ex_spec{exports} }, 
+        push @{ $ex_spec{exports} },
             $type_short,
-            sub { 
+            sub {
                 bless $wrapper->type_export_generator($type_short, $type_full),
                     'MooseX::Types::EXPORTED_TYPE_CONSTRAINT';
             };
@@ -84,13 +84,13 @@ sub import {
 
     # create S:E exporter and increase export level unless specified explicitly
     my $exporter = build_exporter \%ex_spec;
-    $options->{into_level}++ 
+    $options->{into_level}++
         unless $options->{into};
 
     # remember requested symbols to determine what helpers to auto-export
-    my %was_requested = 
-        map  { ($_ => 1) } 
-        grep { not ref } 
+    my %was_requested =
+        map  { ($_ => 1) }
+        grep { not ref }
         @args;
 
     # determine which additional symbols (helpers) to export along

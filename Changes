@@ -5,7 +5,6 @@ Revision history for MooseX-Types
         (RT#77100, Graham Knop)
 
 0.35    2012-05-19
-
         - The new delegation code could fail when a type had no
           parent. Attempting to subtype Any was one way to trigger the
           bug. (Dave Rolsky)
@@ -14,15 +13,12 @@ Revision history for MooseX-Types
           MooseX::Types::TypeDecorator as a class method. (Dave Rolsky)
 
 0.34    2012-05-18
-
         - Special case new to avoid unexpected exceptions on unloaded classes
 
 0.33    2012-05-18
-
         - Switch delegation order to prioritise type over class except for new
 
 0.32    2012-05-18
-
         - Support delegation of methods to the class for class types
         - Factor out _try_delegate method
 
@@ -126,7 +122,8 @@ Revision history for MooseX-Types
         - Removed unneeded debugging code from one of the tests, which was
           causing installation errors for people that didn't already have
           Data::Dump installed. (jjnapiork)
-0.09    ...
+
+0.09    2009-03-03
         - Added MooseX::Types::Util::has_available_type_export($p, $n) to
           allow introspection of available types for other libraries wanting
           to use type export names for type specifications.
@@ -147,7 +144,7 @@ Revision history for MooseX-Types
         - Added support for parameterized types and type unions, tests for all
         that and documentation updates.
 
-0.05    [unknown]
+0.05    2008-02-19
         - moved export mechanism to Sub::Exporter. ::Base contains
           a bunch of wrapping logic to allow the export-along functionality
           for the helper symbols

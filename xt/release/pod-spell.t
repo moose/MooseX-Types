@@ -33,7 +33,6 @@ Sedlacek
 StrOrArrayRef
 TODO
 TypeAndSubExporter
-Upi
 autarch
 caelum
 coercions

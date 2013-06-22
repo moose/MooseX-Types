@@ -565,7 +565,7 @@ targets. For example if you do:
   use TypeAndSubExporter qw(MyStr);
 
 You'll get a '"MyStr" is not exported by the TypeAndSubExporter module' error.
-Upi can workaround by:
+It can be worked around by:
 
   - use Sub::Exporter -setup => { exports => [ qw(something) ] };
   + use Sub::Exporter -setup => { exports => [ qw(something MyStr) ] };

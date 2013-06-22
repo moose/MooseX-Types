@@ -9,5 +9,6 @@ inc
 META.yml
 .*
 !.gitignore
+!.mailmap
 MooseX-Types*
 .build

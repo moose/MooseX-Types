@@ -5,7 +5,7 @@ package MooseX::Types::Wrapper;
 use Moose;
 
 use Carp::Clan      qw( ^MooseX::Types );
-use Class::MOP;
+use Module::Runtime 'use_module';
 
 use namespace::clean -except => [qw( meta )];
 
@@ -32,7 +32,7 @@ sub import {
 
         my $library_class
           = ($l eq 'Moose' ? 'MooseX::Types::Moose' : $l );
-        Class::MOP::load_class($library_class);
+        use_module($library_class);
 
         $library_class->import({
             -into    => scalar(caller),

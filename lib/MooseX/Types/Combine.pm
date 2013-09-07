@@ -4,7 +4,7 @@ package MooseX::Types::Combine;
 
 use strict;
 use warnings;
-use Class::MOP ();
+use Module::Runtime 'use_module';
 
 =head1 SYNOPSIS
 
@@ -88,7 +88,7 @@ sub provide_types_from {
 sub _check_type_lib {
     my ($class, $lib) = @_;
 
-    Class::MOP::load_class($lib);
+    use_module($lib);
 
     die "Cannot use $lib in a combined type library, it does not provide any types"
         unless $lib->can('type_names');

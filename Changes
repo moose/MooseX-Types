@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+
+0.37      2013-09-08 21:58:26Z (Karen Etheridge)
         - removed use of deprecated Class::MOP::load_class
         - repository has moved to the GitHub Moose organization
 

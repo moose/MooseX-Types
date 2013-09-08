@@ -592,18 +592,4 @@ L<Sub::Exporter>
 
 Many thanks to the C<#moose> cabal on C<irc.perl.org>.
 
-=head1 CONTRIBUTORS
-
-jnapiorkowski: John Napiorkowski <jjnapiork@cpan.org>
-
-caelum: Rafael Kitover <rkitover@cpan.org>
-
-rafl: Florian Ragwitz <rafl@debian.org>
-
-hdp: Hans Dieter Pearcey <hdp@cpan.org>
-
-autarch: Dave Rolsky <autarch@urth.org>
-
 =cut
-
-1;

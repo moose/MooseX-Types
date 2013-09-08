@@ -112,9 +112,9 @@ sub __type_constraint {
     }
 }
 
-=head2 isa
+=head2 C<isa>
 
-handle $self->isa since AUTOLOAD can't - this tries both the type constraint,
+handle C<< $self->isa >> since C<AUTOLOAD> can't - this tries both the type constraint,
 and for a class type, the class.
 
 =cut

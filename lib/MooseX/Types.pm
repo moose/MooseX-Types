@@ -18,6 +18,8 @@ use namespace::autoclean;
 use 5.008;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
+=pod
+
 =head1 SYNOPSIS
 
 =head2 Library Definition
@@ -119,7 +121,7 @@ my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};
 
 The type system provided by Moose effectively makes all of its builtin type
 global, as are any types you declare with Moose. This means that every module
-that declares a type named "PositiveInt" is sharing the same type object. This
+that declares a type named C<PositiveInt> is sharing the same type object. This
 can be a problem when different parts of the code base want to use the same
 name for different things.
 
@@ -424,7 +426,7 @@ sub type_export_generator {
 
 =head2 create_arged_type_constraint ($name, @args)
 
-Given a String $name with @args find the matching typeconstraint and parameterize
+Given a String $name with @args find the matching type constraint and parameterize
 it with @args.
 
 =cut
@@ -532,7 +534,7 @@ Due to this stringification, the following will NOT work as you might think:
 
   subtype StrOrArrayRef => as Str | ArrayRef;
 
-The 'StrOrArrayRef' will have its stringification activated this causes the
+The C<StrOrArrayRef> type will have its stringification activated -- this causes the
 subtype to not be created.  Since the bareword type constraints are not strings
 you really should not try to treat them that way.  You will have to use the ','
 operator instead.  The authors of this package realize that all the L<Moose>
@@ -564,7 +566,7 @@ targets. For example if you do:
   package Foo;
   use TypeAndSubExporter qw(MyStr);
 
-You'll get a '"MyStr" is not exported by the TypeAndSubExporter module' error.
+You'll get a C<< "MyStr" is not exported by the TypeAndSubExporter module >> error.
 It can be worked around by:
 
   - use Sub::Exporter -setup => { exports => [ qw(something) ] };

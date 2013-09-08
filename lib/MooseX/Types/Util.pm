@@ -46,7 +46,7 @@ sub filter_tags {
 
 This function allows you to introspect if a given type export is available
 I<at this point in time>. This means that the C<$package> must have imported
-a typeconstraint with the name C<$name>, and it must be still in its symbol
+a type constraint with the name C<$name>, and it must be still in its symbol
 table.
 
 Two arguments are expected:

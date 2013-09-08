@@ -22,7 +22,7 @@ use Module::Runtime 'use_module';
 
 Allows you to export types from multiple type libraries.
 
-Libraries on the right side of the type libs passed to L</provide_types_from>
+Libraries on the right end of the list passed to L</provide_types_from>
 take precedence over those on the left in case of conflicts.
 
 =cut

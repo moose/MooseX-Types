@@ -13,7 +13,7 @@ use Carp::Clan                        qw( ^MooseX::Types );
 use Sub::Name;
 use Scalar::Util                      'reftype';
 
-use namespace::clean -except => [qw( meta )];
+use namespace::autoclean;
 
 use 5.008;
 my $UndefMsg = q{Action for type '%s' not yet defined in library '%s'};

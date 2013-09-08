@@ -9,7 +9,7 @@ use Moose::Exporter;
 use Sub::Name;
 use Carp;
 
-use namespace::clean -except => 'meta';
+use namespace::autoclean;
 
 my $StringFoundMsg =
 q{WARNING: String found where Type expected (did you use a => instead of a , ?)};

@@ -7,7 +7,7 @@ use Moose;
 use Carp::Clan      qw( ^MooseX::Types );
 use Module::Runtime 'use_module';
 
-use namespace::clean -except => [qw( meta )];
+use namespace::autoclean;
 
 extends 'MooseX::Types';
 

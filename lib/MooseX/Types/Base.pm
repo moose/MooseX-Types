@@ -8,7 +8,7 @@ use MooseX::Types::Util             qw( filter_tags );
 use Sub::Exporter                   qw( build_exporter );
 use Moose::Util::TypeConstraints;
 
-use namespace::clean -except => [qw( meta )];
+use namespace::autoclean;
 
 =head1 DESCRIPTION
 

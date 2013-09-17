@@ -1,11 +1,9 @@
-BEGIN {
-    use strict;
-    use warnings;
-    use Test::More;
-    use lib 't/lib';
+use strict;
+use warnings;
+use Test::More;
 
-    use Test::Requires { 'Sub::Exporter' => '0' };
-}
+use Test::Requires { 'Sub::Exporter' => '0' };
+use lib 't/lib';
 
 use SubExporterCompatibility qw(MyStr something);
 

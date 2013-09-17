@@ -73,7 +73,7 @@ subtype AtLeastOneInt,
     where { @$_ > 0 };
 
 enum Jobs,
-    (qw/Programming Teaching Banking/);
+    [qw/Programming Teaching Banking/];
 
 subtype isFive,
  as Int,

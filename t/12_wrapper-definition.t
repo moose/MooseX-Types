@@ -2,8 +2,7 @@ use warnings;
 use strict;
 
 use Test::More;
-use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib 't/lib';
 use Moose::Util::TypeConstraints;
 BEGIN { coerce 'Str', from 'Int', via { "$_" } }
 use TestWrapper TestLibrary => [qw( NonEmptyStr IntArrayRef )],

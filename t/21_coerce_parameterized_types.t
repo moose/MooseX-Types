@@ -7,33 +7,33 @@ use Test::More;
 BEGIN {
     package TypeLib;
     use MooseX::Types -declare => [qw/
-	MyChar MyDigit ArrayRefOfMyCharOrDigit
+    MyChar MyDigit ArrayRefOfMyCharOrDigit
     /];
     use MooseX::Types::Moose qw/ArrayRef Str Int/;
 
     subtype MyChar, as Str, where {
-	length == 1
+    length == 1
     };
 
     subtype MyDigit, as Int, where {
-	length == 1
+    length == 1
     };
 
     coerce ArrayRef[MyChar|MyDigit], from Str, via {
-	[split //]
+    [split //]
     };
 
 # same thing with an explicit subtype
     subtype ArrayRefOfMyCharOrDigit, as ArrayRef[MyChar|MyDigit];
 
     coerce ArrayRefOfMyCharOrDigit, from Str, via {
-	[split //]
+    [split //]
     };
 }
 
 {
     BEGIN { TypeLib->import(qw/
-	MyChar MyDigit ArrayRefOfMyCharOrDigit/
+    MyChar MyDigit ArrayRefOfMyCharOrDigit/
     ) };
     use MooseX::Types::Moose 'ArrayRef';
 

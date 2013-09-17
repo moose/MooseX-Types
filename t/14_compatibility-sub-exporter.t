@@ -1,7 +1,7 @@
 BEGIN {
-	use strict;
-	use warnings;
-	use Test::More;
+    use strict;
+    use warnings;
+    use Test::More;
     use FindBin;
     use lib "$FindBin::Bin/lib";
 

@@ -4,7 +4,7 @@ MooseX::Types - Organise your Moose types in libraries
 
 # VERSION
 
-version 0.38
+version 0.39
 
 # SYNOPSIS
 
@@ -142,8 +142,8 @@ The only thing a library is required to do is
 
 with `@types` being a list of types you wish to define in this library.
 This line will install a proper base class in your package as well as the
-full set of [handlers](#TYPE HANDLER FUNCTIONS) for your declared
-types. It will then hand control over to [Moose::Util::TypeConstraints](http://search.cpan.org/perldoc?Moose::Util::TypeConstraints)'
+full set of [handlers](#type-handler-functions) for your declared
+types. It will then hand control over to [Moose::Util::TypeConstraints](https://metacpan.org/pod/Moose::Util::TypeConstraints)'
 `import` method to export the functions you will need to declare your
 types.
 
@@ -152,11 +152,11 @@ want to
 
     use MooseX::Types::Moose @types;
 
-to import the helpers from the shipped [MooseX::Types::Moose](http://search.cpan.org/perldoc?MooseX::Types::Moose)
+to import the helpers from the shipped [MooseX::Types::Moose](https://metacpan.org/pod/MooseX::Types::Moose)
 library which can export all types that come with Moose.
 
 You will have to define coercions for your types or your library won't
-export a ["to\_$type"](#to\_$type) coercion helper for it.
+export a ["to_$type"](#to_-type) coercion helper for it.
 
 Note that you currently cannot define types containing `::`, since
 exporting would be a problem.
@@ -166,7 +166,7 @@ definition of a library automatically exports those.
 
 # LIBRARY USAGE
 
-You can import the ["type helpers"](#TYPE HANDLER FUNCTIONS) of a
+You can import the ["type helpers"](#type-handler-functions) of a
 library by `use`ing it with a list of types to import as arguments. If
 you want all of them, use the `:all` tag. For example:
 
@@ -174,10 +174,10 @@ you want all of them, use the `:all` tag. For example:
     use MyOtherLibrary qw( TypeA TypeB );
 
 MooseX::Types comes with a library of Moose' built-in types called
-[MooseX::Types::Moose](http://search.cpan.org/perldoc?MooseX::Types::Moose).
+[MooseX::Types::Moose](https://metacpan.org/pod/MooseX::Types::Moose).
 
 The exporting mechanism is, since version 0.5, implemented via a wrapper
-around [Sub::Exporter](http://search.cpan.org/perldoc?Sub::Exporter). This means you can do something like this:
+around [Sub::Exporter](https://metacpan.org/pod/Sub::Exporter). This means you can do something like this:
 
     use MyLibrary TypeA => { -as => 'MyTypeA' },
                   TypeB => { -as => 'MyTypeB' };
@@ -238,13 +238,13 @@ with this:
     ...
     1;
 
-The `Moose` library name is a special shortcut for [MooseX::Types::Moose](http://search.cpan.org/perldoc?MooseX::Types::Moose).
+The `Moose` library name is a special shortcut for [MooseX::Types::Moose](https://metacpan.org/pod/MooseX::Types::Moose).
 
 ## Generator methods you can overload
 
 - type\_export\_generator( $short, $full )
 
-    Creates a closure returning the type's [Moose::Meta::TypeConstraint](http://search.cpan.org/perldoc?Moose::Meta::TypeConstraint) object.
+    Creates a closure returning the type's [Moose::Meta::TypeConstraint](https://metacpan.org/pod/Moose::Meta::TypeConstraint) object.
 
 - check\_export\_generator( $short, $full, $undef\_message )
 
@@ -262,7 +262,7 @@ The `Moose` library name is a special shortcut for [MooseX::Types::Moose](http:/
 
 - $full
 
-    The fully qualified name of this type as [Moose](http://search.cpan.org/perldoc?Moose) knows it.
+    The fully qualified name of this type as [Moose](https://metacpan.org/pod/Moose) knows it.
 
 - $undef\_message
 
@@ -271,7 +271,7 @@ The `Moose` library name is a special shortcut for [MooseX::Types::Moose](http:/
 
 # RECURSIVE SUBTYPES
 
-As of version 0.08, [Moose::Types](http://search.cpan.org/perldoc?Moose::Types) has experimental support for Recursive
+As of version 0.08, [Moose::Types](https://metacpan.org/pod/Moose::Types) has experimental support for Recursive
 subtypes.  This will allow:
 
     subtype Tree() => as HashRef[Str|Tree];
@@ -286,7 +286,7 @@ to hunt me down with patches and test cases if you have trouble.
 
 # NOTES REGARDING TYPE UNIONS
 
-[MooseX::Types](http://search.cpan.org/perldoc?MooseX::Types) uses [MooseX::Types::TypeDecorator](http://search.cpan.org/perldoc?MooseX::Types::TypeDecorator) to do some overloading
+[MooseX::Types](https://metacpan.org/pod/MooseX::Types) uses [MooseX::Types::TypeDecorator](https://metacpan.org/pod/MooseX::Types::TypeDecorator) to do some overloading
 which generally allows you to easily create union types:
 
     subtype StrOrArrayRef,
@@ -306,16 +306,16 @@ And everything should just work as you'd think.
 
 ## import
 
-Installs the [MooseX::Types::Base](http://search.cpan.org/perldoc?MooseX::Types::Base) class into the caller and exports types
-according to the specification described in ["LIBRARY DEFINITION"](#LIBRARY DEFINITION). This
-will continue to [Moose::Util::TypeConstraints](http://search.cpan.org/perldoc?Moose::Util::TypeConstraints)' `import` method to export
+Installs the [MooseX::Types::Base](https://metacpan.org/pod/MooseX::Types::Base) class into the caller and exports types
+according to the specification described in ["LIBRARY DEFINITION"](#library-definition). This
+will continue to [Moose::Util::TypeConstraints](https://metacpan.org/pod/Moose::Util::TypeConstraints)' `import` method to export
 helper functions you will need to declare your types.
 
 ## type\_export\_generator
 
 Generate a type export, e.g. `Int()`. This will return either a
-[Moose::Meta::TypeConstraint](http://search.cpan.org/perldoc?Moose::Meta::TypeConstraint) object, or alternatively a
-[MooseX::Types::UndefinedType](http://search.cpan.org/perldoc?MooseX::Types::UndefinedType) object if the type was not yet defined.
+[Moose::Meta::TypeConstraint](https://metacpan.org/pod/Moose::Meta::TypeConstraint) object, or alternatively a
+[MooseX::Types::UndefinedType](https://metacpan.org/pod/MooseX::Types::UndefinedType) object if the type was not yet defined.
 
 ## create\_arged\_type\_constraint ($name, @args)
 
@@ -328,7 +328,7 @@ Given a String $name, find the matching type constraint.
 
 ## create\_type\_decorator ($type\_constraint)
 
-Given a $type\_constraint, return a lightweight [MooseX::Types::TypeDecorator](http://search.cpan.org/perldoc?MooseX::Types::TypeDecorator)
+Given a $type\_constraint, return a lightweight [MooseX::Types::TypeDecorator](https://metacpan.org/pod/MooseX::Types::TypeDecorator)
 instance.
 
 ## coercion\_export\_generator
@@ -353,7 +353,7 @@ a type's actual full name.
 
 ## Argument separation ('=>' versus ',')
 
-The [perlop](http://search.cpan.org/perldoc?perlop) manpage has this to say about the '=>' operator: "The => operator is
+The [perlop](https://metacpan.org/pod/perlop) manpage has this to say about the '=>' operator: "The => operator is
 a synonym for the comma, but forces any word (consisting entirely of word
 characters) to its left to be interpreted as a string (as of 5.001). This
 includes words that might otherwise be considered a constant or function call."
@@ -365,7 +365,7 @@ Due to this stringification, the following will NOT work as you might think:
 The `StrOrArrayRef` type will have its stringification activated -- this causes the
 subtype to not be created.  Since the bareword type constraints are not strings
 you really should not try to treat them that way.  You will have to use the ','
-operator instead.  The authors of this package realize that all the [Moose](http://search.cpan.org/perldoc?Moose)
+operator instead.  The authors of this package realize that all the [Moose](https://metacpan.org/pod/Moose)
 documentation and examples nearly uniformly use the '=>' version of the comma
 operator and this could be an issue if you are converting code.
 
@@ -373,7 +373,7 @@ Patches welcome for discussion.
 
 ## Compatibility with Sub::Exporter
 
-If you want to use [Sub::Exporter](http://search.cpan.org/perldoc?Sub::Exporter) with a Type Library, you need to make sure
+If you want to use [Sub::Exporter](https://metacpan.org/pod/Sub::Exporter) with a Type Library, you need to make sure
 you export all the type constraints declared AS WELL AS any additional export
 targets. For example if you do:
 
@@ -408,15 +408,15 @@ detailed test cases welcome. See the tests directory for a start on this.
 # COMBINING TYPE LIBRARIES
 
 You may want to combine a set of types for your application with other type
-libraries, like [MooseX::Types::Moose](http://search.cpan.org/perldoc?MooseX::Types::Moose) or [MooseX::Types::Common::String](http://search.cpan.org/perldoc?MooseX::Types::Common::String).
+libraries, like [MooseX::Types::Moose](https://metacpan.org/pod/MooseX::Types::Moose) or [MooseX::Types::Common::String](https://metacpan.org/pod/MooseX::Types::Common::String).
 
-The [MooseX::Types::Combine](http://search.cpan.org/perldoc?MooseX::Types::Combine) module provides a simple API for combining a set
+The [MooseX::Types::Combine](https://metacpan.org/pod/MooseX::Types::Combine) module provides a simple API for combining a set
 of type libraries together.
 
 # SEE ALSO
 
-[Moose](http://search.cpan.org/perldoc?Moose), [Moose::Util::TypeConstraints](http://search.cpan.org/perldoc?Moose::Util::TypeConstraints), [MooseX::Types::Moose](http://search.cpan.org/perldoc?MooseX::Types::Moose),
-[Sub::Exporter](http://search.cpan.org/perldoc?Sub::Exporter)
+[Moose](https://metacpan.org/pod/Moose), [Moose::Util::TypeConstraints](https://metacpan.org/pod/Moose::Util::TypeConstraints), [MooseX::Types::Moose](https://metacpan.org/pod/MooseX::Types::Moose),
+[Sub::Exporter](https://metacpan.org/pod/Sub::Exporter)
 
 # ACKNOWLEDGEMENTS
 

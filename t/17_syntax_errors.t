@@ -1,7 +1,8 @@
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
 # remove this when CheckedUtilExports croaks instead of carps
 $SIG{__WARN__} = sub { die @_ };

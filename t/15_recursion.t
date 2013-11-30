@@ -1,3 +1,9 @@
+use strict;
+use warnings FATAL => 'all';
+
+use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
+
 ## Test case inspired by Stevan Little
 
 BEGIN {
@@ -48,6 +54,6 @@ BEGIN {
 
     ok ! RecursiveHashRef->check({key=>{subkey=>"value",subkey2=>{ssubkey=>[1,2,3]}}})
      => 'Properly invalidates bad value deeply';
-
-    done_testing;
 }
+
+done_testing;

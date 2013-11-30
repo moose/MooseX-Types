@@ -1,7 +1,9 @@
-use warnings;
 use strict;
+use warnings FATAL => 'all';
 
 use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
+
 use lib 't/lib';
 use TestLibrary qw( NonEmptyStr IntArrayRef ),
                 Foo2Alias => { -as => 'Foo' };

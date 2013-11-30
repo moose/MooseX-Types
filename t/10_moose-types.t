@@ -1,7 +1,9 @@
-use warnings;
 use strict;
+use warnings FATAL => 'all';
 
 use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
+
 use MooseX::Types::Moose ':all', 'Bool';
 
 my @types = MooseX::Types::Moose->type_names;

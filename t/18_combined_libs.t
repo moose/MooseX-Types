@@ -1,9 +1,11 @@
 use strict;
-use warnings;
-use lib 't/lib';
+use warnings FATAL => 'all';
 
 use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
+
 use Test::Fatal;
+use lib 't/lib';
 
 BEGIN { use_ok 'Combined', qw/Foo2Alias MTFNPY NonEmptyStr/ }
 

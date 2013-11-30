@@ -2,6 +2,7 @@ Revision history for MooseX-Types
 
 {{$NEXT}}
         - more strict warnings checking in tests
+        - re-release to fix compile test
 
 0.38      2013-09-17 00:44:16Z (Karen Etheridge)
         - removed use of deprecated enum syntax

@@ -2,7 +2,6 @@ use warnings;
 use strict;
 
 use Test::More;
-use lib 't/lib';
 use MooseX::Types::Moose ':all', 'Bool';
 
 my @types = MooseX::Types::Moose->type_names;

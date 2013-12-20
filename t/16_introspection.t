@@ -4,21 +4,34 @@ use warnings FATAL => 'all';
 use Test::More;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
+use MooseX::Types::Util qw( has_available_type_export );
+BEGIN {
+    my @Memory;
+    sub store_memory {
+        my ($package, @types) = @_;
+        for my $type (@types) {
+            my $tc     = has_available_type_export($package, $type);
+            push @Memory, [$package, $type, $tc ? $tc->name : undef];
+        }
+    }
+    sub get_memory { \@Memory }
+}
+
 use lib 't/lib';
 
-do {
+{
     package IntrospectionTest;
-    use IntrospectTypeExports   __PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr );
+    BEGIN { main::store_memory(__PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr )) }
     use TestLibrary             qw( TwentyThree );
-    use IntrospectTypeExports   __PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr );
+    BEGIN { main::store_memory(__PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr )) }
     use TestLibrary             NonEmptyStr => { -as => 'MyNonEmptyStr' };
-    use IntrospectTypeExports   __PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr );
+    BEGIN { main::store_memory(__PACKAGE__, qw( TwentyThree NonEmptyStr MyNonEmptyStr )) }
 
     sub NotAType () { 'just a string' }
 
     BEGIN {
         eval {
-            IntrospectTypeExports->import(__PACKAGE__, qw( NotAType ));
+            main::store_memory(__PACKAGE__, qw( NotAType ));
         };
         ::ok(!$@, "introspecting something that's not not a type doesn't blow up");
     }
@@ -27,14 +40,13 @@ do {
         no strict 'refs';
         delete ${'IntrospectionTest::'}{TwentyThree};
     }
-};
+}
 
-use IntrospectTypeExports IntrospectionTest => qw( TwentyThree NonEmptyStr MyNonEmptyStr );
+BEGIN { main::store_memory( IntrospectionTest => qw( TwentyThree NonEmptyStr MyNonEmptyStr )) }
 
 my $P = 'IntrospectionTest';
 
-is_deeply(IntrospectTypeExports->get_memory, [
-
+is_deeply(get_memory, [
     [$P, TwentyThree    => undef],
     [$P, NonEmptyStr    => undef],
     [$P, MyNonEmptyStr  => undef],

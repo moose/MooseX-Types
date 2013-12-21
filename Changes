@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+
+0.41      2013-12-21 17:21:41Z
         - reversed changes in 0.40, until compatibility issues with older
           Moose versions are figured out
 

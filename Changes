@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - reversed changes in 0.40, until compatibility issues with older
+          Moose versions are figured out
 
 0.40      2013-12-20 06:38:15Z
         - types are now properly installed into the proper package, so they

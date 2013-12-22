@@ -46,13 +46,12 @@ print "### MyTypeLibrary ISA: @MyTypeLibrary::ISA\n";
     continue
     {
         ::note 'calling namespace::autoclean';
-        namespace::autoclean->import;
+        eval q{namespace::autoclean->import};
     }
 
 # XXX given the code in place right now, this *should* be passing. see that we
 # don't pass an installer arg when exporting to MyApp!
     ::ok(!MyApp->can('NonEmptyStr'), 'type is not available as a method on the importing class');
-    ::ok(!eval '\&MyApp::NonEmptyStr', 'ditto');
 }
 
 done_testing;

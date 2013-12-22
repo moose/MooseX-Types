@@ -335,6 +335,32 @@ helper functions you will need to declare your types.
 
 =cut
 
+# stolen from Sub::Exporter::ForMethods, but with the blessing added
+sub _my_method_installer {
+    my ($arg, $to_export) = @_;
+
+    my $into = $arg->{into};
+
+    for (my $i = 0; $i < @$to_export; $i += 2) {
+      my ($as, $code) = @$to_export[ $i, $i+1 ];
+
+      next if ref $as;
+
+      my $sub = sub { $code->(@_) };
+      my $subtype = blessed $code;
+      bless $sub, $subtype if $subtype;
+
+print "### installing ", join(q{::}, $into, $as), "\n";
+      $to_export->[ $i + 1 ] = Sub::Name::subname(
+        join(q{::}, $into, $as),
+        $sub,
+      );
+    }
+
+    Sub::Exporter::default_installer($arg, $to_export);
+}
+
+
 sub import {
     my ($class, %args) = @_;
     my  $caller = caller;
@@ -363,7 +389,13 @@ sub import {
             push @to_export, $type;
         }
 
-        $caller->import({ -full => 1, -into => $caller }, @to_export);
+print "### in ${class}::import for args ", Dumper(\%args);
+print "### ${class}::import calling $caller->import for: ", Dumper([ into => $caller, \@to_export ]);
+use Data::Dumper;
+# XXX here is where we use the method thingy
+        $caller->import( { -full => 1, -into => $caller
+                 , installer => \&_my_method_installer,
+            }, @to_export);
     }
 
     # run type constraints import

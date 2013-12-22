@@ -36,20 +36,28 @@ L<MooseX::Types/"LIBRARY USAGE"> for syntax details on this.
 sub import {
     my ($class, @args) = @_;
 
+print "### ${class}::import got all args: ", Dumper(\@args);
     # filter or create options hash for S:E
     my $options = (@args and (ref($args[0]) eq 'HASH')) ? $args[0] : undef;
+    my %extra_options = %{ $options || {} };
     unless ($options) {
         $options = {foo => 23};
         unshift @args, $options;
     }
+
+print "### ${class}::import got all options: ", Dumper($options);
+print "### ${class}::import got all extra_options: ", Dumper(\%extra_options);
+use Data::Dumper;
 
     # all types known to us
     my @types = $class->type_names;
 
     # determine the wrapper, -into is supported for compatibility reasons
     my $wrapper = $options->{ -wrapper } || 'MooseX::Types';
+    delete $extra_options{ -wrapper };
     $args[0]->{into} = $options->{ -into }
         if exists $options->{ -into };
+    delete $extra_options{ -into };
 
     my (%ex_spec, %ex_util);
   TYPE:
@@ -75,6 +83,7 @@ sub import {
             sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg) };
 
         # only export coercion helper if full (for libraries) or coercion is defined
+        delete $extra_options{ -full };
         next TYPE
             unless $options->{ -full }
             or ($type_cons and $type_cons->has_coercion);
@@ -84,8 +93,13 @@ sub import {
         $ex_util{ $type_short }{to}++;  # shortcut to remember this exists
     }
 
+print "### ${class}::import getting ready to export. extra_options now contains: ", Dumper(\%extra_options);
+
     # ensure types are installed into the type library's namespace
-    $ex_spec{installer} = \&_my_method_installer;
+    #$ex_spec{installer} = \&_my_method_installer;
+    @ex_spec{ keys %extra_options } = values %extra_options;
+
+print "### ex_spec sent to build_exporter is: ", Dumper(\%ex_spec);
 
     # create S:E exporter and increase export level unless specified explicitly
     my $exporter = build_exporter \%ex_spec;

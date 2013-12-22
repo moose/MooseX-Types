@@ -36,6 +36,11 @@ sub import {
 
     # filter or create options hash for S:E
     my $options = (@args and (ref($args[0]) eq 'HASH')) ? $args[0] : undef;
+
+    # preserve additional options, to ensure types are installed into the type library's namespace
+    my %ex_spec = %{ $options || {} };
+    delete @ex_spec{ qw(-wrapper -into -full) };
+
     unless ($options) {
         $options = {foo => 23};
         unshift @args, $options;
@@ -46,10 +51,12 @@ sub import {
 
     # determine the wrapper, -into is supported for compatibility reasons
     my $wrapper = $options->{ -wrapper } || 'MooseX::Types';
+
     $args[0]->{into} = $options->{ -into }
         if exists $options->{ -into };
 
-    my (%ex_spec, %ex_util);
+    my %ex_util;
+
   TYPE:
     for my $type_short (@types) {
 

@@ -363,7 +363,33 @@ sub import {
             push @to_export, $type;
         }
 
-        $caller->import({ -full => 1, -into => $caller }, @to_export);
+        $caller->import({
+            -full => 1,
+            -into => $caller,
+            # just like Sub::Exporter::ForMethods, but with the blessing added
+            installer => sub {
+                my ($arg, $to_export) = @_;
+
+                my $into = $arg->{into};
+
+                for (my $i = 0; $i < @$to_export; $i += 2) {
+                  my ($as, $code) = @$to_export[ $i, $i+1 ];
+
+                  next if ref $as;
+
+                  my $sub = sub { $code->(@_) };
+                  my $subtype = blessed $code;
+                  bless $sub, $subtype if $subtype;
+
+                  $to_export->[ $i + 1 ] = Sub::Name::subname(
+                    join(q{::}, $into, $as),
+                    $sub,
+                  );
+                }
+
+                Sub::Exporter::default_installer($arg, $to_export);
+            },
+        }, @to_export);
     }
 
     # run type constraints import

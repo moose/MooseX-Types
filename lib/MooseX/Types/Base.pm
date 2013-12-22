@@ -7,6 +7,7 @@ use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );
 use Sub::Exporter                   qw( build_exporter );
 use Sub::Name ();
+use Scalar::Util                    qw( blessed );
 use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;

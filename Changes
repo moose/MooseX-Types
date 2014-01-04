@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+
+0.42      2014-01-04 23:31:58Z (TRIAL RELEASE)
         - declared (not imported) types are now properly installed into the
           proper package, so they survive namespace::autoclean (fixed this
           time)

@@ -4,7 +4,7 @@ MooseX::Types - Organise your Moose types in libraries
 
 # VERSION
 
-version 0.41
+version 0.42
 
 # SYNOPSIS
 
@@ -92,9 +92,9 @@ version 0.41
     sub quux {
         my ($self, $value);
 
-      # test the value
-      print "positive\n" if is_PositiveInt($value);
-      print "negative\n" if is_NegativeInt($value);
+        # test the value
+        print "positive\n" if is_PositiveInt($value);
+        print "negative\n" if is_NegativeInt($value);
 
         # coerce the value, NegativeInt doesn't have a coercion
         # helper, since it didn't define any coercions.
@@ -156,7 +156,7 @@ to import the helpers from the shipped [MooseX::Types::Moose](https://metacpan.o
 library which can export all types that come with Moose.
 
 You will have to define coercions for your types or your library won't
-export a ["to_$type"](#to_-type) coercion helper for it.
+export a ["to\_$type"](#to_-type) coercion helper for it.
 
 Note that you currently cannot define types containing `::`, since
 exporting would be a problem.

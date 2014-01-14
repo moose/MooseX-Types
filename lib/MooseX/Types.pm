@@ -1,6 +1,5 @@
 package MooseX::Types;
 use Moose;
-
 # ABSTRACT: Organise your Moose types in libraries
 
 use Moose::Util::TypeConstraints;

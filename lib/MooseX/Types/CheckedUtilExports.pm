@@ -1,6 +1,5 @@
 package MooseX::Types::CheckedUtilExports;
-
-#ABSTRACT: Wrap L<Moose::Util::TypeConstraints> to be safer for L<MooseX::Types>
+# ABSTRACT: Wrap L<Moose::Util::TypeConstraints> to be safer for L<MooseX::Types>
 
 use strict;
 use warnings;

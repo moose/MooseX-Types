@@ -1,7 +1,7 @@
 package MooseX::Types::Base;
-use Moose;
-
 # ABSTRACT: Type library base class
+
+use Moose;
 
 use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );

@@ -1,9 +1,8 @@
-package MooseX::Types::Combine;
-
-# ABSTRACT: Combine type libraries for exporting
-
 use strict;
 use warnings;
+package MooseX::Types::Combine;
+# ABSTRACT: Combine type libraries for exporting
+
 use Module::Runtime 'use_module';
 
 =head1 SYNOPSIS

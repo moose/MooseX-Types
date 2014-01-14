@@ -1,7 +1,7 @@
-package MooseX::Types::UndefinedType;
-
 use warnings;
 use strict;
+package MooseX::Types::UndefinedType;
+# ABSTRACT: a fallback type for when a type cannot be found
 
 use Moose::Util::TypeConstraints ();
 use Carp::Clan qw( ^MooseX::Types );

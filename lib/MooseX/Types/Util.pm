@@ -1,11 +1,9 @@
-package MooseX::Types::Util;
-
-#ABSTRACT: Common utility functions for the distribution
-
 use warnings;
 use strict;
-use Scalar::Util 'blessed';
+package MooseX::Types::Util;
+# ABSTRACT: Common utility functions for the distribution
 
+use Scalar::Util 'blessed';
 use base 'Exporter';
 
 =head1 DESCRIPTION

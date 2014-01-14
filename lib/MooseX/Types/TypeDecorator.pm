@@ -1,9 +1,7 @@
-package MooseX::Types::TypeDecorator;
-
-#ABSTRACT: Wraps Moose::Meta::TypeConstraint objects with added features
-
 use strict;
 use warnings;
+package MooseX::Types::TypeDecorator;
+# ABSTRACT: Wraps Moose::Meta::TypeConstraint objects with added features
 
 use Carp::Clan qw( ^MooseX::Types );
 use Moose::Util::TypeConstraints ();

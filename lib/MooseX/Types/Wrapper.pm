@@ -1,9 +1,7 @@
 package MooseX::Types::Wrapper;
-
-#ABSTRACT: Wrap exports from a library
+# ABSTRACT: Wrap exports from a library
 
 use Moose;
-
 use Carp::Clan      qw( ^MooseX::Types );
 use Module::Runtime 'use_module';
 

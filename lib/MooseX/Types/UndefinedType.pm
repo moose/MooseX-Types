@@ -12,7 +12,7 @@ use overload '""'     => sub { shift->name },
 =head1 DESCRIPTION
 
 Whenever a type handle function (e.g. C<Int()> can't find a type
-constraint under it's full name, it assumes it has not yet been defined.
+constraint under its full name, it assumes it has not yet been defined.
 It will then return an instance of this class, handling only
 stringification, name and possible identification of undefined types.
 

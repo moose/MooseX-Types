@@ -28,10 +28,14 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
     {
         ::note "$phase calling namespace::autoclean";
 
-        ::ok(MyTypeLibrary->can('NonEmptyStr'), 'type is available as a fully-qualified name on the declaring class');
-        ::ok(eval '\&MyTypeLibrary::NonEmptyStr', 'ditto');
+        ::ok(MyTypeLibrary->can('NonEmptyStr'),
+            "$phase calling namespace::autoclean: type is available as a method on the declaring class");
+        ::ok(eval '\&MyTypeLibrary::NonEmptyStr',
+            "$phase calling namespace::autoclean: type is available as a fully-qualified name on the declaring class");
 
-        ::ok(MyTypeLibrary::NonEmptyStr->isa('Moose::Meta::TypeConstraint'), 'type is the right type');
+        ::ok(MyTypeLibrary::NonEmptyStr->isa('Moose::Meta::TypeConstraint'),
+            "$phase calling namespace::autoclean: type is the right type")
+            or ::diag('MyTypeLibrary is type: ' .join(', ', @MyTypeLibrary::ISA));
 
         last if $phase eq 'after';
     }
@@ -41,7 +45,7 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
         eval q{use namespace::autoclean};
     }
 
-    ::ok(!MyApp->can('NonEmptyStr'), 'type is not available as a method on the importing class');
+    ::ok(!MyApp->can('NonEmptyStr'), 'type is no longer available as a method on the importing class');
 }
 
 done_testing;

@@ -3,6 +3,8 @@ Revision history for MooseX-Types
 {{$NEXT}}
         - line numbers in shipped code are now almost the same (within 3) as
           the repository source, for easier debugging
+        - skipped new namespacing tests that fail with older Moose versions,
+          due to an inability to install blessed subs
 
 0.42      2014-01-04 23:31:58Z (TRIAL RELEASE)
         - declared (not imported) types are now properly installed into the

@@ -4,7 +4,7 @@ MooseX::Types - Organise your Moose types in libraries
 
 # VERSION
 
-version 0.42
+version 0.43
 
 # SYNOPSIS
 

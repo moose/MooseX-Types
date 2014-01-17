@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+
+0.43      2014-01-17 01:25:55Z (TRIAL RELEASE)
         - line numbers in shipped code are now almost the same (within 3) as
           the repository source, for easier debugging
         - skipped new namespacing tests that fail with older Moose versions,

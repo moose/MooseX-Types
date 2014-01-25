@@ -25,14 +25,14 @@ Revision history for MooseX-Types
         - more strict warnings checking in tests
         - re-release to fix compile test
 
-0.38      2013-09-17 00:44:16Z (Karen Etheridge)
+0.38      2013-09-17 00:44:16Z
         - removed use of deprecated enum syntax
 
-0.37      2013-09-08 21:58:26Z (Karen Etheridge)
+0.37      2013-09-08 21:58:26Z
         - removed use of deprecated Class::MOP::load_class
         - repository has moved to the GitHub Moose organization
 
-0.36    2013-06-22 13:51:54 PDT-0700 (Karen Etheridge)
+0.36    2013-06-22 20:51:54Z
         - fixed failing tests on 5.8.5 due to incorrect == overload
         (RT#77100, Graham Knop)
 

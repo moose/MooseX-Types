@@ -92,11 +92,6 @@ sub has_available_type_export {
 
 L<MooseX::Types::Moose>, L<Exporter>
 
-=head1 LICENSE
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as perl itself.
-
 =cut
 
 1;

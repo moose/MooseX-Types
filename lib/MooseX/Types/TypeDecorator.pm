@@ -3,7 +3,7 @@ use warnings;
 package MooseX::Types::TypeDecorator;
 # ABSTRACT: Wraps Moose::Meta::TypeConstraint objects with added features
 
-use Carp::Clan qw( ^MooseX::Types );
+use Carp::Clan '^MooseX::Types';
 use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint::Union;
 use Scalar::Util qw(blessed);

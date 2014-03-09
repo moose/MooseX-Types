@@ -4,7 +4,7 @@ package MooseX::Types::UndefinedType;
 # ABSTRACT: a fallback type for when a type cannot be found
 
 use Moose::Util::TypeConstraints ();
-use Carp::Clan qw( ^MooseX::Types );
+use Carp::Clan '^MooseX::Types';
 use namespace::clean;   # TODO: namespace::autoclean does not yet respect overloads
 
 use overload '""'     => sub { shift->name },

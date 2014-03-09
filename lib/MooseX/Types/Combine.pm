@@ -4,6 +4,7 @@ package MooseX::Types::Combine;
 # ABSTRACT: Combine type libraries for exporting
 
 use Module::Runtime 'use_module';
+use namespace::clean;
 
 =head1 SYNOPSIS
 

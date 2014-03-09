@@ -7,6 +7,7 @@ use Carp::Clan qw( ^MooseX::Types );
 use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint::Union;
 use Scalar::Util qw(blessed);
+use namespace::clean;   # TODO: namespace::autoclean does not yet respect overloads
 
 use overload(
     '0+' => sub {

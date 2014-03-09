@@ -7,7 +7,6 @@ use Moose::Util::TypeConstraints ();
 use Moose::Exporter;
 use Sub::Name;
 use Carp;
-
 use namespace::autoclean;
 
 my $StringFoundMsg =

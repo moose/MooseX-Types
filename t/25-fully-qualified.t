@@ -4,6 +4,12 @@ use warnings FATAL => 'all';
 use Test::More;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
+# this test demonstrates:
+# - it is safe to use namespace::autoclean in a MooseX::Types exporter (types
+#   are still available on the exporting module afterwards)
+# - namespace::autoclean can be used to clean imported types in the consuming
+#   class
+
 {
     package MyTypeLibrary;
     use MooseX::Types::Moose 'Str';

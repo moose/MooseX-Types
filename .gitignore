@@ -1,4 +1,7 @@
+/.ackrc
 /.build/
-!.gitignore
-!.mailmap
-/MooseX-Types-*
+!/.gitignore
+/.latest
+!/.mailmap
+/MooseX-Types-*/
+/MooseX-Types-*.tar.gz

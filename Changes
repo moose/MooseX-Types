@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+
+0.45      2014-09-02 01:17:50Z
         - increase the required versions of some prerequisites
 
 0.44      2014-03-09 04:16:20Z

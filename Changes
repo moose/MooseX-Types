@@ -1,6 +1,7 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - increase the required versions of some prerequisites
 
 0.44      2014-03-09 04:16:20Z
         - full respect for namespaces: declared types are now properly

@@ -5,7 +5,7 @@ package MooseX::Types::Util;
 
 use Scalar::Util 'blessed';
 use base 'Exporter';
-use namespace::clean;
+use namespace::autoclean;
 
 =head1 DESCRIPTION
 

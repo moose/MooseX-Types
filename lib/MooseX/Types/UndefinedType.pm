@@ -5,7 +5,7 @@ package MooseX::Types::UndefinedType;
 
 use Moose::Util::TypeConstraints ();
 use Carp::Clan '^MooseX::Types';
-use namespace::clean;   # TODO: namespace::autoclean does not yet respect overloads
+use namespace::autoclean 0.16;
 
 use overload '""'     => sub { shift->name },
              fallback => 1;

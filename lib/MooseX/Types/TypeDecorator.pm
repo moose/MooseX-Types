@@ -7,7 +7,7 @@ use Carp::Clan '^MooseX::Types';
 use Moose::Util::TypeConstraints ();
 use Moose::Meta::TypeConstraint::Union;
 use Scalar::Util qw(blessed);
-use namespace::clean;   # TODO: namespace::autoclean does not yet respect overloads
+use namespace::autoclean 0.16;
 
 use overload(
     '0+' => sub {
@@ -50,7 +50,6 @@ use overload(
         return Moose::Util::TypeConstraints::register_type_constraint($union);
     },
     fallback => 1,
-
 );
 
 =head1 DESCRIPTION

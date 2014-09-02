@@ -40,7 +40,10 @@ From L<Moose::Util::TypeConstraints>. See that module for syntax.
 for my $export (@exports) {
     no strict 'refs';
 
-    *{$export} = sub {
+    Sub::Install::install_sub({
+      into => __PACKAGE__,
+      as   => $export,
+      code => sub {
         my $caller = shift;
 
         local $Carp::CarpLevel = $Carp::CarpLevel + 1;
@@ -52,7 +55,8 @@ for my $export (@exports) {
                 $caller->get_registered_role_type($_[0]);
 
         goto &{"Moose::Util::TypeConstraints::$export"};
-    }
+      }
+    });
 }
 
 Moose::Exporter->setup_import_methods(

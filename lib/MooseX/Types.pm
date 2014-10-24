@@ -11,7 +11,7 @@ use MooseX::Types::UndefinedType;
 use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
 use Sub::Name;
-use Scalar::Util                      'reftype';
+use Scalar::Util                      qw( blessed reftype );
 
 use namespace::autoclean;
 

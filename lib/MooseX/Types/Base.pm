@@ -8,7 +8,7 @@ use Moose;
 use Carp::Clan                      qw( ^MooseX::Types );
 use MooseX::Types::Util             qw( filter_tags );
 use Sub::Exporter                   qw( build_exporter );
-use Moose::Util::TypeConstraints;
+use Moose::Util::TypeConstraints    qw( find_type_constraint );
 
 use namespace::autoclean;
 

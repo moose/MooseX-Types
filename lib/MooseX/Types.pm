@@ -5,7 +5,7 @@ use Moose;
 
 our $VERSION = '0.46';
 
-use Moose::Util::TypeConstraints;
+use Moose::Util::TypeConstraints      qw( find_type_constraint );
 use MooseX::Types::TypeDecorator;
 use MooseX::Types::Base               ();
 use MooseX::Types::Util               qw( filter_tags );

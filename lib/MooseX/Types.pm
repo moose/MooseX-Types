@@ -3,6 +3,8 @@ use Moose;
 # ABSTRACT: Organise your Moose types in libraries
 # KEYWORDS: moose types classes objects constraints declare libraries
 
+our $VERSION = '0.46';
+
 use Moose::Util::TypeConstraints;
 use MooseX::Types::TypeDecorator;
 use MooseX::Types::Base               ();

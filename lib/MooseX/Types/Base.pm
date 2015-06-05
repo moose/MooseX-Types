@@ -1,6 +1,8 @@
 package MooseX::Types::Base;
 # ABSTRACT: Type library base class
 
+our $VERSION = '0.46';
+
 use Moose;
 
 use Carp::Clan                      qw( ^MooseX::Types );

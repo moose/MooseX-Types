@@ -61,7 +61,6 @@ sub type_storage { \%BuiltIn_Storage }
 
 =head1 SEE ALSO
 
-L<MooseX::Types::Moose>,
 L<Moose>,
 L<Moose::Util::TypeConstraints>
 

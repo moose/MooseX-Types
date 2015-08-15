@@ -14,6 +14,7 @@ use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
 use Sub::Name;
 use Scalar::Util                      qw( blessed reftype );
+use Sub::Exporter::ForMethods 0.100052 'method_installer';  # for 'rebless'
 
 use namespace::autoclean;
 
@@ -368,29 +369,7 @@ sub import {
         $caller->import({
             -full => 1,
             -into => $caller,
-            # just like Sub::Exporter::ForMethods, but with the blessing added
-            installer => sub {
-                my ($arg, $to_export) = @_;
-
-                my $into = $arg->{into};
-
-                for (my $i = 0; $i < @$to_export; $i += 2) {
-                  my ($as, $code) = @$to_export[ $i, $i+1 ];
-
-                  next if ref $as;
-
-                  my $sub = sub { $code->(@_) };
-                  my $subtype = blessed $code;
-                  bless $sub, $subtype if $subtype;
-
-                  $to_export->[ $i + 1 ] = Sub::Name::subname(
-                    join(q{::}, $into, $as),
-                    $sub,
-                  );
-                }
-
-                Sub::Exporter::default_installer($arg, $to_export);
-            },
+            installer => method_installer({ rebless => 1 }),
         }, @to_export);
     }
 

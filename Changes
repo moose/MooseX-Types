@@ -1,6 +1,7 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - make use of Sub::Exporter::ForMethods's new rebless option
 
 0.45      2014-09-02 01:17:50Z
         - increase the required versions of some prerequisites

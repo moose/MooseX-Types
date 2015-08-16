@@ -3,7 +3,7 @@ use warnings;
 package MooseX::Types::Combine;
 # ABSTRACT: Combine type libraries for exporting
 
-our $VERSION = '0.46';
+our $VERSION = '0.47';
 
 use Module::Runtime 'use_module';
 use namespace::autoclean;

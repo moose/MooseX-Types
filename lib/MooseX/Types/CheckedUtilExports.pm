@@ -1,7 +1,7 @@
 package MooseX::Types::CheckedUtilExports;
 # ABSTRACT: Wrap L<Moose::Util::TypeConstraints> to be safer for L<MooseX::Types>
 
-our $VERSION = '0.46';
+our $VERSION = '0.47';
 
 use strict;
 use warnings;

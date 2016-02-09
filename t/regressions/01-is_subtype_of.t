@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More 0.88;
 use MooseX::Types;
 use MooseX::Types::Moose qw(Any Item );
 

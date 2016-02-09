@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More 0.88;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
 ## Test case inspired by Stevan Little
@@ -24,7 +24,7 @@ BEGIN {
     package MooseX::Types::Test::Recursion::TestRunner;
 
     BEGIN {
-        use Test::More;
+        use Test::More 0.88;
 
         ## Grab the newly created test type constraint
         MooseX::Types::Test::Recursion->import(':all');

@@ -33,10 +33,16 @@ sub import {
     my ($class, @types) = @_;
     my $caller = caller;
 
+    my $where_to_import_to = $caller;
+    if (ref $types[0] eq 'HASH') {
+        my $extra = shift @types;
+        $where_to_import_to = $extra->{-into} if exists $extra->{-into};
+    }
+
     my %types = $class->_provided_types;
 
     if ( grep { $_ eq ':all' } @types ) {
-        $_->import( { -into => $caller }, q{:all} )
+        $_->import( { -into => $where_to_import_to }, q{:all} )
             for $class->provide_types_from;
         return;
     }
@@ -54,7 +60,7 @@ sub import {
         push @{ $from{ $types{$type} } }, $type;
     }
 
-    $_->import({ -into => $caller }, @{ $from{ $_ } })
+    $_->import({ -into => $where_to_import_to }, @{ $from{ $_ } })
         for keys %from;
 }
 
@@ -106,6 +112,13 @@ sub _provided_types {
         if keys %types;
 
     %$types;
+}
+
+sub type_names {
+    my ($class) = @_;
+
+    my %types = $class->_provided_types();
+    return keys %types;
 }
 
 =head1 SEE ALSO

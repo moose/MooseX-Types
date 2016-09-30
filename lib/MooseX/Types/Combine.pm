@@ -22,10 +22,47 @@ use namespace::autoclean;
 
 =head1 DESCRIPTION
 
-Allows you to export types from multiple type libraries.
+Allows you to create a single class that will allow you to export types from
+multiple type libraries:
 
-Libraries on the right end of the list passed to L</provide_types_from>
-take precedence over those on the left in case of conflicts.
+    package TransportTypes;
+
+    use base 'MooseX::Types::Combine';
+
+    __PACKAGE__->provide_types_from(qw/ MotorizedTypes UnmotorizedTypes /);
+
+    1;
+
+In this example all types defined in C<MotorizedTypes> and C<UnmotorizedTypes>
+are available through the C<TransportTypes> combined type library.
+
+    package SkiingTrip;
+
+    use Moose;
+
+    use TransportTypes qw( CarType SkisType );
+
+    has car => ( is => 'ro', isa => CarType, required => 1 );
+    has ski_rack => ( is => 'ro', isa => ArrayRef[SkisType], required => 1 );
+    ...
+
+Libraries on the right end of the list passed to L</provide_types_from> take
+precedence over those on the left in case of conflicts.  So, in the above
+example if both the C<MotorizedTypes> and C<UnmotorizedTypes> libraries provided
+a C<Bike> type, you'd get the bicycle from C<UnmotorizedTypes> not the
+motorbike from C<MorotizedTypes>.
+
+You can also further combine combined type libraries with additional type
+libraries or other combined type libraries in the same way to simulate even
+larger type libraries:
+
+    package MeetingTransportTypes;
+
+    use base 'MooseX::Types::Combine';
+
+    __PACKAGE__->provide_types_from(qw/ TransportTypes TelepresenceTypes /);
+
+    1;
 
 =cut
 
@@ -68,7 +105,8 @@ sub import {
 
 =head2 provide_types_from
 
-Sets or returns a list of type libraries to re-export from.
+Sets or returns a list of type libraries (or combined type libraries) to
+re-export from.
 
 =cut
 

@@ -152,6 +152,12 @@ sub _provided_types {
     %$types;
 }
 
+=head2 type_names
+
+Returns a list of all known types by their name.
+
+=cut
+
 sub type_names {
     my ($class) = @_;
 

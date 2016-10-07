@@ -53,7 +53,7 @@ a C<Bike> type, you'd get the bicycle from C<UnmotorizedTypes> not the
 motorbike from C<MorotizedTypes>.
 
 You can also further combine combined type libraries with additional type
-libraries or other combined type libraries in the same way to simulate even
+libraries or other combined type libraries in the same way to provide even
 larger type libraries:
 
     package MeetingTransportTypes;

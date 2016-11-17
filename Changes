@@ -3,6 +3,8 @@ Revision history for MooseX-Types
 {{$NEXT}}
         - allow type libraries built with MooseX::Types::Combine to be
           combined with MooseX::Types::Combine. (GH #1, Mark Fowler).
+        - made the exported is_Foo and to_Foo subs much faster, especially for
+          type constraints which can be inlined.
 
 0.46      2015-08-16 00:43:46Z
         - make use of Sub::Exporter::ForMethods's new rebless option

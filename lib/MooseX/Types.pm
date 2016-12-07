@@ -485,18 +485,23 @@ This generates a coercion handler function, e.g. C<to_Int($value)>.
 =cut
 
 sub coercion_export_generator {
-    my ($class, $type, $full, $undef_msg) = @_;
+    my ($class, $type, $full, $undef_msg, $sub_name) = @_;
     return sub {
         my ($value) = @_;
 
         # we need a type object
         my $tobj = find_type_constraint($full) or croak $undef_msg;
-        my $return = $tobj->coerce($value);
 
-        # non-successful coercion returns false
-        return unless $tobj->check($return);
+        my $coercion_sub = sub {
+            my $return = $tobj->coerce($_[0]);
 
-        return $return;
+            # non-successful coercion returns false
+            return unless $tobj->check($return);
+
+            return $return;
+        };
+
+        $class->_replace_and_call_trampoline((caller(0))[0], $sub_name, $coercion_sub, $value);
     }
 }
 
@@ -507,15 +512,31 @@ Generates a constraint check closure, e.g. C<is_Int($value)>.
 =cut
 
 sub check_export_generator {
-    my ($class, $type, $full, $undef_msg) = @_;
+    my ($class, $type, $full, $undef_msg, $sub_name) = @_;
+
     return sub {
         my ($value) = @_;
 
         # we need a type object
         my $tobj = find_type_constraint($full) or croak $undef_msg;
 
-        return $tobj->check($value);
+        # This method will actually compile an inlined sub if possible. If
+        # not, it will return something like sub { $tobj->check($_[0]) }
+        my $check_sub = $tobj->_compiled_type_constraint;
+        $class->_replace_and_call_trampoline((caller(0))[0], $sub_name, $check_sub, $value);
     }
+}
+
+sub _replace_and_call_trampoline {
+    my ($class, $package, $sub_name, $sub, $value) = @_;
+
+    no warnings 'redefine';
+    no strict 'refs';
+
+    *{$package . '::' . $sub_name} = $sub;
+
+    @_ = ($value);
+    goto $sub;
 }
 
 =head1 CAVEATS

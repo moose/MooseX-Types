@@ -43,7 +43,7 @@ sub import {
     delete @ex_spec{ qw(-wrapper -into -full) };
 
     unless ($options) {
-        $options = {foo => 23};
+        $options = {};
         unshift @args, $options;
     }
 

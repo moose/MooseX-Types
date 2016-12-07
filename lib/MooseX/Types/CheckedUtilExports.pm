@@ -7,7 +7,8 @@ use strict;
 use warnings;
 use Moose::Util::TypeConstraints ();
 use Moose::Exporter;
-use Carp;
+use Carp 'carp';
+use Sub::Install;
 use namespace::autoclean;
 
 my $StringFoundMsg =

@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-{{$NEXT}}
+0.47      2016-12-07 00:40:34Z
         - allow type libraries built with MooseX::Types::Combine to be
           combined with MooseX::Types::Combine. (GH #1, Mark Fowler).
         - made the exported is_Foo and to_Foo subs much faster, especially for

@@ -38,6 +38,8 @@ While C<class_type> and C<role_type> will also register the type in the library.
 
 From L<Moose::Util::TypeConstraints>. See that module for syntax.
 
+=for Pod::Coverage class_type role_type
+
 =cut
 
 for my $export (@exports) {

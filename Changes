@@ -1,12 +1,14 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - reverted is_Foo and to_Foo refactoring [from 0.47] for now, so they
+          can be reworked
 
 0.47      2016-12-07 00:40:34Z
         - allow type libraries built with MooseX::Types::Combine to be
           combined with MooseX::Types::Combine. (GH #1, Mark Fowler).
         - made the exported is_Foo and to_Foo subs much faster, especially for
-          type constraints which can be inlined.
+          type constraints which can be inlined [reverted in 0.48]
 
 0.46      2015-08-16 00:43:46Z
         - make use of Sub::Exporter::ForMethods's new rebless option

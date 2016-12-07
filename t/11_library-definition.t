@@ -13,28 +13,6 @@ my @tests = (
     [ 'IntArrayRef', 12, [12], {}, [17, 23], {} ],
 );
 
-{
-    is_deeply(
-        to_IntArrayRef(42), [42],
-        'to_IntArrayRef works on first call'
-    );
-    is_deeply(
-        to_IntArrayRef(84), [84],
-        'to_IntArrayRef works on second call and does not close over first value'
-    );
-}
-
-{
-    ok(
-        is_IntArrayRef([42]),
-        'is_IntArrayRef works on first call'
-    );
-    ok(
-        !is_IntArrayRef({}),
-        'to_IntArrayRef works on second call and does not close over first value'
-    );
-}
-
 # new array ref so we can safely shift from it
 for my $data (map { [@$_] } @tests) {
     my $type = shift @$data;

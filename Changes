@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-{{$NEXT}}
+0.48      2016-12-07 01:15:14Z
         - reverted is_Foo and to_Foo refactoring [from 0.47] for now, so they
           can be reworked
 

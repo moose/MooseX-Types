@@ -12,6 +12,7 @@ use MooseX::Types::Util               qw( filter_tags );
 use MooseX::Types::UndefinedType;
 use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
+use Sub::Defer                        qw( defer_sub );
 use Sub::Name;
 use Scalar::Util                      qw( reftype );
 use Sub::Exporter::ForMethods 0.100052 'method_installer';  # for 'rebless'

@@ -43,7 +43,7 @@ sub import {
     delete @ex_spec{ qw(-wrapper -into -full) };
 
     unless ($options) {
-        $options = {foo => 23};
+        $options = {};
         unshift @args, $options;
     }
 
@@ -76,17 +76,20 @@ sub import {
             };
 
         # the check helper
+        my $check_name = "is_${type_short}";
         push @{ $ex_spec{exports} },
-            "is_${type_short}",
-            sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg) };
+            $check_name,
+            sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg, $check_name) };
 
         # only export coercion helper if full (for libraries) or coercion is defined
         next TYPE
             unless $options->{ -full }
             or ($type_cons and $type_cons->has_coercion);
+
+        my $coercion_name = "to_${type_short}";
         push @{ $ex_spec{exports} },
-            "to_${type_short}",
-            sub { $wrapper->coercion_export_generator($type_short, $type_full, $undef_msg) };
+            $coercion_name,
+            sub { $wrapper->coercion_export_generator($type_short, $type_full, $undef_msg, $coercion_name) };
         $ex_util{ $type_short }{to}++;  # shortcut to remember this exists
     }
 

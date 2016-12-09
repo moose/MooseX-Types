@@ -79,7 +79,7 @@ sub import {
         my $check_name = "is_${type_short}";
         push @{ $ex_spec{exports} },
             $check_name,
-            sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg, $check_name) };
+            sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg) };
 
         # only export coercion helper if full (for libraries) or coercion is defined
         next TYPE
@@ -89,7 +89,7 @@ sub import {
         my $coercion_name = "to_${type_short}";
         push @{ $ex_spec{exports} },
             $coercion_name,
-            sub { $wrapper->coercion_export_generator($type_short, $type_full, $undef_msg, $coercion_name) };
+            sub { $wrapper->coercion_export_generator($type_short, $type_full, $undef_msg) };
         $ex_util{ $type_short }{to}++;  # shortcut to remember this exists
     }
 

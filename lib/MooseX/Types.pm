@@ -12,6 +12,7 @@ use MooseX::Types::Util               qw( filter_tags );
 use MooseX::Types::UndefinedType;
 use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
+use Sub::Defer                        qw( defer_sub );
 use Sub::Name;
 use Scalar::Util                      qw( reftype );
 use Sub::Exporter::ForMethods 0.100052 'method_installer';  # for 'rebless'
@@ -485,14 +486,14 @@ This generates a coercion handler function, e.g. C<to_Int($value)>.
 =cut
 
 sub coercion_export_generator {
-    my ($class, $type, $full, $undef_msg, $sub_name) = @_;
-    return sub {
+    my ($class, $type, $full, $undef_msg) = @_;
+    return defer_sub undef, sub {
         my ($value) = @_;
 
         # we need a type object
         my $tobj = find_type_constraint($full) or croak $undef_msg;
 
-        my $coercion_sub = sub {
+        return sub {
             my $return = $tobj->coerce($_[0]);
 
             # non-successful coercion returns false
@@ -500,8 +501,6 @@ sub coercion_export_generator {
 
             return $return;
         };
-
-        $class->_replace_and_call_trampoline((caller(0))[0], $sub_name, $coercion_sub, $value);
     }
 }
 
@@ -512,9 +511,9 @@ Generates a constraint check closure, e.g. C<is_Int($value)>.
 =cut
 
 sub check_export_generator {
-    my ($class, $type, $full, $undef_msg, $sub_name) = @_;
+    my ($class, $type, $full, $undef_msg) = @_;
 
-    return sub {
+    return defer_sub undef, sub {
         my ($value) = @_;
 
         # we need a type object
@@ -522,21 +521,8 @@ sub check_export_generator {
 
         # This method will actually compile an inlined sub if possible. If
         # not, it will return something like sub { $tobj->check($_[0]) }
-        my $check_sub = $tobj->_compiled_type_constraint;
-        $class->_replace_and_call_trampoline((caller(0))[0], $sub_name, $check_sub, $value);
+        return $tobj->_compiled_type_constraint;
     }
-}
-
-sub _replace_and_call_trampoline {
-    my ($class, $package, $sub_name, $sub, $value) = @_;
-
-    no warnings 'redefine';
-    no strict 'refs';
-
-    *{$package . '::' . $sub_name} = $sub;
-
-    @_ = ($value);
-    goto $sub;
 }
 
 =head1 CAVEATS

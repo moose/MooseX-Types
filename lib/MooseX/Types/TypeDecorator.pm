@@ -3,7 +3,7 @@ use warnings;
 package MooseX::Types::TypeDecorator;
 # ABSTRACT: Wraps Moose::Meta::TypeConstraint objects with added features
 
-our $VERSION = '0.49';
+our $VERSION = '0.50';
 
 use Carp::Clan '^MooseX::Types';
 use Moose::Util::TypeConstraints ();

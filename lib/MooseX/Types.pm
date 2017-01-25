@@ -486,8 +486,8 @@ This generates a coercion handler function, e.g. C<to_Int($value)>.
 =cut
 
 sub coercion_export_generator {
-    my ($class, $type, $full, $undef_msg) = @_;
-    return defer_sub undef, sub {
+    my ($class, $sub_name, $type, $full, $undef_msg) = @_;
+    return defer_sub $sub_name, sub {
         my ($value) = @_;
 
         # we need a type object
@@ -511,9 +511,9 @@ Generates a constraint check closure, e.g. C<is_Int($value)>.
 =cut
 
 sub check_export_generator {
-    my ($class, $type, $full, $undef_msg) = @_;
+    my ($class, $sub_name, $type, $full, $undef_msg) = @_;
 
-    return defer_sub undef, sub {
+    return defer_sub $sub_name, sub {
         my ($value) = @_;
 
         # we need a type object

@@ -12,7 +12,6 @@ use MooseX::Types::Util               qw( filter_tags );
 use MooseX::Types::UndefinedType;
 use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
-use Sub::Defer                        qw( defer_sub );
 use Sub::Name;
 use Scalar::Util                      qw( reftype );
 use Sub::Exporter::ForMethods 0.100052 'method_installer';  # for 'rebless'
@@ -487,20 +486,17 @@ This generates a coercion handler function, e.g. C<to_Int($value)>.
 
 sub coercion_export_generator {
     my ($class, $type, $full, $undef_msg) = @_;
-    return defer_sub undef, sub {
+    return sub {
         my ($value) = @_;
 
         # we need a type object
         my $tobj = find_type_constraint($full) or croak $undef_msg;
+        my $return = $tobj->coerce($value);
 
-        return sub {
-            my $return = $tobj->coerce($_[0]);
+        # non-successful coercion returns false
+        return unless $tobj->check($return);
 
-            # non-successful coercion returns false
-            return unless $tobj->check($return);
-
-            return $return;
-        };
+        return $return;
     }
 }
 
@@ -512,16 +508,13 @@ Generates a constraint check closure, e.g. C<is_Int($value)>.
 
 sub check_export_generator {
     my ($class, $type, $full, $undef_msg) = @_;
-
-    return defer_sub undef, sub {
+    return sub {
         my ($value) = @_;
 
         # we need a type object
         my $tobj = find_type_constraint($full) or croak $undef_msg;
 
-        # This method will actually compile an inlined sub if possible. If
-        # not, it will return something like sub { $tobj->check($_[0]) }
-        return $tobj->_compiled_type_constraint;
+        return $tobj->check($value);
     }
 }
 

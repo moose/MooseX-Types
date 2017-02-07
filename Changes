@@ -1,10 +1,13 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - reverted the is_Fo and to_Foo refactoring again temporarily to
+          resolve issues with Sub::Defer
 
 0.49      2016-12-23 00:12:12Z
         - made the exported is_Foo and to_Foo subs much faster, especially for
-          type constraints which can be inlined. (Dave Rolsky)
+          type constraints which can be inlined. (Dave Rolsky) [reverted in
+          0.50)
 
 0.48      2016-12-07 01:15:14Z
         - reverted is_Foo and to_Foo refactoring [from 0.47] for now, so they
@@ -15,7 +18,7 @@ Revision history for MooseX-Types
           combined with MooseX::Types::Combine. (GH #1, Mark Fowler).
         - made the exported is_Foo and to_Foo subs much faster, especially for
           type constraints which can be inlined [reverted in 0.48,
-          reimplemented in 0.49]
+          reimplemented in 0.49, reverted in 0.50]
 
 0.46      2015-08-16 00:43:46Z
         - make use of Sub::Exporter::ForMethods's new rebless option

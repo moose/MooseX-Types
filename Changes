@@ -1,6 +1,8 @@
 Revision history for MooseX-Types
 
 {{$NEXT}}
+        - made the exported is_Foo and to_Foo subs much faster, especially for
+          type constraints which can be inlined.
 
 0.50      2017-02-07 18:59:30Z
         - reverted the is_Foo and to_Foo refactoring again temporarily to

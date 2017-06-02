@@ -25,4 +25,17 @@ unlike(
     'is_Int sub is now undeferred'
 );
 
+{
+    package MyTypes;
+
+    use MooseX::Types -declare => ['Unused'];
+
+}
+
+is(
+    exception { undefer_all() },
+    undef,
+    'Sub::Defer::undefer_all does not throw an exception with unused type declaration'
+);
+
 done_testing();

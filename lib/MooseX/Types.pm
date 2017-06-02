@@ -491,9 +491,11 @@ sub coercion_export_generator {
         my ($value) = @_;
 
         # we need a type object
-        my $tobj = find_type_constraint($full) or croak $undef_msg;
+        my $tobj = find_type_constraint($full);
 
         return sub {
+            croak $undef_msg unless $tobj;
+
             my $return = $tobj->coerce($_[0]);
 
             # non-successful coercion returns false
@@ -517,11 +519,15 @@ sub check_export_generator {
         my ($value) = @_;
 
         # we need a type object
-        my $tobj = find_type_constraint($full) or croak $undef_msg;
+        my $tobj = find_type_constraint($full);
 
         # This method will actually compile an inlined sub if possible. If
         # not, it will return something like sub { $tobj->check($_[0]) }
-        return $tobj->_compiled_type_constraint;
+        #
+        # If $tobj is undef, we delay the croaking until the check is
+        # actually used for backward compatibility reasons. See
+        # RT #119534.
+        return $tobj ? $tobj->_compiled_type_constraint : sub { croak $undef_msg};
     }
 }
 

@@ -53,8 +53,18 @@ sub import {
     # determine the wrapper, -into is supported for compatibility reasons
     my $wrapper = $options->{ -wrapper } || 'MooseX::Types';
 
-    $args[0]->{into} = $options->{ -into }
-        if exists $options->{ -into };
+    # It's a little gross to calculate the calling package here when
+    # Sub::Exporter is going to do it again, but we need to give Sub::Defer a
+    # fully qualified name if we give it a name at all, and we want to give it
+    # a name. Otherwise it guesses at the name and will use its caller, which
+    # in this case ends up being MooseX::Types, which is wrong.
+    my $into;
+    if (exists $options->{ -into }) {
+        $into = $args[0]->{into} = $options->{ -into }
+    }
+    else {
+        $into = caller(($options->{into_level} || 0) + 1)
+    }
 
     my %ex_util;
 
@@ -79,7 +89,7 @@ sub import {
         my $check_name = "is_${type_short}";
         push @{ $ex_spec{exports} },
             $check_name,
-            sub { $wrapper->check_export_generator($type_short, $type_full, $undef_msg) };
+            sub { $wrapper->check_export_generator("${into}::$check_name", $type_short, $type_full, $undef_msg) };
 
         # only export coercion helper if full (for libraries) or coercion is defined
         next TYPE
@@ -89,7 +99,7 @@ sub import {
         my $coercion_name = "to_${type_short}";
         push @{ $ex_spec{exports} },
             $coercion_name,
-            sub { $wrapper->coercion_export_generator($type_short, $type_full, $undef_msg) };
+            sub { $wrapper->coercion_export_generator("${into}::$coercion_name", $type_short, $type_full, $undef_msg) };
         $ex_util{ $type_short }{to}++;  # shortcut to remember this exists
     }
 

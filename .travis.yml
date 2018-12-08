@@ -5,8 +5,9 @@ addons:
       - aspell-en
 language: perl
 perl:
-  - blead
-  - dev
+  - blead       # builds perl from git
+  - dev         # latest point release
+  - '5.28'
   - '5.26'
   - '5.24'
   - '5.22'
@@ -18,8 +19,6 @@ perl:
   - '5.10'
   - '5.8'
 matrix:
-  allow_failures:
-    - perl: blead
   include:
     - env: COVERAGE=1
       perl: '5.24'

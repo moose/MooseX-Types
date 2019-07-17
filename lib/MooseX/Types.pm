@@ -296,7 +296,7 @@ type does not yet exist.
 
 =head1 RECURSIVE SUBTYPES
 
-As of version 0.08, L<Moose::Types> has experimental support for Recursive
+As of version 0.08, L<MooseX::Types> has experimental support for Recursive
 subtypes.  This will allow:
 
     subtype Tree() => as HashRef[Str|Tree];

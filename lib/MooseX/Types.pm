@@ -12,6 +12,7 @@ use MooseX::Types::Util               qw( filter_tags );
 use MooseX::Types::UndefinedType;
 use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
+use Sub::Defer                        qw( defer_sub );
 use Sub::Name;
 use Scalar::Util                      qw( reftype );
 use Sub::Exporter::ForMethods 0.100052 'method_installer';  # for 'rebless'
@@ -486,17 +487,22 @@ This generates a coercion handler function, e.g. C<to_Int($value)>.
 
 sub coercion_export_generator {
     my ($class, $type, $full, $undef_msg) = @_;
-    return sub {
+    return defer_sub undef, sub {
         my ($value) = @_;
 
         # we need a type object
-        my $tobj = find_type_constraint($full) or croak $undef_msg;
-        my $return = $tobj->coerce($value);
+        my $tobj = find_type_constraint($full);
 
-        # non-successful coercion returns false
-        return unless $tobj->check($return);
+        return sub {
+            croak $undef_msg unless $tobj;
 
-        return $return;
+            my $return = $tobj->coerce($_[0]);
+
+            # non-successful coercion returns false
+            return unless $tobj->check($return);
+
+            return $return;
+        };
     }
 }
 
@@ -508,13 +514,20 @@ Generates a constraint check closure, e.g. C<is_Int($value)>.
 
 sub check_export_generator {
     my ($class, $type, $full, $undef_msg) = @_;
-    return sub {
+
+    return defer_sub undef, sub {
         my ($value) = @_;
 
         # we need a type object
-        my $tobj = find_type_constraint($full) or croak $undef_msg;
+        my $tobj = find_type_constraint($full);
 
-        return $tobj->check($value);
+        # This method will actually compile an inlined sub if possible. If
+        # not, it will return something like sub { $tobj->check($_[0]) }
+        #
+        # If $tobj is undef, we delay the croaking until the check is
+        # actually used for backward compatibility reasons. See
+        # RT #119534.
+        return $tobj ? $tobj->_compiled_type_constraint : sub { croak $undef_msg};
     }
 }
 

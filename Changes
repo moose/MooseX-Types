@@ -1,6 +1,6 @@
 Revision history for MooseX-Types
 
-{{$NEXT}}
+0.51      2025-04-19 18:55:03Z
         - use Sub::Util rather than Sub::Name, since Sub::Util is in core
 
 0.50      2017-02-07 18:59:30Z

@@ -1,7 +1,7 @@
 package MooseX::Types::Base;
 # ABSTRACT: Type library base class
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 use Carp::Clan                      qw( ^MooseX::Types );
 use Sub::Exporter                   qw( build_exporter );

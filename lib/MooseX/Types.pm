@@ -3,7 +3,7 @@ package MooseX::Types;
 # ABSTRACT: Organise your Moose types in libraries
 # KEYWORDS: moose types classes objects constraints declare libraries
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 use Moose::Util::TypeConstraints      qw( find_type_constraint );
 use MooseX::Types::TypeDecorator;

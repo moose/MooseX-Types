@@ -3,13 +3,12 @@ package MooseX::Types::Wrapper;
 
 our $VERSION = '0.51';
 
-use Moose;
 use Carp::Clan      qw( ^MooseX::Types );
 use Module::Runtime 'use_module';
 
 use namespace::autoclean;
 
-extends 'MooseX::Types';
+use parent 'MooseX::Types';
 
 =head1 DESCRIPTION
 

@@ -3,8 +3,6 @@ package MooseX::Types::Base;
 
 our $VERSION = '0.51';
 
-use Moose;
-
 use Carp::Clan                      qw( ^MooseX::Types );
 use Sub::Exporter                   qw( build_exporter );
 use Moose::Util::TypeConstraints    qw( find_type_constraint );

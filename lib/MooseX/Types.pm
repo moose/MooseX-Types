@@ -12,7 +12,7 @@ use MooseX::Types::Util               qw( filter_tags );
 use MooseX::Types::UndefinedType;
 use MooseX::Types::CheckedUtilExports ();
 use Carp::Clan                        qw( ^MooseX::Types );
-use Sub::Name;
+use Sub::Util                         qw( set_subname );
 use Scalar::Util                      qw( reftype );
 use Sub::Exporter::ForMethods 0.100052 'method_installer';  # for 'rebless'
 
@@ -396,7 +396,7 @@ sub type_export_generator {
     ## Return an anonymous subroutine that will generate the proxied type
     ## constraint for you.
 
-    return subname "__TYPE__::$name" => sub {
+    return set_subname "__TYPE__::$name" => sub {
         my $type_constraint = $class->create_base_type_constraint($name);
 
         if(defined(my $params = shift @_)) {
